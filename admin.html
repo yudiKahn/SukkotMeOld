@@ -35,15 +35,29 @@
                  <div data-toggle="collapse" data-target="#li${i}"
                  aria-expanded="true" aria-controls="collapseOne">${d.firstName} ${d.lastName}</div>
                  <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
-                ${items.map(item=>`${item.t} ${d[item.t][0]} / ${d[item.t][1]}$<br/>`) }sum: ${d.sum}</div>
+                ${items.map(item=>`${item.t} ${d[item.t][0]} / ${d[item.t][1]}$<br/>`) }sum: ${d.sum} $
+                 <br/><button value="${d._id}" class="btn btn-danger">Delete</button></div>
                  </div>`;               
              })
 
+            document.querySelectorAll('.btn-danger').forEach(btn=>{
+                btn.addEventListener('click', e=>{
+                    if (confirm('Are you sure you want to delete from the database?')) {
+                        let del = new XMLHttpRequest();
+                        del.onreadystatechange = function(){
+                            if(this.readyState == 4 && this.status == 200){
+                                location.reload();
+                            }
+                        }
+                        del.open("GET", `/delete/${e.target.value}`, true);
+                        del.send();
+                    } 
+                })
+            });
          }
        }
        xhttp.open("GET", "/orders/130240", true);
        xhttp.send();
-
     </script>
    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

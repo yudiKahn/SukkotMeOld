@@ -14,24 +14,12 @@ window.onload = async() =>{
                 <input type="number" class="form-control" min="0" value="0" id="${d.t}" name="${d.t}">      
                 </div>`;
             });
-        
-            let sum = 0;
-        
-            arr.map(d=>{
-                let btn = document.getElementById(d.t);
-                let oldValue = btn.value
-                btn.addEventListener('change', function(e){
-                    e.target.value > oldValue ? sum += d.p : sum -=d.p;
-                    oldValue = e.target.value;
-                    updateSum();
-                });
-            })
-
-            function updateSum(){
-                document.getElementById('SUM').innerHTML = `${sum} $`;
-            }
         }
     };
     xhttp.open("GET", "/items", true);
     xhttp.send();
+
+    document.getElementById('admin-link').addEventListener('click', ()=>{
+       
+    })
 }

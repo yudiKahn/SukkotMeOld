@@ -1,3 +1,4 @@
+body{margin:0; padding:0;width:100vw;height: 100vh;overflow-x: hidden;}
 .c-y{
     color: #eff157 !important;
 }
@@ -9,7 +10,7 @@
     box-shadow:3px 3px 5px black;margin-top:20px !important;
     overflow-y: auto;overflow-x: hidden;
 }
-.list-group-item:hover{transform: scaleY(1.09); cursor: pointer;}
+.list-group-item:hover{cursor: pointer;}
 ::-webkit-scrollbar {
     width: 10px;
 }

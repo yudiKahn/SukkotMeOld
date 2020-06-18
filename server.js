@@ -58,14 +58,20 @@ app.get('/items', (req,res)=>{
     res.json(items);
 })
 
-app.get('/admin', (req, res)=>{
+app.get('/admin/:id', (req, res)=>{
+    if(req.params.id == 130240)
     res.sendFile(__dirname+'/admin.html');
+    else res.send('not found.')
 })
 
 app.get('/orders/:id', (req,res)=>{
     if(req.params.id == 130240)
     Yanki.find().then(doc=>res.json({data:doc, items:items})).catch(err=>res.send(err))
     else res.send('not found.')
+})
+
+app.get('/delete/:id', (req, res)=>{
+    Yanki.findByIdAndRemove(req.params.id).then(()=>res.send('deleted')).catch(err=>res.send(err))
 })
 
 const listener = app.listen(process.env.PORT || 8080, ()=>{
