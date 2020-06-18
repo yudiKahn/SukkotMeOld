@@ -1,0 +1,32 @@
+.c-y{
+    color: #eff157 !important;
+}
+.icon{
+    max-width:50px;
+}
+.form-size{width:90vw; max-width:500px; height:90vw; max-height:500px;min-height: 400px;}
+.main-form{   
+    box-shadow:3px 3px 5px black;margin-top:20px !important;
+    overflow-y: auto;overflow-x: hidden;
+}
+.list-group-item:hover{transform: scaleY(1.09); cursor: pointer;}
+::-webkit-scrollbar {
+    width: 10px;
+}
+#popup{
+  opacity:0.7; position: absolute;width:100vw;height: 100vh;top:0; z-index: 100;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+   background: #28a745;
+}

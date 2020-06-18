@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreder</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="/style.css" rel="stylesheet">
+    <link rel="icon" href="/imgs/icon.png">
+    <script type="text/javascript" src="/index.js"></script>
+</head>
+<body>
+    <header class="bg-success px-3 w-100">
+        <nav class="navbar navbar-expand-lg navbar-light bg-success">
+            <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
+        </nav>
+    </header>
+    <main>
+        <form class="main-form form-size m-auto" method="POST" action="/order">
+
+            <div class="form-size p-4">
+                <div class="form-group">
+                    <label for="main-form-email" class="text-success">Email address</label>
+                    <input required type="email" class="form-control" id="main-form-email" name="email" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label class="text-success" for="main-from-f-name">First Name</label>
+                    <input required type="text" class="form-control" placeholder="Enter First Name" id="main-from-f-name" name="firstName">
+                </div>
+                <div class="form-group">
+                    <label class="text-success" for="main-from-l-name">Last Name</label>
+                    <input required type="text" class="form-control" placeholder="Enter Last Name" id="main-from-l-name" name="lastName">
+                </div>
+                <a type="button" href="#show-next" class="btn btn-success">Next &gt;</a>
+            </div>
+
+            <div id="show-next" class="form-size p-4">
+              <div class="form-group d-minim">
+
+              </div>
+              <button type="submit" class="btn btn-success ml-4">Submit &gt;</button>
+            </div>
+            
+        </form>
+        <div class="container p-4 row">
+               <h4 class="text-success col-6 text-right">SUM :</h4>
+               <h4 class="col-6 text-success text-right" id="SUM"> 0$ </h4>
+        </div>
+    </main>
+    <footer class="bg-success p-3 w-100">
+        <a href="/admin" class="c-y">A</a>
+    </footer>
+</body>
+</html>
