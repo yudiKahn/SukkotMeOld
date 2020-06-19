@@ -33,23 +33,29 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
         let newUser = new Yanki(req.body);
         newUser.items = myItems;
         newUser.sum = sum;
-
-        newUser.save().then(doc=>{
-            res.send(`<div style="text-align: center;">
-            <h1 style="color:#28a745;margin-top:20px;">Your Order Has Been Saved.</h1>
-            <p>First Name :${doc.firstName}<br/>
-            Last Name :${doc.lastName}<br/>User Name :${doc.username}<br/> Email :${doc.email}<br/>
-            ${myItems.map(d=>d.q>0?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'')} Sum :${doc.sum}$</p>
-            <a href="/">Go Back</a></div>`)
-        }).catch(err=>{
-            res.send(`<div>
-            <h1 style="text-align:center;margin-top:20px;">Something went wrong.</h1>
-            <p style="color:red;">${err}</p>
-            </div>`)
-        })
-        
+        if(newUser.sum <= 0){
+           res.send(`<div style="text-align: center;">
+           <h1 style="color:red;margin-top:20px;">Your Did not order any items.</h1>
+           <a href="/">Go Back</a></div>`)
+        }else{
+            newUser.save().then(doc=>{
+                res.send(`<div style="text-align: center;">
+                <h1 style="color:#28a745;margin-top:20px;">Your Order Has Been Saved.</h1>
+                <p>First Name :${doc.firstName}<br/>
+                Last Name :${doc.lastName}<br/>User Name :${doc.username}<br/> Email :${doc.email}<br/>
+                ${myItems.map(d=>d.q>0?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'')} Sum :${doc.sum}$</p>
+                <a href="/">Go Back</a></div>`)
+            }).catch(err=>{
+                res.send(`<div>
+                <h1 style="text-align:center;margin-top:20px;">Something went wrong.</h1>
+                <p style="color:red;">${err}</p>
+                <a href="/">Go Back</a></div>`)
+            })
+        }
     })
-
+    app.route('/update').post((req, res)=>{
+        res.send('blablabla')
+    })
 }).catch(err=>console.log(err));
 
 app.get('/', (req, res)=>{

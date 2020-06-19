@@ -6,6 +6,21 @@ window.onload = () =>{
     document.getElementById('close-items').addEventListener('click',()=>{
         document.getElementById('items').style.display='none';
     })
+    let update = false;
+    let f = document.getElementById('main-from-f-name');
+    let l = document.getElementById('main-from-l-name');
+    let ft = f.placeholder;
+    let lt = l.placeholder;
+    document.getElementById('update').addEventListener('click', function(){
+        update = !update;
+        this.innerHTML = update? 'New Order' : 'Update Order';
+        f.disabled = update;
+        l.disabled = update;
+        f.placeholder = update ? 'Not Requierd on updating order' : ft;
+        l.placeholder = update ? 'Not Requierd on updating order' : lt;
+        document.getElementById('form').action = update ? '/update' : '/order';
+        document.getElementById('form-status').innerHTML = update ? '- Update -' : '- New Order -';
+    })
 
     let arr;
 
@@ -49,6 +64,10 @@ window.onload = () =>{
                 return `<small class="form-text text-muted">Order Israeli estrog & get a gift. <em id="ysra-e" class="text-info">press here</em></small>
                 <small class="form-text text-muted">Order Yanever estrog & get a gift. <em id="yan-e" class="text-info">press here</em></small><br/>`;
             }
+
+            document.getElementById('submit-btn').addEventListener('click',()=>{
+                document.getElementById('items').style.display='none';
+            })
         }
     };
     xhttp.open("GET", "/items", true);

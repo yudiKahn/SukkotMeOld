@@ -11,13 +11,19 @@
 </head>
 <body>
     <header class="bg-success px-3 w-100">
-        <nav class="navbar navbar-expand-lg navbar-light bg-success">
+        <nav class="navbar navbar-expand-lg navbar-light bg-success" style="justify-content: space-between;">
             <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
+            <div class="nav-item">
+                <a class="nav-link text-white" id="update">Update Order</a>
+            </div>
+            <div class="nav-item" style="font-family: cursive;">
+                <h5 class="c-y">ב"ה</h5>
+            </div>
         </nav>
     </header>
     <main>
-        <form class="main-form form-size mx-auto my-5" method="POST" action="/order">
-
+        <form class="main-form form-size mx-auto my-5" id="form" method="POST" action="/order">
+            <h3 id="form-status" class="c-y text-center">- New Order -</h3>
             <div class="form-size p-4">
                 <div class="form-group">
                     <label for="main-form-user" class="text-success">User Name</label>
@@ -48,16 +54,18 @@
             </div>
 
             <div id="items" class="p-4">
+                <a class="btn btn-outline-success" href="#close-items" style="transform: rotate(90deg);">&rsaquo;</a>
                 <div id="min" class="mb-3">
 
                 </div>
-                <button type="button" id="close-items" class="btn btn-success">Back</button>
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" id="close-items" class="btn btn-outline-success">Back</button>
+                <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
             </div>
         </form>
-    </main>
-    <footer class="bg-success p-3 w-100">
-        <a href="/admin/130240" id="admin-link" class="c-y">A</a>
+    </main><a href="/admin/130240" id="admin-link" class="c-y">A</a>
+    <footer class="bg-success p-3 w-100 text-white">
+        <h5>About</h5>
+        <p>Yanki Kahn <a class="c-y" href="tel:+18186052066">Call</a> - <a class="c-y" href="mailto:chabad18@hotmail.com">Mail</a></p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -65,27 +73,5 @@
 </body>
 </html>
 <!-- 
-            <div id="estrog" class="form-size p-4">
-                <h3 class="c-y">אתרוגים</h3>
-                <small class="form-text text-muted">Order Israeli estrog & get a gift. <a href="/">press here</a></small>
-                <div id="accordion">
-                    <div class="card">
-                      <div class="card-header collapsed" data-toggle="collapse" data-target="#minim-1" aria-expanded="false" aria-controls="collapseThree">
-                       Israeli Estrog
-                      </div>
-                      <div id="minim-1" class="d-minim-estrog collapse show card-body" data-parent="#accordion"></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header collapsed" data-toggle="collapse" data-target="#minim-2" aria-expanded="false" aria-controls="collapseThree">
-                         Yanever Estrog
-                        </div>
-                        <div id="minim-2" class="d-minim-estrog-y collapse card-body" data-parent="#accordion"></div>
-                    </div>
-                  </div>
-                <a href="#lulav" class="mt-1 btn btn-success ml-4">Next &gt;</a>
-            </div>
-            <div id="lulav" class="form-size p-4">
-                <h3 class="text-success pl-3">לולבים</h3>
-                <div class="d-minim-lulav"></div>
-            </div>
+           
 -->

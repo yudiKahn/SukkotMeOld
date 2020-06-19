@@ -36,7 +36,7 @@
                  <div data-toggle="collapse" data-target="#li${i}"
                  aria-expanded="true" aria-controls="collapseOne">${d.firstName} ${d.lastName}</div>
                  <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
-                ${d.items.map(t=>t.q>0?` - <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')}sum: ${d.sum} $
+                ${d.items.map(t=>t.q>0?` - <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:null)}sum: ${d.sum} $
                  <br/><button value="${d._id}" class="btn btn-danger">Delete</button></div>
                  </div>`;               
              })
