@@ -5,14 +5,27 @@ body{margin:0; padding:0;width:100vw;height: 100vh;overflow-x: hidden;}
 .icon{
     max-width:50px;
 }
-.form-size{width:90vw; max-width:500px; height:90vw; max-height:500px;min-height: 400px;}
+#items{
+  position: fixed; background-color: white; box-shadow:3px 3px 5px black;
+  width:90vw; height:90vh;z-index:11; top:5vh !important;left:5vw !important;
+  max-height: 700px; overflow-y: auto; display: none;
+}
+.card-header{cursor: pointer;}
+.form-size{width:90vw; max-width:500px; height:90vw; max-height:500px;min-height: 400px;z-index: 5;}
 .main-form{   
-    box-shadow:3px 3px 5px black;margin-top:20px !important;
+    box-shadow:3px 3px 5px black;
     overflow-y: auto;overflow-x: hidden;
 }
 .list-group-item:hover{cursor: pointer;}
 ::-webkit-scrollbar {
     width: 10px;
+}
+footer{
+  position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
 }
 #popup{
   opacity:0.7; position: absolute;width:100vw;height: 100vh;top:0; z-index: 100;

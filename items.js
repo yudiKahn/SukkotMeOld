@@ -1,6 +1,24 @@
 module.exports = [
-    {t:'Estrog',p:20},
-    {t:'Lulav',p:25}, 
-    {t:'Arovos',p:10},
-    {t:'Adasim',p:10}
+    {n:1,t:'Estrog A PITOM',p:30},
+    {n:1,t:'Estrog B PITOM',p:25},
+    {n:1,t:'Estrog C PITOM',p:20},
+    {n:1,t:'Estrog Yannever A PITOM',p:300},
+    {n:1,t:'Estrog Yannever B PITOM',p:200},
+    {n:1,t:'Estrog Yannever C PITOM',p:150},
+    {n:1,t:'Estrog Yannever D PITOM',p:100},
+    {n:1,t:'Estrog A NO PITOM',p:30},
+    {n:1,t:'Estrog B NO PITOM',p:25},
+    {n:1,t:'Estrog C NO PITOM',p:20},
+    {n:1,t:'Estrog Yannever A NO PITOM',p:300},
+    {n:1,t:'Estrog Yannever B NO PITOM',p:200},
+    {n:1,t:'Estrog Yannever C NO PITOM',p:150},
+    {n:1,t:'Estrog Yannever D NO PITOM',p:100},
+    {n:2,t:'Egyptian Lulav',p:15}, 
+    {n:2,t:'Deri Lulav',p:25}, 
+    {n:2,t:'Deri & Much Lulav',p:40}, 
+    {n:3,t:'Arovos',p:3},
+    {n:4,t:'Adas A',p:15},
+    {n:4,t:'Adas B',p:10},
+    {n:4,t:'Adas C',p:5},
+    {n:5,t:'Aushana',p:5}
 ]

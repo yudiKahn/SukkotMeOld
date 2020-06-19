@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oreder</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">   
     <link href="/style.css" rel="stylesheet">
     <link rel="icon" href="/imgs/icon.png">
     <script type="text/javascript" src="/index.js"></script>
@@ -16,14 +16,26 @@
         </nav>
     </header>
     <main>
-        <form class="main-form form-size m-auto" method="POST" action="/order">
+        <form class="main-form form-size mx-auto my-5" method="POST" action="/order">
 
             <div class="form-size p-4">
                 <div class="form-group">
-                    <label for="main-form-email" class="text-success">Email address</label>
-                    <input required type="email" class="form-control" id="main-form-email" name="email" placeholder="Enter email">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <label for="main-form-user" class="text-success">User Name</label>
+                    <input required type="text" class="form-control" id="main-form-user" name="username" placeholder="Enter User Name">
+                    <small class="form-text text-muted">You can change you'r order in the future with this username.</small>
                 </div>
+                <div class="form-group">
+                    <label for="main-form-email" class="text-success">Email address</label>
+                    <input type="email" class="form-control" id="main-form-email" name="email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label class="text-success" for="main-from-phone">Phone Number</label>
+                    <input required type="tel" class="form-control" placeholder="Enter Phone Number" id="main-from-phone" name="phoneNumber">
+                </div>
+                <a href="#show-next" class="btn btn-success">Next &gt;</a>
+            </div>
+
+            <div id="show-next" class="form-size p-4">
                 <div class="form-group">
                     <label class="text-success" for="main-from-f-name">First Name</label>
                     <input required type="text" class="form-control" placeholder="Enter First Name" id="main-from-f-name" name="firstName">
@@ -32,23 +44,48 @@
                     <label class="text-success" for="main-from-l-name">Last Name</label>
                     <input required type="text" class="form-control" placeholder="Enter Last Name" id="main-from-l-name" name="lastName">
                 </div>
-                <a type="button" href="#show-next" class="btn btn-success">Next &gt;</a>
+                <a href="#items" id="to-items" class="btn btn-success">Next &gt;</a>
             </div>
 
-            <div id="show-next" class="form-size p-4">
-              <div class="form-group d-minim">
+            <div id="items" class="p-4">
+                <div id="min" class="mb-3">
 
-              </div>
-              <button type="submit" class="btn btn-success ml-4">Submit &gt;</button>
+                </div>
+                <button type="button" id="close-items" class="btn btn-success">Back</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
-            
         </form>
-        <div class="container p-4 row">
-               
-        </div>
     </main>
     <footer class="bg-success p-3 w-100">
         <a href="/admin/130240" id="admin-link" class="c-y">A</a>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
+<!-- 
+            <div id="estrog" class="form-size p-4">
+                <h3 class="c-y">אתרוגים</h3>
+                <small class="form-text text-muted">Order Israeli estrog & get a gift. <a href="/">press here</a></small>
+                <div id="accordion">
+                    <div class="card">
+                      <div class="card-header collapsed" data-toggle="collapse" data-target="#minim-1" aria-expanded="false" aria-controls="collapseThree">
+                       Israeli Estrog
+                      </div>
+                      <div id="minim-1" class="d-minim-estrog collapse show card-body" data-parent="#accordion"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header collapsed" data-toggle="collapse" data-target="#minim-2" aria-expanded="false" aria-controls="collapseThree">
+                         Yanever Estrog
+                        </div>
+                        <div id="minim-2" class="d-minim-estrog-y collapse card-body" data-parent="#accordion"></div>
+                    </div>
+                  </div>
+                <a href="#lulav" class="mt-1 btn btn-success ml-4">Next &gt;</a>
+            </div>
+            <div id="lulav" class="form-size p-4">
+                <h3 class="text-success pl-3">לולבים</h3>
+                <div class="d-minim-lulav"></div>
+            </div>
+-->

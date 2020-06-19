@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">    <link href="/style.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">   
+   <link href="/style.css" rel="stylesheet">
     <link rel="icon" href="/imgs/icon.png">
 </head>
 <body>
@@ -29,13 +30,13 @@
        let xhttp = new XMLHttpRequest();
        xhttp.onreadystatechange = function(){
          if(this.readyState == 4 && this.status == 200){
-             let {data, items} = JSON.parse(this.responseText);
+             let data = JSON.parse(this.responseText);
              data.map((d,i)=>{
                  document.getElementById('ul').innerHTML+=`<div class="list-group-item">
                  <div data-toggle="collapse" data-target="#li${i}"
                  aria-expanded="true" aria-controls="collapseOne">${d.firstName} ${d.lastName}</div>
                  <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
-                ${items.map(item=>`${item.t} ${d[item.t][0]} / ${d[item.t][1]}$<br/>`) }sum: ${d.sum} $
+                ${d.items.map(t=>t.q>0?` - <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')}sum: ${d.sum} $
                  <br/><button value="${d._id}" class="btn btn-danger">Delete</button></div>
                  </div>`;               
              })
