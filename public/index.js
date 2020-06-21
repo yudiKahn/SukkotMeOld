@@ -1,4 +1,8 @@
-window.onload = () =>{  
+window.onload = () =>{
+    document.getElementById('toggle-pass').addEventListener('click', function(){
+        document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
+    });
+
     let tmp = ['Estrog','Lulav','Adasim','Arovot','Husanos'];
     document.getElementById('to-items').addEventListener('click',()=>{
         document.getElementById('items').style.display='block';
@@ -7,19 +11,25 @@ window.onload = () =>{
         document.getElementById('items').style.display='none';
     })
     let update = false;
-    let f = document.getElementById('main-from-f-name');
-    let l = document.getElementById('main-from-l-name');
-    let ft = f.placeholder;
-    let lt = l.placeholder;
+    let f = document.getElementById('main-form-f-name');
+    let l = document.getElementById('main-form-l-name');
+    let p = document.getElementById('main-form-phone');
+    let e = document.getElementById('main-form-email');
+    let ft = f.placeholder;  let pt = p.placeholder;
+    let lt = l.placeholder;  let et = e.placeholder;
     document.getElementById('update').addEventListener('click', function(){
+        let disTxt = 'Not Requierd on updating order';
         update = !update;
         this.innerHTML = update? 'New Order' : 'Update Order';
-        f.disabled = update;
-        l.disabled = update;
-        f.placeholder = update ? 'Not Requierd on updating order' : ft;
-        l.placeholder = update ? 'Not Requierd on updating order' : lt;
+        f.disabled = update;  l.disabled = update;  
+        p.disabled = update;  e.disabled = update;
+        p.placeholder = update ? disTxt : ft;
+        e.placeholder = update ? disTxt : lt;
+        f.placeholder = update ? disTxt : ft;
+        l.placeholder = update ? disTxt : lt;
         document.getElementById('form').action = update ? '/update' : '/order';
         document.getElementById('form-status').innerHTML = update ? '- Update -' : '- New Order -';
+        document.getElementById('form-note').innerHTML = update ? 'Forgot password / username ?! <a href="tel:+18186052066">call me</a>.':"You can change you'r order in the future with this username & password."
     })
 
     let arr;

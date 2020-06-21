@@ -21,23 +21,56 @@
 
            </div>
         </div>
+        <div id="popup-print"></div>
     </main>
     <footer class="bg-success p-3 w-100">
         <a href="/" class="c-y">Back</a>
     </footer>
     <script type="text/javascript">
 
+        function Print(d){
+            let tmpItems = '';
+            d.items.map(i=>{
+                if(i.total>0){
+                    tmpItems+=`<tr>
+                    <td scope="row">${i.item}</td>
+                    <td>${i.q}</td>
+                    </tr>`;
+                }
+            })
+            document.getElementById('popup-print').style.display='block';
+            document.getElementById('popup-print').innerHTML=`<a href="/admin/130240" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
+            <p>${d.firstName}-${d.lastName}</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td scope="col">#</td>
+                        <td scope="col">Quantity</td>
+                    </tr>
+                </thead>
+                <tbody>
+                   ${tmpItems}
+                </tbody>
+            </table>
+            <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
+        }
+
        let xhttp = new XMLHttpRequest();
        xhttp.onreadystatechange = function(){
          if(this.readyState == 4 && this.status == 200){
              let data = JSON.parse(this.responseText);
+             data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((b.lastName.toLowerCase() > a.lastName.toLowerCase()) ? -1 : 0))
              data.map((d,i)=>{
+                 let itemStr = '';
+                 d.items.map(t=>t.q>0?itemStr+=`- <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')
                  document.getElementById('ul').innerHTML+=`<div class="list-group-item">
                  <div data-toggle="collapse" data-target="#li${i}"
-                 aria-expanded="true" aria-controls="collapseOne">${d.firstName} ${d.lastName}</div>
+                 aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
                  <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
-                ${d.items.map(t=>t.q>0?` - <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:null)}sum: ${d.sum} $
-                 <br/><button value="${d._id}" class="btn btn-danger">Delete</button></div>
+                user name :${d.username}<br/>password :${d.password}<br/>
+                ${itemStr}sum: ${d.sum} $
+                <br/>order created at :${new Date(d.createdAt)} <br/> updated at :${new Date(d.updatedAt)}
+                <br/><button value="${d._id}" class="btn btn-danger">Delete</button> <button value="${d._id}" class="btn btn-info">Print</button></div>
                  </div>`;               
              })
 
@@ -55,6 +88,20 @@
                     } 
                 })
             });
+
+            document.querySelectorAll('.btn-info').forEach(btn=>{
+                btn.addEventListener('click', e=>{
+                    let del = new XMLHttpRequest();
+                    del.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            Print(JSON.parse(this.responseText))
+                        }
+                    }
+                    del.open("GET", `/get/${e.target.value}`, true);
+                    del.send();
+                })
+            });
+
          }
        }
        xhttp.open("GET", "/orders/130240", true);

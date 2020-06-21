@@ -37,10 +37,15 @@ footer{
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgb(243, 241, 241);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
    background: #28a745;
+}
+#popup-print{
+  position:absolute; display:none; width:95vw; min-height:95vh;
+  left:2.5vw;top:2.5vh;background-color: white;
+  box-shadow:3px 3px 5px black; padding:1rem;z-index:100;
 }
