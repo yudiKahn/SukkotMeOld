@@ -3,7 +3,7 @@ window.onload = () =>{
         document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
     });
 
-    let tmpMinimArr = ['Israeli set','Estrog','Lulav','Adasim','Arovot','Husanos'];
+    let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hushanos'];
     document.getElementById('to-items').addEventListener('click',()=>{
         document.getElementById('items').style.display='block';
     })
@@ -11,25 +11,17 @@ window.onload = () =>{
         document.getElementById('items').style.display='none';
     })
     let update = false;
-    let f = document.getElementById('main-form-f-name');
-    let l = document.getElementById('main-form-l-name');
-    let p = document.getElementById('main-form-phone');
-    let e = document.getElementById('main-form-email');
-    let ft = f.placeholder;  let pt = p.placeholder;
-    let lt = l.placeholder;  let et = e.placeholder;
     document.getElementById('update').addEventListener('click', function(){
-        let disTxt = 'Not Requierd on updating order';
+        let placehold = ['Address','Email','Phone Number','First Name','Last Name'];
         update = !update;
         this.innerHTML = update? 'New Order' : 'Update Order';
-        f.disabled = update;  l.disabled = update;  
-        p.disabled = update;  e.disabled = update;
-        p.placeholder = update ? disTxt : ft;
-        e.placeholder = update ? disTxt : lt;
-        f.placeholder = update ? disTxt : ft;
-        l.placeholder = update ? disTxt : lt;
         document.getElementById('form').action = update ? '/update' : '/order';
         document.getElementById('form-status').innerHTML = update ? '- Update -' : '- New Order -';
-        document.getElementById('form-note').innerHTML = update ? 'Forgot password / username ?! <a href="tel:+18186052066">call me</a>.':"You can change you'r order in the future with this username & password."
+        document.getElementById('form-note').innerHTML = update ? 'Forgot password / username ?!<a href="tel:+18186052066">call me</a>.':"You can change you'r order in the future with this username & password."
+        document.querySelectorAll('.dis-on-up').forEach((input,index)=>{
+          input.placeholder = update ? 'Not Requierd on updating order':`Enter ${placehold[index]}`;
+          input.disabled = update;
+        })
     })
 
     let arr;
@@ -48,16 +40,16 @@ window.onload = () =>{
             tmpMinimArr.map((d,index)=>{
                 let a = [set,estrog, lulav, hadas, arava, husana];
                 let currentMin = a[index];
-              document.getElementById('min').innerHTML+=`<div class="p-3" id="min-${d}">
-              <h2 class="text-success">${d}</h2>
-              ${
-                currentMin.map(m=>`<div class="row">
-                <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}</div>
-                <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
-                <div class="col">${m.p} $</div>
-                </div>`)
-             }
-              </div>`;
+                document.getElementById('min').innerHTML+=`<div class="p-3" id="min-${d}">
+                <h2 class="text-success">${d}</h2>
+                ${
+                    currentMin.map(m=>`<div class="row">
+                    <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}</div>
+                    <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
+                    <div class="col">${m.p} $</div>
+                    </div>`)
+                }
+                </div>`;
             })
             
             function sale(){

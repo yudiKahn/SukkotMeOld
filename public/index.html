@@ -36,25 +36,33 @@
                     <input type="checkbox" id="toggle-pass">&nbsp;<label class="text-muted" for="toggle-pass"><small>Show / Hide password</small>.</label>
                     <small class="form-text text-muted" id="form-note">You can change you'r order in the future with this username & password.</small>
                 </div>
+                <a href="#show-loc" class="btn btn-success">Next &gt;</a>
+            </div>
+
+            <div id="show-loc" class="form-size p-4">
+                <div class="form-group">
+                    <label for="main-form-address" class="text-success">Address <em style="color:red;">*</em></label>
+                    <input required type="text" class="form-control dis-on-up" id="main-form-address" name="address" placeholder="Enter Address">
+                </div>
+                <div class="form-group">
+                    <label for="main-form-email" class="text-success">Email address <em style="color:red;">*</em></label>
+                    <input required type="email" class="form-control dis-on-up" id="main-form-email" name="email" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                    <label class="text-success" for="main-form-phone">Phone Number <em style="color:red;">*</em></label>
+                    <input required type="tel" class="form-control dis-on-up" placeholder="Enter Phone Number" id="main-form-phone" name="phoneNumber">
+                </div>
                 <a href="#show-next" class="btn btn-success">Next &gt;</a>
             </div>
 
             <div id="show-next" class="form-size p-4">
                 <div class="form-group">
-                    <label for="main-form-email" class="text-success">Email address <em style="color:red;">*</em></label>
-                    <input required type="email" class="form-control" id="main-form-email" name="email" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label class="text-success" for="main-form-phone">Phone Number <em style="color:red;">*</em></label>
-                    <input required type="tel" class="form-control" placeholder="Enter Phone Number" id="main-form-phone" name="phoneNumber">
-                </div>
-                <div class="form-group">
                     <label class="text-success" for="main-form-f-name">First Name</label>
-                    <input type="text" class="form-control" placeholder="Enter First Name" id="main-form-f-name" name="firstName">
+                    <input type="text" class="form-control dis-on-up" placeholder="Enter First Name" id="main-form-f-name" name="firstName">
                 </div>
                 <div class="form-group">
                     <label class="text-success" for="main-form-l-name">Last Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Last Name" id="main-form-l-name" name="lastName">
+                    <input type="text" class="form-control dis-on-up" placeholder="Enter Last Name" id="main-form-l-name" name="lastName">
                 </div>
                 <a href="#items" id="to-items" class="btn btn-success">Next &gt;</a>
             </div>
@@ -72,7 +80,7 @@
         <h5>About</h5>
         <p>Yanki Kahn <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 
         <a class="c-y" target="_blank" href="https://maps.google.com/?q=18253 Topham St Tarazana CA 91335"><i class="fa fa-map-marker"></i></a> 
-        <a href="http://www.simplesukkah.com/" target="_blank" class="c-y px-1" style="background: rgba(255, 254, 254, 0.5);border-radius:1px 10px 1px 10px;"><i class="fa fa-home"></i> sukka.com</a></p>
+        <a href="http://www.simplesukkah.com/" target="_blank" class="c-y px-1" style="background: rgba(255, 254, 254, 0.5);border-radius:0 10px 10px 0;"><i class="fa fa-home"></i> sukka.com</a></p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

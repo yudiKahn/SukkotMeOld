@@ -46,7 +46,7 @@
             })
             document.getElementById('popup-print').style.display='block';
             document.getElementById('popup-print').innerHTML=`<a id="close-popup" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
-            <p>${d.firstName}-${d.lastName}</p>
+            <p>${d.firstName} ${d.lastName} <b>/</b> ${d.email} <b>/</b> ${d.phoneNumber}</p>
             ${
                 whatPrint=="Print"?
                 `<table class="table table-bordered">
@@ -61,7 +61,7 @@
                    <tr><th scope="row">SUM :</th><th>${d.sum}$</th></tr>
                 </tbody>
                 </table>`:
-                `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Address</b> </p><p><b>Box No.</b> </p>`
+                `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Address</b> ${d.address}</p><p><b>Box No.</b> </p>`
             }
             <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
             document.getElementById('close-popup').addEventListener('click', ()=>{
@@ -87,7 +87,7 @@
 
         function fillPage(){
             document.getElementById('ul').innerHTML="";
-            document.getElementById('ul-done').innerHTML="";
+            document.getElementById('ul-done').innerHTML="<p>None</p>";
             let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){

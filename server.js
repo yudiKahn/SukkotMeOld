@@ -26,6 +26,7 @@ const schema = mongoose.Schema({
     password: {type:String, trim: true},
     items:[],
     sum: {type:Number},
+    address: {type: String},
     isDone: {type:Boolean}
 }, {timestamps: true});
 var Yanki = new mongoose.model('YANKI', schema);
@@ -95,10 +96,15 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
             }else{
                 let myItems = [];
                 let sum = 0;
+                let numOfSets = 0;
                 items.map(d=>{
-                    sum += Number(req.body[d.t]*d.p);
+                    sum += Number(req.body[d.t]*d.p)?Number(req.body[d.t]*d.p):0;
+                    if((d.t.toString().includes('set'))&&(Number(req.body[d.t])>0)){
+                        numOfSets+=Number(req.body[d.t]);
+                    }
                     myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)})
-                });
+                })
+                items.map(sev=>sev.n==7?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
                 if(sum<=0){
                     res.send(`<div style="text-align: center;">
                     <h1 style="color:red;margin-top:20px;">Your Did not order any items.</h1>
