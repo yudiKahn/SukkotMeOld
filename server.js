@@ -124,14 +124,14 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
                         let htmlTxtRes = `<h1 style="color:#28a745;margin-top:20px;">Username '${req.body.username}' is updated.</h1>`;
                         myItems.map(d=>htmlTxtRes+= d.q>0? `<p>${d.item} :${d.q}. total: ${d.total}$</p>`:'');
                         htmlTxtRes+=`<p>SUM :${sum}$</p>`;
-                        /*mailSender.sendMail({
+                        mailSender.sendMail({
                             from: 'sukkotme@gmail.com',
                             to: data[0].email,
                             subject: 'Thank you !',
                             html: htmlTxtRes
                         }, (err, info)=>{
                            console.log(info||err)
-                        });*/
+                        });
                         res.send(`<div style="text-align: center;">${htmlTxtRes}<a href="/">Go Back</a></div>`)
                     }).catch(err=>res.send(err))
                 }
