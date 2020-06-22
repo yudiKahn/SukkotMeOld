@@ -1,12 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser= require('body-parser');
-let items = require('./items');
+const items = require('./items');
+const nodemailer = require('nodemailer');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static(__dirname+'/public'));
+
+const mailSender  = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'sukkotme@gmail.com',
+      pass: 'sukkot130ME'
+    }
+  });
 
 const schema = mongoose.Schema({
     username: {type: String, trim: true},
@@ -16,7 +25,8 @@ const schema = mongoose.Schema({
     phoneNumber: {type: String},
     password: {type:String, trim: true},
     items:[],
-    sum: {type:Number}
+    sum: {type:Number},
+    isDone: {type:Boolean}
 }, {timestamps: true});
 var Yanki = new mongoose.model('YANKI', schema);
 
@@ -34,6 +44,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
         let newUser = new Yanki(req.body);
         newUser.items = myItems;
         newUser.sum = sum;
+        newUser.isDone=false;
         if(newUser.sum <= 0){
            res.send(`<div style="text-align: center;">
            <h1 style="color:red;margin-top:20px;">Your did not order any items.</h1>
@@ -46,12 +57,20 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
             Yanki.find({username: newUser.username, password:newUser.password}).then(data=>{
                 if(data.length<=0){
                     newUser.save().then(doc=>{
-                        res.send(`<div style="text-align: center;">
-                        <h1 style="color:#28a745;margin-top:20px;">Your Order Has Been Saved.</h1>
-                        <p>First Name :${doc.firstName}<br/>
-                        Last Name :${doc.lastName}<br/>User Name :${doc.username}<br/> Email :${doc.email}<br/>
-                        ${myItems.map(d=>d.q>0?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'')} Sum :${doc.sum}$</p>
-                        <a href="/">Go Back</a></div>`)
+                        let htmlItmStr = '';
+                        myItems.map(d=>htmlItmStr+=d.q>0?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'')
+                        let htmlTxtRes = `<h1 style="color:#28a745;margin-top:20px;">Your Order Has Been Saved.</h1><p>First Name :${doc.firstName}<br/>
+                         Last Name :${doc.lastName}<br/>User Name :${doc.username}<br/>Email :${doc.email}<br/>${htmlItmStr}Sum :${doc.sum}$</p>`;
+                       
+                        mailSender.sendMail({
+                            from: 'sukkotme@gmail.com',
+                            to: newUser.email,
+                            subject: 'Thank you !',
+                            html: htmlTxtRes
+                        }, (err, info)=>{
+                           console.log(info||err)
+                        });
+                        res.send(`<div style="text-align: center;">${htmlTxtRes}<a href="/">Go Back</a></div>`)
                     }).catch(err=>{
                         res.send(`<div>
                         <h1 style="text-align:center;margin-top:20px;">Something went wrong.</h1>
@@ -81,7 +100,18 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
                     <a href="/">Go Back</a></div>`);
                 }else{
                     Yanki.updateOne({username: req.body.username, password: req.body.password}, {items: myItems, sum:sum}).then(()=>{
-                        res.send(`<div style="text-align: center;"> <h1 style="color:#28a745;margin-top:20px;">Username '${req.body.username}' is updated.</h1><br/> ${myItems.map(d=>d.q>0?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'')} Sum :${sum}$</p><a href="/">Go Back</a></div>`)
+                        let htmlTxtRes = `<h1 style="color:#28a745;margin-top:20px;">Username '${req.body.username}' is updated.</h1>`;
+                        myItems.map(d=>htmlTxtRes+= d.q>0? `<p>${d.item} :${d.q}. total: ${d.total}$</p>`:'');
+                        htmlTxtRes+=`<p>SUM :${sum}$</p>`;
+                        mailSender.sendMail({
+                            from: 'sukkotme@gmail.com',
+                            to: data[0].email,
+                            subject: 'Thank you !',
+                            html: htmlTxtRes
+                        }, (err, info)=>{
+                           console.log(info||err)
+                        });
+                        res.send(`<div style="text-align: center;">${htmlTxtRes}<a href="/">Go Back</a></div>`)
                     }).catch(err=>res.send(err))
                 }
             }
@@ -117,6 +147,11 @@ app.get('/get/:id', (req,res)=>{
     Yanki.findById(req.params.id).then(doc=>res.json(doc)).catch(er=>res.status(400).json(er))
 })
 
+app.get('/orderdone/:id', (req,res)=>{
+    Yanki.findById(req.params.id).then(doc=>{
+        Yanki.updateOne({_id:req.params.id}, {isDone: !doc.isDone}).then((()=>res.send(doc.isDone))).catch(er=>res.status(400).json(er))
+    }).catch(er=>res.status(400).json(er))
+})
 
 const listener = app.listen(process.env.PORT || 8080, ()=>{
     console.log(`listening on port ${listener.address().port}`);

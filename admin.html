@@ -15,10 +15,16 @@
         </nav>
     </header>
     <main>
-        <div class="container text-center">
-            <h2 class="c-y">Orders</h2>
+        <div class="container text-center" id="li-parent">
+           <h2 class="c-y">Orders</h2>
            <div id="ul" class="list-group text-success my-4">
 
+           </div>
+           <h2 class="c-y" style="cursor:pointer;" data-toggle="collapse" data-target="#ul-done"aria-expanded="true" aria-controls="collapseOne">
+             <p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p> Done Orders &nbsp;<p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p>
+           </h2>
+           <div id="ul-done" class="list-group text-success my-4 collapse"  data-parent="#li-parent">
+              
            </div>
         </div>
         <div id="popup-print"></div>
@@ -55,25 +61,44 @@
             <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
         }
 
-       let xhttp = new XMLHttpRequest();
-       xhttp.onreadystatechange = function(){
-         if(this.readyState == 4 && this.status == 200){
-             let data = JSON.parse(this.responseText);
-             data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((b.lastName.toLowerCase() > a.lastName.toLowerCase()) ? -1 : 0))
-             data.map((d,i)=>{
-                 let itemStr = '';
-                 d.items.map(t=>t.q>0?itemStr+=`- <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')
-                 document.getElementById('ul').innerHTML+=`<div class="list-group-item">
+        function getOrders(d, i, items){
+           let doneBtn = i.toString().includes('done')? 'unDone' : 'Done';
+           return (`<div class="list-group-item">
                  <div data-toggle="collapse" data-target="#li${i}"
                  aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
                  <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
                 user name :${d.username}<br/>password :${d.password}<br/>
-                ${itemStr}sum: ${d.sum} $
+                ${items}sum: ${d.sum} $
                 <br/>order created at :${new Date(d.createdAt)} <br/> updated at :${new Date(d.updatedAt)}
-                <br/><button value="${d._id}" class="btn btn-danger">Delete</button> <button value="${d._id}" class="btn btn-info">Print</button></div>
-                 </div>`;               
-             })
+                <br/><button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button> <button value="${d._id}" class="btn btn-danger">Delete</button> <button value="${d._id}" class="btn btn-info">Print</button></div>
+                 </div>`);
+        }
 
+        function fillPage(){
+            document.getElementById('ul').innerHTML="";
+            document.getElementById('ul-done').innerHTML="";
+            let xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    let data = JSON.parse(this.responseText);
+                    console.log(data)
+                    data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((b.lastName.toLowerCase() > a.lastName.toLowerCase()) ? -1 : 0))
+                    data.map((d,i)=>{
+                        let itemStr = '';
+                        d.items.map(t=>t.q>0?itemStr+= `- <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')
+                        if(!d.isDone)
+                            document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
+                        if(d.isDone)
+                            document.getElementById('ul-done').innerHTML+=getOrders(d,`${i}-done`,itemStr);            
+                    })
+                    enableBtns();
+                }
+            }
+            xhttp.open("GET", "/orders/130240", true);
+            xhttp.send();
+        }
+        fillPage()
+        function enableBtns(){
             document.querySelectorAll('.btn-danger').forEach(btn=>{
                 btn.addEventListener('click', e=>{
                     if (confirm('Are you sure you want to delete from the database?')) {
@@ -102,10 +127,19 @@
                 })
             });
 
-         }
-       }
-       xhttp.open("GET", "/orders/130240", true);
-       xhttp.send();
+            document.querySelectorAll('.btn-warning').forEach(btn=>{
+                btn.addEventListener('click', e=>{
+                    let del = new XMLHttpRequest();
+                    del.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200){
+                            fillPage();
+                        }
+                    }
+                    del.open("GET", `/orderdone/${e.target.value}`, true);
+                    del.send();
+                })
+            });
+        }
     </script>
    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
