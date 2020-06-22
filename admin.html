@@ -29,25 +29,27 @@
         </div>
         <div id="popup-print"></div>
     </main>
-    <footer class="bg-success p-3 w-100">
+    <footer class="bg-success p-3 w-100" style="top:50vh">
         <a href="/" class="c-y">Back</a>
     </footer>
     <script type="text/javascript">
 
-        function Print(d){
+        function Print(d, whatPrint){
             let tmpItems = '';
             d.items.map(i=>{
-                if(i.total>0){
+                if(i.q>0){
                     tmpItems+=`<tr>
-                    <td scope="row">${i.item}</td>
+                    <td scope="row">${i.item.toString().replace('set','Esrog')}</td>
                     <td>${i.q}</td>
                     </tr>`;
                 }
             })
             document.getElementById('popup-print').style.display='block';
-            document.getElementById('popup-print').innerHTML=`<a href="/admin/130240" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
+            document.getElementById('popup-print').innerHTML=`<a id="close-popup" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
             <p>${d.firstName}-${d.lastName}</p>
-            <table class="table table-bordered">
+            ${
+                whatPrint=="Print"?
+                `<table class="table table-bordered">
                 <thead>
                     <tr>
                         <td scope="col">#</td>
@@ -56,9 +58,15 @@
                 </thead>
                 <tbody>
                    ${tmpItems}
+                   <tr><th scope="row">SUM :</th><th>${d.sum}$</th></tr>
                 </tbody>
-            </table>
+                </table>`:
+                `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Address</b> </p><p><b>Box No.</b> </p>`
+            }
             <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
+            document.getElementById('close-popup').addEventListener('click', ()=>{
+                document.getElementById('popup-print').style.display='none';
+            })
         }
 
         function getOrders(d, i, items){
@@ -70,7 +78,10 @@
                 user name :${d.username}<br/>password :${d.password}<br/>
                 ${items}sum: ${d.sum} $
                 <br/>order created at :${new Date(d.createdAt)} <br/> updated at :${new Date(d.updatedAt)}
-                <br/><button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button> <button value="${d._id}" class="btn btn-danger">Delete</button> <button value="${d._id}" class="btn btn-info">Print</button></div>
+                <br/><button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
+                 <button value="${d._id}" class="btn btn-danger">Delete</button>
+                 <button value="${d._id}" class="btn btn-info">Print</button>
+                 <button value="${d._id}" class="btn btn-info">Shipping</button> </div>
                  </div>`);
         }
 
@@ -81,11 +92,10 @@
             xhttp.onreadystatechange = function(){
                 if(this.readyState == 4 && this.status == 200){
                     let data = JSON.parse(this.responseText);
-                    console.log(data)
-                    data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((b.lastName.toLowerCase() > a.lastName.toLowerCase()) ? -1 : 0))
+                    data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((b.lastName.toLowerCase() < a.lastName.toLowerCase()) ? -1 : 0))
                     data.map((d,i)=>{
                         let itemStr = '';
-                        d.items.map(t=>t.q>0?itemStr+= `- <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')
+                        d.items.map(t=>t.total>0?itemStr+= `- <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')
                         if(!d.isDone)
                             document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
                         if(d.isDone)
@@ -119,7 +129,7 @@
                     let del = new XMLHttpRequest();
                     del.onreadystatechange = function(){
                         if(this.readyState == 4 && this.status == 200){
-                            Print(JSON.parse(this.responseText))
+                            Print(JSON.parse(this.responseText), btn.innerText)
                         }
                     }
                     del.open("GET", `/get/${e.target.value}`, true);

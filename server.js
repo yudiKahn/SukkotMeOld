@@ -31,16 +31,21 @@ const schema = mongoose.Schema({
 var Yanki = new mongoose.model('YANKI', schema);
 
 let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false })
 .then(()=>{
     console.log('connected to db...');
     app.route('/order').post((req,res)=>{
         let myItems = [];
         let sum = 0;
+        let numOfSets = 0;
         items.map(d=>{
-            sum += Number(req.body[d.t]*d.p);
+            sum += Number(req.body[d.t]*d.p)?Number(req.body[d.t]*d.p):0;
+            if((d.t.toString().includes('set'))&&(Number(req.body[d.t])>0)){
+                numOfSets+=Number(req.body[d.t]);
+            }
             myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)})
         })
+        items.map(sev=>sev.n==7?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
         let newUser = new Yanki(req.body);
         newUser.items = myItems;
         newUser.sum = sum;
