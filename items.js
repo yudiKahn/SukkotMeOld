@@ -1,4 +1,5 @@
 module.exports = [
+    {n:0,t:'Budget Esrog',p:50},
     {n:1,t:'Israeli set A PITOM',p:30},
     {n:1,t:'Israeli set B PITOM',p:25},
     {n:1,t:'Israeli set C PITOM',p:20},

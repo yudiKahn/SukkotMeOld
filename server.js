@@ -41,12 +41,17 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
         let numOfSets = 0;
         items.map(d=>{
             sum += Number(req.body[d.t]*d.p)?Number(req.body[d.t]*d.p):0;
-            if((d.t.toString().includes('set'))&&(Number(req.body[d.t])>0)){
+            if((d.n==1)&&(Number(req.body[d.t])>0)){
                 numOfSets+=Number(req.body[d.t]);
+                myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
             }
-            myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)})
+            else if((d.n==0)&&(Number(req.body[d.t])>0)){
+               myItems.push({item: d.t, q:Number(req.body[d.t]), price:Number(req.body[`${d.t} q`]), total:Number(req.body[d.t]*req.body[`${d.t} q`])})
+            }else if(d.n!==7){
+                myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
+            }
         })
-        items.map(sev=>sev.n==7?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
+        items.map(sev=>(sev.n==7)?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
         let newUser = new Yanki(req.body);
         newUser.items = myItems;
         newUser.sum = sum;
@@ -99,12 +104,17 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
                 let numOfSets = 0;
                 items.map(d=>{
                     sum += Number(req.body[d.t]*d.p)?Number(req.body[d.t]*d.p):0;
-                    if((d.t.toString().includes('set'))&&(Number(req.body[d.t])>0)){
+                    if((d.n==1)&&(Number(req.body[d.t])>0)){
                         numOfSets+=Number(req.body[d.t]);
+                        myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
                     }
-                    myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)})
+                    else if((d.n==0)&&(Number(req.body[d.t])>0)){
+                       myItems.push({item: d.t, q:Number(req.body[d.t]), price:Number(req.body[`${d.t} q`]), total:Number(req.body[d.t]*req.body[`${d.t} q`])})
+                    }else if(d.n!==7){
+                        myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
+                    }
                 })
-                items.map(sev=>sev.n==7?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
+                items.map(sev=>(sev.n==7)?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
                 if(sum<=0){
                     res.send(`<div style="text-align: center;">
                     <h1 style="color:red;margin-top:20px;">Your Did not order any items.</h1>
@@ -114,14 +124,14 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
                         let htmlTxtRes = `<h1 style="color:#28a745;margin-top:20px;">Username '${req.body.username}' is updated.</h1>`;
                         myItems.map(d=>htmlTxtRes+= d.q>0? `<p>${d.item} :${d.q}. total: ${d.total}$</p>`:'');
                         htmlTxtRes+=`<p>SUM :${sum}$</p>`;
-                        mailSender.sendMail({
+                        /*mailSender.sendMail({
                             from: 'sukkotme@gmail.com',
                             to: data[0].email,
                             subject: 'Thank you !',
                             html: htmlTxtRes
                         }, (err, info)=>{
                            console.log(info||err)
-                        });
+                        });*/
                         res.send(`<div style="text-align: center;">${htmlTxtRes}<a href="/">Go Back</a></div>`)
                     }).catch(err=>res.send(err))
                 }
