@@ -52,24 +52,19 @@ window.onload = () =>{
                 </div>`;
             })
             
-            function sale(){
-                setTimeout(()=>{
-                    let yan = document.getElementById('yan-e');
-                    let isra = document.getElementById('ysra-e');
-                    yan.addEventListener('click', ()=>{
-                        alert('order yanever estrog and get two adasim.')
-                    })
-                    isra.addEventListener('click', ()=>{
-                        alert('order israeli estrog and get a all set')
-                    })
-                },500);
-                return `<small class="form-text text-muted">Order Israeli estrog & get a gift. <em id="ysra-e" class="text-info">press here</em></small>
-                <small class="form-text text-muted">Order Yanever estrog & get a gift. <em id="yan-e" class="text-info">press here</em></small><br/>`;
-            }
-
-            document.getElementById('submit-btn').addEventListener('click',()=>{
-                document.getElementById('items').style.display='none';
-            })
+           document.querySelectorAll('input').forEach((inp,ind)=>{
+               if(inp.min){
+                   let min = inp.min;
+                   let max = inp.max||2000;
+                   inp.addEventListener('input', function(){
+                       if(Number(this.value) > max || Number(this.value) < min){
+                           this.style.color="red";
+                       }else{
+                         this.style.color="black"
+                       }
+                   })
+               }
+           })
         }
     };
     xhttp.open("GET", "/items", true);
