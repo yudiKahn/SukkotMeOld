@@ -1,4 +1,17 @@
 window.onload = () =>{
+    function changeImg(){
+       let w = window.innerWidth;
+       let img = document.getElementById('bg-img-head');
+
+       if(w<500){
+           img.src="/imgs/d-minim-s.png"
+       }else if(w>=500){
+           img.src="/imgs/d-minim.jpg"
+       }
+    }
+    changeImg();
+    window.addEventListener('resize', changeImg)
+
     document.getElementById('toggle-pass').addEventListener('click', function(){
         document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
     });

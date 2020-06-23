@@ -11,22 +11,30 @@
     <script type="text/javascript" src="/index.js"></script>
 </head>
 <body>
-    <header class="px-4 w-100" style="background-image: linear-gradient(180deg, rgba(194,203,210,0.33) 0%, #ffffff 20%);">
-        <div class="w-100 p-2 row mx-0">
-            <div class="col col-10">
-                <a class="nav-link text-success" id="update" style="cursor:pointer;">Update Order</a>
+    <header>
+        <img alt="minim" src="/imgs/d-minim.jpg" id="bg-img-head">
+        <div class="w-100 navbar px-3">
+            <div class="w-100 p-2 row mx-0">
+                <div class="col col-10" style="text-shadow:1px 2px 1px #eff157;">
+                    <b><a class="text-success" id="update" style="cursor:pointer;">Update Order</a></b>
+                    &nbsp;<i class="fa fa-mouse-pointer text-success"></i>
+                </div>
+                <div class="col col-2 text-right" style="font-family: cursive;">
+                    <h5 class="text-success">ב"ה</h5>
+                </div>
             </div>
-            <div class="col col-2 text-right" style="font-family: cursive;">
-                <h5 class="c-y">ב"ה</h5>
-            </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-success w-100" style="justify-content:space-between;border-radius:0 0 20px 20px;border-top:4px solid #eff157;">
+                <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
+                <h5 id="form-status" class="c-y text-center nav-item">- New Order</h5>
+            </nav>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-success" style="justify-content:space-between;border-radius:0 0 20px 20px;border-top:4px solid #eff157;">
-            <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
-            <h5 id="form-status" class="c-y text-center nav-item">- New Order</h5>
-        </nav>
+        <div class="w-100 p-3 text-center" style="position:relative; top:70px;">
+             <h1 class="c-y" id="txt-head">All You'r Needs For Sukkot !</h1>
+        </div>
+        <a href="#main"><i class="fa fa-caret-down fa-4x text-success" id="carret-down"></i></a>
     </header>
-    <main>
-        <form class="main-form form-size mx-auto my-5" id="form" method="POST" action="/order">
+    <main id="main" class="py-5">
+        <form class="main-form form-size mx-auto bg-white" id="form" method="POST" action="/order">
             <div class="form-size p-4">
                 <div class="form-group">
                     <label for="main-form-user" class="text-success">User Name</label>

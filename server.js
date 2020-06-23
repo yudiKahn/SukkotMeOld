@@ -70,7 +70,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
             }
         }).catch(err=>sendErr(res, err))
     })
-}).catch(err=>sendErr(res, err));
+}).catch(err=>console.log(err));
 
 app.get('/', (req, res)=>{
     res.sendFile('/index.html');
