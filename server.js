@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser= require('body-parser');
 const items = require('./items');
-const {getUserItems, getUserSum, sendErr, sendWarning, sendSuccess} = require('./helpfulFunctions')
+const {getUserItems, getUserSum, sendErr, sendWarning, sendSuccess, getItemObj} = require('./helpfulFunctions')
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -105,45 +105,19 @@ app.get('/orderdone/:id', (req,res)=>{
         Yanki.updateOne({_id:req.params.id}, {isDone: !doc.isDone}).then((()=>res.send(doc.isDone))).catch(er=>res.status(400).json(er))
     }).catch(er=>res.status(400).json(er))
 })
+app.post('/admin/update/130240/:id', (req,res)=>{
+    Yanki.findById(req.params.id).then(doc=>{
+        let oldItems = doc.items;
+        oldItems.push(getItemObj(req.body.item, req.body.q, req.body.price))
+        Yanki.updateOne({_id:req.params.id}, {items: oldItems}).then(()=>{
+            res.redirect('/admin/130240')
+        }).catch(err=>sendErr(res, err))
+    }).catch(err=>sendErr(res, err));
+})
 
 const listener = app.listen(process.env.PORT || 8080, ()=>{
     console.log(`listening on port ${listener.address().port}`);
 })
 
-/**
- *         let numOfSets = 0;
-        items.map(d=>{
-            sum += d.n==0? Number(req.body[d.t]*Number(req.body[`${d.t} q`])) : Number(req.body[d.t]*d.p) ? Number(req.body[d.t]*d.p) : 0;
-            if((d.n==1)&&(Number(req.body[d.t])>0)){
-                numOfSets+=Number(req.body[d.t]);
-                myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
-            }
-            else if((d.n==0)&&(Number(req.body[d.t])>0)){
-               if(Number(req.body[`${d.t} q`])>=75)
-                 numOfSets+=Number(req.body[d.t]);
-               myItems.push({item: d.t, q:Number(req.body[d.t]), price:Number(req.body[`${d.t} q`]), total:Number(req.body[d.t]*req.body[`${d.t} q`])})
-            }else if(d.n!==7){
-                myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
-            }
-        })
-        items.map(sev=>(sev.n==7)?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
-
-
-
- *                 let numOfSets = 0;
-                items.map(d=>{
-                    sum += d.n==0? Number(req.body[d.t]*Number(req.body[`${d.t} q`])) : Number(req.body[d.t]*d.p) ? Number(req.body[d.t]*d.p) : 0;
-                    if((d.n==1)&&(Number(req.body[d.t])>0)){
-                        numOfSets+=Number(req.body[d.t]);
-                        myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
-                    }
-                    else if((d.n==0)&&(Number(req.body[d.t])>0)){
-                       if(Number(req.body[`${d.t} q`])>=75)
-                         numOfSets+=Number(req.body[d.t]);
-                       myItems.push({item: d.t, q:Number(req.body[d.t]), price:Number(req.body[`${d.t} q`]), total:Number(req.body[d.t]*req.body[`${d.t} q`])})
-                    }else if(d.n!==7){
-                        myItems.push({item: d.t, q: Number(req.body[d.t]), price:d.p, total: Number(req.body[d.t]*d.p)});
-                    }
-                })
-                items.map(sev=>(sev.n==7)?myItems.push({item:sev.t,q:numOfSets,price:0,total:0}):undefined);
+/* 
  */

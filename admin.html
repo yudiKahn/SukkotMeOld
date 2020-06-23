@@ -15,6 +15,19 @@
         </nav>
     </header>
     <main>
+        <form method="POST" id="admin-form" class="admin-form main-form form-size mx-3 my-3 bg-white" style="position:fixed;display:none;">
+            <div class="row"><div class="col c-y h4" id="form-user"></div><div class="col text-danger text-right h5" id="close-form">&times;</div></div> 
+            <div class="p-3 form-group">
+                <select name="item" class="form-control" id="form-select">
+
+                </select>
+                <label>Price :</label>
+                <input type="number" name="price" class="form-control" min="0">
+                <label>Quantity :</label>
+                <input type="number" name="q" class="form-control" min="0">
+                <button type="submit" class="btn btn-primary my-4">Submit</button>
+            </div>
+        </form>
         <div class="container text-center" id="li-parent">
            <h2 class="c-y">Orders</h2>
            <div id="ul" class="list-group text-success my-4">
@@ -35,6 +48,13 @@
     </footer>
     <script type="text/javascript">
 
+        const adminItems=['Israeli Esrog A PITOM','Israeli Esrog B PITOM','Israeli Esrog C PITOM',
+            'Israeli Esrog A NO PITOM','Israeli Esrog B NO PITOM','Israeli Esrog C NO PITOM',
+            'Esrog Yannever A PITOM','Esrog Yannever B PITOM','Esrog Yannever C PITOM',
+            'Esrog Yannever D PITOM','Esrog Yannever A NO PITOM','Esrog Yannever B NO PITOM',
+            'Esrog Yannever C NO PITOM','Esrog Yannever D NO PITOM','Egyptian Lulav','Deri Lulav',
+            'Deri Much Lulav','Aruvos', 'Hadas A','Hadas B','Hadas C','Hushanos',"Koisaklach","Plastic bag"];
+
         function printMoney(money){
             document.getElementById('total-money').innerHTML=`Total all : <b class="c-y">${money} $</b>`;
         }
@@ -54,7 +74,7 @@
             document.getElementById('popup-print').innerHTML=`<a id="close-popup" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
             <p>${d.firstName} ${d.lastName} <b>/</b> ${d.email} <b>/</b> ${d.phoneNumber}  <b>/</b> ${d.address}</p>
             ${
-                whatPrint=="Print"?
+                whatPrint=="Order"?
                 `<table class="table table-bordered">
                 <thead>
                     <tr>
@@ -76,6 +96,20 @@
             })
         }
 
+        function showUpdateForm(username, id){
+            const form = document.getElementById('admin-form');
+            form.style.display='block';
+            form.action=`/admin/update/130240/${id}`;
+            document.getElementById('close-form').addEventListener('click',()=> form.style.display='none' );
+            document.getElementById('form-user').innerText=username;
+
+            adminItems.map((d,i)=>{
+                document.getElementById('form-select').innerHTML+=`<option>${d}</option>`;
+            })            
+
+
+        }
+
         function getOrders(d, i, items){
            let doneBtn = i.toString().includes('done')? 'unDone' : 'Done';
            return (`<div class="list-group-item">
@@ -87,9 +121,9 @@
                 <br/>order created at :${new Date(d.createdAt)} <br/> updated at :${new Date(d.updatedAt)}
                 <br/><button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
                  <button value="${d._id}" class="btn btn-danger">Delete</button>
-                 <button value="${d._id}" class="btn btn-info">Print</button>
+                 <button value="${d._id}" class="btn btn-info">Order</button>
                  <button value="${d._id}" class="btn btn-info">Shipping</button>
-                 <button value="${d._id}" class="btn btn-dark">Edit</button> </div>
+                 <button value="${d._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-dark">Edit</button> </div>
                  </div>`);
         }
 
@@ -163,7 +197,7 @@
 
             document.querySelectorAll('.btn-dark').forEach(btn=>{
                 btn.addEventListener('click', e=>{
-                    console.log(e.target.value)
+                    showUpdateForm(e.target.getAttribute('data-user'), e.target.value);
                 })
             });
         }
