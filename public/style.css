@@ -1,4 +1,4 @@
-body, html{scroll-behavior: smooth;margin:0; padding:0;width:100vw;height: 100vh;overflow-x: hidden;}
+body, html{scroll-behavior: smooth;margin:0; padding:0;width:100vw;height: 100vh;overflow-x: hidden;overflow: overlay;}
 .header{
   width:100vw; height:100vh; position: relative;
 }
@@ -47,17 +47,12 @@ footer{
 #popup{
   opacity:0.7; position: absolute;width:100vw;height: 100vh;top:0; z-index: 100;
 }
-/* Track */
-::-webkit-scrollbar-track {
-  background: white;
+::-webkit-scrollbar{
+  width: 4px !important;
 }
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(243, 241, 241);
+  background: #cccccc;
 }
-
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
    background: #28a745;
 }
