@@ -1,5 +1,5 @@
-body{margin:0; padding:0;width:100vw;height: 100vh;overflow-x: hidden;}
-header{
+body, html{scroll-behavior: smooth;margin:0; padding:0;width:100vw;height: 100vh;overflow-x: hidden;}
+.header{
   width:100vw; height:100vh; position: relative;
 }
 #bg-img-head{
@@ -25,11 +25,11 @@ header{
 #items{
   position: fixed; background-color: white; box-shadow:3px 3px 5px black;
   width:90vw; height:90vh;z-index:11; top:5vh !important;left:5vw !important;
-  max-height: 700px; overflow-y: auto; display: none;
+  max-height: 700px; overflow-y: auto; display: none; scroll-behavior: smooth;
 }
 .card-header{cursor: pointer;}
 .form-size{width:90vw; max-width:500px; height:90vw; max-height:500px;min-height: 400px;z-index: 5;}
-.main-form{   
+.main-form{  scroll-behavior: smooth; 
     box-shadow:3px 3px 5px black;
     overflow-y: auto;overflow-x: hidden;
 }
