@@ -16,7 +16,7 @@ window.onload = () =>{
         update = !update;
         this.innerHTML = update? 'New Order' : 'Update Order';
         document.getElementById('form').action = update ? '/update' : '/order';
-        document.getElementById('form-status').innerHTML = update ? '- Update -' : '- New Order -';
+        document.getElementById('form-status').innerHTML = update ? '- Update' : '- New Order';
         document.getElementById('form-note').innerHTML = update ? 'Forgot password / username ?!<a href="tel:+18186052066">call me</a>.':"You can change you'r order in the future with this username & password."
         document.querySelectorAll('.dis-on-up').forEach((input,index)=>{
           input.placeholder = update ? 'Not Requierd on updating order':`Enter ${placehold[index]}`;

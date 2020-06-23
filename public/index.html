@@ -11,20 +11,22 @@
     <script type="text/javascript" src="/index.js"></script>
 </head>
 <body>
-    <header class="bg-success px-3 w-100">
-        <nav class="navbar navbar-expand-lg navbar-light bg-success" style="justify-content: space-between;">
-            <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
-            <div class="nav-item">
-                <a class="nav-link text-white" id="update" style="cursor:pointer;">Update Order</a>
+    <header class="px-4 w-100" style="background-image: linear-gradient(180deg, rgba(194,203,210,0.33) 0%, #ffffff 20%);">
+        <div class="w-100 p-2 row mx-0">
+            <div class="col col-10">
+                <a class="nav-link text-success" id="update" style="cursor:pointer;">Update Order</a>
             </div>
-            <div class="nav-item" style="font-family: cursive;">
+            <div class="col col-2 text-right" style="font-family: cursive;">
                 <h5 class="c-y">ב"ה</h5>
             </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-success" style="justify-content:space-between;border-radius:0 0 20px 20px;border-top:4px solid #eff157;">
+            <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
+            <h5 id="form-status" class="c-y text-center nav-item">- New Order</h5>
         </nav>
     </header>
     <main>
         <form class="main-form form-size mx-auto my-5" id="form" method="POST" action="/order">
-            <h3 id="form-status" class="c-y text-center">- New Order -</h3>
             <div class="form-size p-4">
                 <div class="form-group">
                     <label for="main-form-user" class="text-success">User Name</label>
@@ -69,7 +71,13 @@
 
             <div id="items" class="p-4">
                 <a class="btn btn-outline-success" href="#close-items" style="transform: rotate(90deg);">&rsaquo;</a>
-                <div class="row px-3"><div class="col h5">Type</div><div class="col h5 text-left">Quantity</div><div class="col"></div></div>
+                <br/>
+                <div class="row p-1 position-fixed w-75 bg-success text-white" style="z-index:100;border-top:5px solid #eff157;">
+                    <div class="col text-center">Type</div>
+                    <div class="col text-right">Quantity</div>
+                    <div class="col text-right">Price</div>
+                </div>
+                <br/>
                 <div id="min" class="mb-3">
 
                 </div>
@@ -85,6 +93,7 @@
                 <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
             </div>
         </form>
+    </main>
     <footer class="bg-success p-3 w-100 text-white">
         <h5>About</h5>
         <p>Yanki Kahn <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 

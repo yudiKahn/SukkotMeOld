@@ -46,12 +46,13 @@
                     tmpItems+=`<tr>
                     <td scope="row">${i.item.toString().replace('set','Esrog')}</td>
                     <td>${i.q}</td>
+                    <td><small>${i.price} $ &times; ${i.q} = ${i.total} $</small></td>
                     </tr>`;
                 }
             })
             document.getElementById('popup-print').style.display='block';
             document.getElementById('popup-print').innerHTML=`<a id="close-popup" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
-            <p>${d.firstName} ${d.lastName} <b>/</b> ${d.email} <b>/</b> ${d.phoneNumber}</p>
+            <p>${d.firstName} ${d.lastName} <b>/</b> ${d.email} <b>/</b> ${d.phoneNumber}  <b>/</b> ${d.address}</p>
             ${
                 whatPrint=="Print"?
                 `<table class="table table-bordered">
@@ -59,14 +60,15 @@
                     <tr>
                         <td scope="col">#</td>
                         <td scope="col">Quantity</td>
+                        <td scope="col">Price</td>
                     </tr>
                 </thead>
                 <tbody>
                    ${tmpItems}
-                   <tr><th scope="row">SUM :</th><th>${d.sum}$</th></tr>
+                   <tr><th scope="row">SUM :</th><th></th><th>${d.sum}$</th></tr>
                 </tbody>
                 </table>`:
-                `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Address</b> ${d.address}</p><p><b>Box No.</b> </p>`
+                `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Box No.</b> </p>`
             }
             <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
             document.getElementById('close-popup').addEventListener('click', ()=>{
@@ -86,7 +88,8 @@
                 <br/><button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
                  <button value="${d._id}" class="btn btn-danger">Delete</button>
                  <button value="${d._id}" class="btn btn-info">Print</button>
-                 <button value="${d._id}" class="btn btn-info">Shipping</button> </div>
+                 <button value="${d._id}" class="btn btn-info">Shipping</button>
+                 <button value="${d._id}" class="btn btn-dark">Edit</button> </div>
                  </div>`);
         }
 
@@ -155,6 +158,12 @@
                     }
                     del.open("GET", `/orderdone/${e.target.value}`, true);
                     del.send();
+                })
+            });
+
+            document.querySelectorAll('.btn-dark').forEach(btn=>{
+                btn.addEventListener('click', e=>{
+                    console.log(e.target.value)
                 })
             });
         }
