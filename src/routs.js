@@ -59,11 +59,12 @@ router.get('/items', (req,res)=>{
 })
 
 //admin route
+/*
 router.get('/admin/:id', (req, res)=>{
     if(req.params.id == 130240)
     res.sendFile(__dirname+'/admin.html');
     else res.send('not found.')
-})
+})*/
 
 //gets all orders for admin
 router.get('/orders/:id', (req,res)=>{
