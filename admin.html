@@ -66,7 +66,7 @@
                     tmpItems+=`<tr>
                     <td scope="row">${i.item.toString().replace('set','Esrog')}</td>
                     <td>${i.q}</td>
-                    <td><small>${i.price} $ &times; ${i.q} = ${i.total} $</small></td>
+                    <td><small>${i.price} &times; ${i.q} = $ ${i.total}</small></td>
                     </tr>`;
                 }
             })
@@ -85,7 +85,7 @@
                 </thead>
                 <tbody>
                    ${tmpItems}
-                   <tr><th scope="row">SUM :</th><th></th><th>${d.sum}$</th></tr>
+                   <tr><th scope="row">SUM :</th><th></th><th>$${d.sum}</th></tr>
                 </tbody>
                 </table>`:
                 `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Box No.</b> </p>`
@@ -117,13 +117,15 @@
                  aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
                  <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
                 user name :${d.username}<br/>password :${d.password}<br/>
-                ${items}sum: ${d.sum} $
+                ${items}sum:$ ${d.sum}
                 <br/>order created at :${new Date(d.createdAt)} <br/> updated at :${new Date(d.updatedAt)}
-                <br/><button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
+                <br/>
+                 <button value="${d._id}" class="btn btn-outline-success">Paid</button>
+                 <button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
                  <button value="${d._id}" class="btn btn-danger">Delete</button>
                  <button value="${d._id}" class="btn btn-info">Order</button>
                  <button value="${d._id}" class="btn btn-info">Shipping</button>
-                 <button value="${d._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-dark">Edit</button> </div>
+                 <button value="${d._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-outline-dark">Edit</button> </div>
                  </div>`);
         }
 
@@ -195,9 +197,14 @@
                 })
             });
 
-            document.querySelectorAll('.btn-dark').forEach(btn=>{
+            document.querySelectorAll('.btn-outline-dark').forEach(btn=>{
                 btn.addEventListener('click', e=>{
                     showUpdateForm(e.target.getAttribute('data-user'), e.target.value);
+                })
+            });
+            document.querySelectorAll('.btn-outline-success').forEach(btn=>{
+                btn.addEventListener('click', e=>{
+                   
                 })
             });
         }

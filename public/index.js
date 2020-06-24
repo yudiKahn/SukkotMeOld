@@ -59,7 +59,7 @@ window.onload = () =>{
                     currentMin.map(m=>`<div class="row">
                     <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}</div>
                     <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
-                    <div class="col">${m.p} $</div>
+                    <div class="col">$ ${m.p}</div>
                     </div>`)
                 }
                 </div>`;

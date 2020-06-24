@@ -18,23 +18,27 @@ function getUserItems(itemsAvailable, reqObj){
    itemsAvailable.map((d,i)=>{
         if(d.n==0){
             res.push(getItemObj(d.t , Number(reqObj[d.t]) , Number(reqObj[`${d.t} price`]) ));
-        }else if(d.n!==7){
+        }else if((d.n!==7)&&(d.n!==8)){
             res.push(getItemObj(d.t , Number(reqObj[d.t]) , d.p ));
         }
         if(d.n==1){
             sumOfIsraeliSets += Number(reqObj[d.t]);
         }
-        if(d.n==0 || d.n==2){
+        if(d.n==2){
+            sumOfYaneverSets += Number(reqObj[d.t]);
+        }
+        if((d.n==0)&&(Number(reqObj[`${d.t} price`])>75)){
             sumOfYaneverSets += Number(reqObj[d.t]);
         }
    })
    
     itemsAvailable.map(d=>{
-      let price = Number(reqObj[`${d.t} price`]) || d.p;
-      if(d.n==7 || d.n==8)
-         res.push(((d.t.toString()=="Hadas B")&&(price>75))? getItemObj(d.t , sumOfYaneverSets , 0 ) : getItemObj(d.t , (Number(sumOfYaneverSets) + Number(sumOfIsraeliSets)) , 0 ));
+      if(d.n==7){
+         res.push(getItemObj(d.t , Number(sumOfYaneverSets + sumOfIsraeliSets) , 0 ))
+      }else if((d.n==8)&&(d.t.toString()=='Hadas B')){
+         res.push(getItemObj(d.t , sumOfYaneverSets , 0 ))
+      }
     })
-
    return res;
 }
 
@@ -71,7 +75,7 @@ function sendSuccess(res, msg , details , user , sum){
   if(details){
      details.map(d=>{
          paidItems += d.total>0 ? `<tr><td>${d.item}</td><td>${d.q}</td><td>${d.total}$</td></tr>`:'';
-         allItems += d.q>0 ? `<tr><td>${d.item}</td><td>${d.q}</td><td>${d.total}$</td></tr>`:'';
+         allItems += d.q>0 ? `<tr><td>${d.item.replace('set','esrog')}</td><td>${d.q}</td><td>${d.total}$</td></tr>`:'';
      })
   }
   return res.status(200).send(`<div style="text-align: center;">
@@ -111,16 +115,6 @@ module.exports = {
     getItemObj: getItemObj
 }
 /**
- * 
-let htmlItmStr = '';
-let htmlFreeItmStr = '';
-myItems.map(d=>{
-    htmlItmStr+=d.total>0?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'';
-    htmlFreeItmStr+=((d.total==0)&&(d.q>0))?`${d.item} :${d.q}. total: ${d.total}$<br/>`:'';
-})
-let htmlTxtRes = `<h1 style="color:#28a745;margin-top:20px;">Your Order Has Been Saved.</h1>
-    <p>First Name :${doc.firstName}<br/>
-    Last Name :${doc.lastName}<br/>User Name :${doc.username}<br/>Email :${doc.email}
-    <br/>${htmlItmStr} ${htmlFreeItmStr.length>0?`<hr/><h3>Free items</h3>${htmlFreeItmStr}`:''}
-    <hr/><b>SUM</b> :${doc.sum}$</p>`;
+ *          res.push(d.t.toString()=="Hadas B" ? getItemObj(d.t , sumOfYaneverSets , 0 ) : getItemObj(d.t , Number(sumOfYaneverSets + sumOfIsraeliSets) , 0 ));
+
  */
