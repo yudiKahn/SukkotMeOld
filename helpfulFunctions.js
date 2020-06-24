@@ -27,8 +27,9 @@ function getUserItems(itemsAvailable, reqObj){
         if(d.n==2){
             sumOfYaneverSets += Number(reqObj[d.t]);
         }
-        if((d.n==0)&&(Number(reqObj[`${d.t} price`])>75)){
-            sumOfYaneverSets += Number(reqObj[d.t]);
+        if(d.n==0){
+            if(Number(reqObj[`${d.t} price`])>75){sumOfYaneverSets += Number(reqObj[d.t]);}
+            else {sumOfIsraeliSets += Number(reqObj[d.t]);}
         }
    })
    

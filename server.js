@@ -20,7 +20,8 @@ const schema = mongoose.Schema({
     items:[],
     sum: {type:Number},
     address: {type: String},
-    isDone: {type:Boolean}
+    isDone: {type:Boolean},
+    isPaid: {type:Boolean}
 }, {timestamps: true});
 var Yanki = new mongoose.model('YANKI', schema);
 
@@ -35,6 +36,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFind
         newUser.items = myItems;
         newUser.sum = sum;
         newUser.isDone=false;
+        newUser.isPaid=false;
         if(newUser.sum <= 0){
            sendErr(res, 'You did not order any items')
         }else if(newUser.password==''||newUser.username==''){
@@ -103,6 +105,11 @@ app.get('/get/:id', (req,res)=>{
 app.get('/orderdone/:id', (req,res)=>{
     Yanki.findById(req.params.id).then(doc=>{
         Yanki.updateOne({_id:req.params.id}, {isDone: !doc.isDone}).then((()=>res.send(doc.isDone))).catch(er=>res.status(400).json(er))
+    }).catch(er=>res.status(400).json(er))
+})
+app.get('/orderpaid/:id', (req,res)=>{
+    Yanki.findById(req.params.id).then(doc=>{
+        Yanki.updateOne({_id:req.params.id}, {isPaid: !doc.isPaid}).then((()=>res.send(doc.isPaid))).catch(er=>res.status(400).json(er))
     }).catch(er=>res.status(400).json(er))
 })
 app.post('/admin/update/130240/:id', (req,res)=>{

@@ -1,4 +1,6 @@
 window.onload = () =>{
+
+    //some responsive effects
     function changeImgAndColOrRow(){
        let w = window.innerWidth;
        let img = document.getElementById('bg-img-head');
@@ -10,11 +12,12 @@ window.onload = () =>{
     changeImgAndColOrRow();
     window.addEventListener('resize', changeImgAndColOrRow)
 
+    //toggle password input to type text
     document.getElementById('toggle-pass').addEventListener('click', function(){
         document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
     });
 
-    let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hushanos'];
+    //display & undisplay main form
     document.getElementById('to-items').addEventListener('click',()=>{
         document.getElementById('items').style.display='block';
     })
@@ -24,6 +27,8 @@ window.onload = () =>{
     document.getElementById('submit-btn').addEventListener('click',()=>{
         document.getElementById('items').style.display='none';
     })
+
+    //change form action from order to update
     let update = false;
     document.getElementById('update').addEventListener('click', function(){
         let placehold = ['Address','Email','Phone Number','First Name','Last Name'];
@@ -38,21 +43,23 @@ window.onload = () =>{
         })
     })
 
-    let arr;
 
+    //fill main form with d minim & items
+    let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hushanos','Schach'];
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            arr = JSON.parse(this.responseText);
+            let arr = JSON.parse(this.responseText);
             let set = arr.filter(d=>d.n==1);
             let estrog = arr.filter(d=>d.n==2);
             let lulav = arr.filter(d=>d.n==3);
             let arava = arr.filter(d=>d.n==4);
             let hadas = arr.filter(d=>d.n==5);
             let husana = arr.filter(d=>d.n==6);
+            let schach = arr.filter(d=>d.n==9)
 
             tmpMinimArr.map((d,index)=>{
-                let a = [set,estrog, lulav, hadas, arava, husana];
+                let a = [set,estrog, lulav, hadas, arava, husana, schach];
                 let currentMin = a[index];
                 document.getElementById('min').innerHTML+=`<div class="p-3" id="min-${d}">
                 <h2 class="text-success">${d}</h2>
