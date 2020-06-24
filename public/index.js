@@ -1,16 +1,14 @@
 window.onload = () =>{
-    function changeImg(){
+    function changeImgAndColOrRow(){
        let w = window.innerWidth;
        let img = document.getElementById('bg-img-head');
 
-       if(w<500){
-           img.src="/imgs/d-minim-s.png"
-       }else if(w>=500){
-           img.src="/imgs/d-minim.jpg"
-       }
+       if(w<500){  img.src="/imgs/d-minim-s.png";}
+       else{ img.src="/imgs/d-minim.jpg"; }
+       document.querySelectorAll('.col-or-row').forEach(d=>{ if(w<500){ d.classList.remove('col-6');}  else{ d.classList.add('col-6');}})
     }
-    changeImg();
-    window.addEventListener('resize', changeImg)
+    changeImgAndColOrRow();
+    window.addEventListener('resize', changeImgAndColOrRow)
 
     document.getElementById('toggle-pass').addEventListener('click', function(){
         document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
@@ -21,6 +19,9 @@ window.onload = () =>{
         document.getElementById('items').style.display='block';
     })
     document.getElementById('close-items').addEventListener('click',()=>{
+        document.getElementById('items').style.display='none';
+    })
+    document.getElementById('submit-btn').addEventListener('click',()=>{
         document.getElementById('items').style.display='none';
     })
     let update = false;

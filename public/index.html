@@ -11,8 +11,8 @@
     <!--<meta name="theme-color" content="#ad9e86">-->
     <script type="text/javascript" src="/index.js"></script>
 </head>
-<body style="scroll-snap-type: y mandatory;">
-    <header class="header" style="scroll-snap-align:start;">
+<body>
+    <header class="header">
         <img alt="minim" src="/imgs/d-minim.jpg" id="bg-img-head">
         <div class="w-100 navbar px-3">
             <div class="w-100 p-2 row mx-0">
@@ -35,7 +35,7 @@
         </div>
         <a href="#main"><i class="fa fa-caret-down fa-4x text-success" id="carret-down"></i></a>
     </header>
-    <main id="main" class="py-5" style="scroll-snap-align:start;">
+    <main id="main" class="py-5">
         <form class="main-form form-size mx-auto bg-white" id="form" method="POST" action="/order">
             <div class="form-size p-4">
                 <div class="form-group">
@@ -106,7 +106,7 @@
         </form>
     </main>
     <footer class="bg-success p-3 pt-5 w-100 text-white">
-       <div class="row w-100 pl-3" style="scroll-snap-align:start;">
+       <div class="row w-100 pl-3">
             <div class="col-6 col-or-row">
                 <h5>About</h5>
                 <p>Yanky Kahn <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 
@@ -120,15 +120,6 @@
                 </ul>
             </div>
        </div>
-       <script type="text/javascript">
-            function colOrRow(){
-                let w = window.innerWidth;
-                document.querySelectorAll('.col-or-row').forEach(d=>{
-                    if(w<500){ d.classList.remove('col-6');}
-                    else{ d.classList.add('col-6');}
-                })
-            }colOrRow();window.addEventListener('resize',colOrRow)
-       </script>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
