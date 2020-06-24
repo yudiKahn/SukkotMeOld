@@ -1,66 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">   
-   <link href="/style.css" rel="stylesheet">
-    <link rel="icon" href="/imgs/icon.png">
-</head>
-<body>
-    <header class="bg-success px-3 w-100">
-        <nav class="navbar navbar-expand-lg navbar-light bg-success">
-            <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
-        </nav>
-    </header>
-    <main>
-        <form method="POST" id="admin-form" class="admin-form main-form form-size mx-3 my-3 bg-white" style="position:fixed;display:none;">
-            <div class="row"><div class="col c-y h4" id="form-user"></div><div class="col text-danger text-right h5" id="close-form">&times;</div></div> 
-            <div class="p-3 form-group">
-                <select name="item" class="form-control" id="form-select">
+window.onload = function(){
 
-                </select>
-                <label>Price :</label>
-                <input type="number" name="price" class="form-control" min="0">
-                <label>Quantity :</label>
-                <input type="number" name="q" class="form-control" min="0">
-                <button type="submit" class="btn btn-primary my-4">Submit</button>
-            </div>
-        </form>
-        <div class="container text-center" id="li-parent">
-           <h2 class="c-y">Orders</h2>
-           <div id="ul" class="list-group text-success my-4">
-
-           </div>
-           <h2 class="c-y" style="cursor:pointer;">
-             <p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p> Done Orders &nbsp;<p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p>
-           </h2>
-           <div id="ul-done" class="list-group text-success my-4 bg-info p-1">
-              
-           </div>
-            <h2 class="c-y mt-5" style="cursor:pointer;">
-                <p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p> Paid Orders &nbsp;<p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p>
-            </h2>
-            <div id="ul-paid" class="list-group text-success my-4 bg-info p-1">
-                
-            </div>
-            <h2 class="text-dark mt-5" style="cursor:pointer;">
-                <p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p> Paid & Done &nbsp;<p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p>
-            </h2>
-            <div id="ul-done-paid" class="list-group text-success my-4 bg-info p-1">
-                
-            </div>
-        </div>
-        <div id="popup-print"></div>
-    </main>
-    <footer class="bg-success p-3 w-100 row mx-0" style="top:50vh">
-        <a href="/" class="c-y col-3">Back</a>
-        <div class="col-9 text-white h5 text-right" id="total-money"></div>
-    </footer>
-    <script type="text/javascript">
-
-        const adminItems=['Israeli Esrog A PITOM','Israeli Esrog B PITOM','Israeli Esrog C PITOM',
+    const adminItems=['Israeli Esrog A PITOM','Israeli Esrog B PITOM','Israeli Esrog C PITOM',
             'Israeli Esrog A NO PITOM','Israeli Esrog B NO PITOM','Israeli Esrog C NO PITOM',
             'Esrog Yannever A PITOM','Esrog Yannever B PITOM','Esrog Yannever C PITOM',
             'Esrog Yannever D PITOM','Esrog Yannever A NO PITOM','Esrog Yannever B NO PITOM',
@@ -234,16 +174,4 @@
                 })
             });
         }
-    </script>
-   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
-</html>
-<!--
-                <h2 class="text-dark mt-5" style="cursor:pointer;" data-toggle="collapse" data-target="#ul-done-paid" aria-expanded="true" aria-controls="collapseOne">
-                <p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p> Paid & Done &nbsp;<p style="transform:rotate(90deg);display: inline-flex;">&rsaquo;</p>
-            </h2>
-            <div id="ul-done-paid" class="list-group text-success my-4 collapse bg-info p-1"  data-parent="#li-parent">
-                
-            </div>
--->
+}

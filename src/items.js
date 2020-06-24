@@ -27,12 +27,7 @@ module.exports = [
     {n:7,t:"Hadas C",p:0},
     {n:7,t:"Aruvos",p:0},
     {n:7,t:"Egyptian Lulav",p:0},
-    {n:8,t:"Koisaklach",p:0},
-    {n:8,t:"Plastic bag",p:0},
     {n:8,t:"Hadas B",p:0},
-    {n:8,t:"Hadas C",p:0},
-    {n:8,t:"Aruvos",p:0},
-    {n:8,t:"Egyptian Lulav",p:0},
     {n:9,t:"Schach 6 × 10",p:75},
     {n:9,t:"Schach 8 × 12",p:100}
 ]

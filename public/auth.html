@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">   
+    <link href="/style.css" rel="stylesheet">
+    <link rel="icon" href="/imgs/icon.png">
+</head>
+<body class="">
+    <form class="form-size main-form mx-auto mt-4 p-4" action="/admin/auth" method="POST">
+        <div class="form-group">
+            <label for="main-form-user" class="text-info">User Name</label>
+            <input required type="text" class="form-control" id="main-form-user" name="username" placeholder="Enter user name">
+        </div>
+        <div class="form-group">
+            <label for="main-form-pass" class="text-info">Password</label>
+            <input required type="password" class="form-control" id="main-form-pass" name="password" placeholder="Enter password">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-info">Submit</button>
+        </div>
+    </form>
+</body>
+</html>

@@ -90,4 +90,11 @@ window.onload = () =>{
     };
     xhttp.open("GET", "/items", true);
     xhttp.send();
+
+    //secret
+    document.getElementById('yanky').addEventListener('click', e=>{
+        if(e.detail==3){
+            window.location = "/auth.html";
+        }
+    })
 }
