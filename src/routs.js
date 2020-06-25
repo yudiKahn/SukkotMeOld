@@ -22,7 +22,7 @@ router.post('/order', (req,res)=>{
             if(data.length<=0){
                 newUser.save()
                 .then(doc=>{   
-                    res.status(200).send(sendSuccess('Your order has been saved' , myItems , doc , sum));
+                    res.status(200).send(sendSuccess('Your order has been saved' , myItems , doc , sum));//sendSuccess('Your order has been saved' , myItems , doc , sum)
                     //sendEmail(doc);
                 }).catch(err=>res.status(400).send(sendErr(res, err)))
             }else{
@@ -101,9 +101,9 @@ router.get('/orderpaid/:id', (req,res)=>{
 router.post('/admin/update/130240/:id', (req,res)=>{
     Yanki.findById(req.params.id).then(doc=>{
         let oldItems = doc.items;
-        oldItems.push(getItemObj(req.body.item, req.body.q, req.body.price))
+        oldItems.push(getItemObj(req.body.item, Number(req.body.q), Number(req.body.price), null, true))
         Yanki.updateOne({_id:req.params.id}, {items: oldItems}).then(()=>{
-            res.redirect('/admin/130240')
+            res.status(200).send('order was updated.')
         }).catch(err=>res.status(400).send(sendErr(err)))
     }).catch(err=>res.status(400).send(sendErr(err)));
 })
@@ -122,6 +122,20 @@ router.post('/admin/auth', (req, res)=>{
 //get admin script
 router.get('/admin/script-js/130240/GET', (req,res)=>{
     res.sendFile(__dirname+'/admin.js');
+})
+
+//admin send email
+router.post('/admin/email/130240/:id', (req,res)=>{
+    Yanki.findById(req.params.id).then(doc=>{
+        let isMaild = sendEmail(doc, req.body.contant)
+        res.send(sendWarning(isMaild));
+    }).catch(err=>res.status(400).send(err));
+})
+router.post('/admin/email-update/130240/:id', (req,res)=>{
+    Yanki.findById(req.params.id).then(doc=>{
+        let isMaild = sendEmail(doc, '', doc.items);
+        res.send(sendWarning(isMaild));
+    }).catch(err=>res.status(400).send(err));
 })
 
 module.exports = router;

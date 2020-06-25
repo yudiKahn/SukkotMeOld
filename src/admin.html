@@ -70,6 +70,20 @@
             </div>
         </form>
 
+        <form method="POST" id="adminemail-form" class="admin-form main-form form-size mx-3 my-3 bg-white" style="position:fixed;display:none;top:10px;">
+            <div class="row"><div class="col c-y h4" id="formemail-user"></div><div class="col text-danger text-right h5" id="closeemail-form">&times;</div></div> 
+            <div class="p-3 form-group">
+                <label>Contant :</label>
+                <textarea name="contant" class="form-control">
+
+                </textarea>
+            </div>
+            <div class="p-3 form-group">
+                <button type="submit" class="btn btn-primary my-4">Send</button>
+                <button type="button" class="btn btn-primary" id="send-email-update">Send Updates</button>
+            </div>
+        </form>
+
         <div id="popup-print"></div>
     </main>
     <footer class="bg-success p-3 w-100 row mx-0">
