@@ -2,23 +2,15 @@ window.onload = function(){
 
     //show total money
     function printMoney(money){
-        document.getElementById('total-money').innerHTML=`Total all : <b class="c-y">${money} $</b>`;
-    }
-
-    function getItemObj(item, q, price, total=null, byAdmin=false){
-        return {item: item, q:q, price: price, total: total ? total :Number(price*q), byAdmin: byAdmin }
-    }
-
-    function getDuplacateItems(arr){
-        let items = arr.map(d=>d.item.toString().replace('set','Esrog'));
-        return items.filter((v, i, a)=> a.indexOf(v)!==i )
+        document.getElementById('total-money').innerHTML=`Total all : <b class="c-y">$ ${money}</b>`;
     }
 
 
     //show print page
     function Print(d, whatPrint){
         let tmpItems = [];
-        d.items.map(i=>{
+        let sortedItems = d.items.sort((a,b)=>(a.item.toLowerCase() > b.item.toLowerCase()) ? 1 : ((a.item.toLowerCase() < b.item.toLowerCase()) ? -1 : 0))
+        sortedItems.map(i=>{
                 tmpItems+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
                 <td scope="row">${i.byAdmin?'+ ':''}${i.item.toString().replace('set','Esrog')}</td>
                 <td>${i.q}</td>
@@ -31,7 +23,7 @@ window.onload = function(){
         ${
             whatPrint=="Order"?
             `<table class="table table-bordered"><thead><tr><td scope="col">#</td><td scope="col">Quantity</td>
-             <td scope="col">Price</td></tr></thead> <tbody>${tmpItems}<tr><th scope="row">SUM :</th><th></th><th>$${d.sum}</th></tr>
+             <td scope="col">Price</td></tr></thead> <tbody>${tmpItems}<tr><th scope="row">SUM :</th><th></th><th>$${d.sum ? d.sum: 0}</th></tr>
             </tbody></table>`: `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Box No.</b> </p>`
         }
         <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
@@ -76,21 +68,28 @@ window.onload = function(){
     function getOrders(d, i, items){
         let doneBtn = i.toString().includes('done')? 'unDone' : 'Done';
         let paidBtn = i.toString().includes('paid')? 'unPaid' : 'Paid';
-        return (`<div class="list-group-item">
+        return (`<style>table, th, td {border: 1px solid #17a2b8;} th{background-color:#17a2b8;color:white;}</style>
+                <div class="list-group-item">
                 <div data-toggle="collapse" data-target="#li${i}"
                 aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
-                <div id="li${i}" class="collapse" data-parent="#ul">email :${d.email}<br/>
-            user name :${d.username}<br/>password :${d.password}<br/>
-            ${items}sum:$ ${d.sum}
-            <br/>order created at :${new Date(d.createdAt)} <br/> updated at :${new Date(d.updatedAt)}
-            <br/>
+                <div id="li${i}" class="collapse" data-parent="#ul">
+                <p><small>${d.email}<b>/</b>${d.username}<b>/</b>password :${d.password}</small></p>
+                <h4 style="color:#ffc107;text-align:left;"><em>Order items.</em></h4>
+                <table style="width:100%;">
+                <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${items[0]}</tbody>
+                </table><h4 style="color:#ffc107;text-align:left;"><em>What's in the box.</em></h4>
+                <table style="width:100%;">
+                <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${items[1]}</tbody>
+                </table>
+                <p><small>sum: $ ${d.sum ? d.sum:0}</small></p>
+                <p><small>created at: :${new Date(d.createdAt)} <b>/</b> updated at :${new Date(d.updatedAt)}</small></p> 
                 <button value="${d._id}" class="btn btn-outline-success">${paidBtn}</button>
                 <button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
                 <button value="${d._id}" class="btn btn-danger">Delete</button>
                 <button value="${d._id}" class="btn btn-info">Order</button>
                 <button value="${d._id}" class="btn btn-info">Shipping</button>
                 <button value="${d._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-outline-dark">Edit</button>
-                <button value="${d._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-outline-primary">Email</button> </div>
+                <button value="${d._id}" data-user="${d.firstName} ${d.lastName}-${d.email}" class="btn btn-outline-primary">Email</button> </div>
                 </div>`);
     }
 
@@ -105,19 +104,22 @@ window.onload = function(){
         xhttp.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
                 let data = JSON.parse(this.responseText);
-                data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((b.lastName.toLowerCase() < a.lastName.toLowerCase()) ? -1 : 0))
+                data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((a.lastName.toLowerCase() < b.lastName.toLowerCase()) ? -1 : 0))
                 data.map((d,i)=>{
-                    money += Number(d.sum);
-                    let itemStr = '';
-                    d.items.map(t=>t.total>0?itemStr+= `- <em class="c-y">${t.item}</em> - <br>quantaty: ${t.q} total: ${t.total}$<br>`:'')
+                    money += Number(d.sum ? d.sum : 0);
+                    let itemStr = ['',''];
+                    d.items.map(t=>{
+                        if(t.total>0){itemStr[0]+=`<tr><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
+                        if(t.q>0){itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
+                    })
                     if((!d.isDone)&&(!d.isPaid)){
-                    document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);}
-                    else if(d.isPaid&&d.isDone){
+                        document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
+                    }else if(d.isPaid&&d.isDone){
                         document.getElementById('ul-done-paid').innerHTML+=getOrders(d,`done-paid`,itemStr);
-                    }
-                    else if(d.isDone){
-                    document.getElementById('ul-done').innerHTML+=getOrders(d,`${i}-done`,itemStr);}
-                    else if(d.isPaid){document.getElementById('ul-paid').innerHTML+=getOrders(d,`${i}-paid`,itemStr);}                    
+                    }else if(d.isDone){
+                        document.getElementById('ul-done').innerHTML+=getOrders(d,`${i}-done`,itemStr);
+                    }else if(d.isPaid){
+                        document.getElementById('ul-paid').innerHTML+=getOrders(d,`${i}-paid`,itemStr);}                    
                 })
                 enableBtns();
                 printMoney(money);
@@ -197,4 +199,18 @@ window.onload = function(){
             })
         })
     }
+
+    //fill users names list
+    let names = new XMLHttpRequest();
+    const pass = 0;
+    names.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            document.getElementById('names-ul').innerHTML="";
+            let res = JSON.parse(this.responseText);
+            res = res.sort();
+            res.map(d=>document.getElementById('names-ul').innerHTML+=`<li class="list-group-item">${d}</li>`)
+        }
+    }
+    names.open("GET", `/admin/getNames/${pass}`, true)
+    names.send();
 }

@@ -13,11 +13,13 @@ window.onload = () =>{
     window.addEventListener('resize', changeImgAndColOrRow)
 
     //toggle password input to type text
+    /*
     document.getElementById('toggle-pass').addEventListener('click', function(){
         document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
-    });
+    });*/
 
     //display & undisplay main form
+    /*
     document.getElementById('to-items').addEventListener('click',()=>{
         document.getElementById('items').style.display='block';
     })
@@ -26,9 +28,10 @@ window.onload = () =>{
     })
     document.getElementById('submit-btn').addEventListener('click',()=>{
         document.getElementById('items').style.display='none';
-    })
+    })*/
 
     //change form action from order to update
+    /*
     let update = false;
     document.getElementById('update').addEventListener('click', function(){
         let placehold = ['Address','Email','Phone Number','First Name','Last Name'];
@@ -41,10 +44,11 @@ window.onload = () =>{
           input.placeholder = update ? 'Not Requierd on updating order':`Enter ${placehold[index]}`;
           input.disabled = update;
         })
-    })
+    })*/
 
 
     //fill main form with d minim & items
+    /*
     let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hushanos','Schach'];
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -89,7 +93,7 @@ window.onload = () =>{
         }
     };
     xhttp.open("GET", "/items", true);
-    xhttp.send();
+    xhttp.send();*/
 
     //secret
     document.getElementById('yanky').addEventListener('click', e=>{

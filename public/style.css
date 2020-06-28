@@ -25,7 +25,7 @@ body, html{scroll-behavior: smooth;margin:0; padding:0;width:100vw;height: 100vh
 #items{
   position: fixed; background-color: white; box-shadow:3px 3px 5px black;
   width:90vw; height:90vh;z-index:11; top:5vh !important;left:5vw !important;
-  max-height: 700px; overflow-y: auto; display: none; scroll-behavior: smooth;
+  max-height: 700px; overflow-y: auto; scroll-behavior: smooth;
 }
 .card-header{cursor: pointer;}
 .form-size{width:90vw; max-width:500px; height:90vw; max-height:500px;min-height: 400px;z-index: 5;}

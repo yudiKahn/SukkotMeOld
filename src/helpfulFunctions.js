@@ -8,6 +8,11 @@ const mailSender  = nodemailer.createTransport({
     }
 });
 
+function emailValidate(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 function getItemObj(item, q, price, total=null, byAdmin=false){
     return {item: item, q:q, price: price, total: total ? total :Number(price*q), byAdmin: byAdmin }
 }
@@ -84,7 +89,7 @@ function getUserSum(itemsAvailable, reqObj){
           res += Number(reqObj[d.t]*d.p);
         }
    })
-   return res;
+   return res ? res : 0;
 }
 
 function sendErr(msg){
@@ -109,8 +114,8 @@ function sendSuccess(msg , details , user , sum){
   let allItems = '';
   if(details){
      details.map(d=>{
-         paidItems += d.total > 0 ? `<tr><td>${d.item}</td><td>${d.q}</td><td>${d.total}$</td></tr>`:'';
-         allItems += d.q > 0 ? `<tr><td>${d.item.toString().includes('set')?d.item.replace('set','Esrog'):d.item}</td><td>${d.q}</td><td>${d.total}$</td></tr>`:'';
+         paidItems += d.total > 0 ? `<tr><td>${d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`:'';
+         allItems += d.q > 0 ? `<tr><td>${d.item.toString().includes('set')?d.item.replace('set','Esrog'):d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`:'';
      })
   }
   return (`<div style="text-align: center;">
@@ -121,13 +126,13 @@ function sendSuccess(msg , details , user , sum){
      <style>table, th, td {border: 1px solid #17a2b8;} th{background-color:#17a2b8;color:white;}</style>
      <table style="width:100%;">
        <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${paidItems}</tbody>
-     <table>
-     <p style="color:#28a745;text-align:right;"><b style="color:#ffc107;">Total :</b>${sum} $</p>
+     </table>
+     <p style="color:#28a745;text-align:right;"><b style="color:#ffc107;">Total :</b>$ ${sum}</p>
      <h2 style="color:#ffc107;text-align:left;"><em>What's in the box.</em></h2>
      <table style="width:100%;">
      <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${allItems}</tbody>
-     <table>
-     <p style="color:#28a745;text-align:right;"><b style="color:#ffc107;">Total :</b>${sum} $</p><a href="/">Go Back</a></div>`)
+     </table>
+     <p style="color:#28a745;text-align:right;"><b style="color:#ffc107;">Total :</b>$ ${sum}</p><a onclick="window.history.back()">Go Back</a></div>`)
 }
 
 function sendEmail(userBody, txt, array=null){
@@ -135,11 +140,14 @@ function sendEmail(userBody, txt, array=null){
     let htmlTxtRes = `<h1>Sukkot Order.</h1>`;
     if(array){
         array.map(d=>{
-            htmlTxtRes+=`<p>${d.item} &times; ${d.q} = $${d.price}. ${d.byAdmin?'<small style="color:#ffc107;">Added by Yanky Kahn</small>':''}</p>`
+            htmlTxtRes+=`<p>${d.item} &times; ${d.q} = $${d.price}. h${d.byAdmin?'<small style="color:#ffc107;">Added by Yanky Kahn</small>':''}</p>`
         })
     }else{
         htmlTxtRes+=`<p>${txt}</p>`;
-    }
+    }htmlTxtRes+=`<p style="text-align:center;">PLEASE OPEN IMMEDIATELY AND INSPECT<br/>Place Lulavim in a cool area and a closed box
+    <br/>Hadasim and Aravos should be refrigerated<br/>Inspect all merchandise for Kashrus<br/>
+    Report any damaged products within 24 hours of receiving shipment.<br/><br/>Thank you! Have a good Yom Tov!
+    <br/>Send payment to Y Kahn 18253 Topham st Tarzana CA 91335<br/>8186052066</p>`
     mailSender.sendMail({
         from: 'sukkotme@gmail.com',
         to: userBody.email,
@@ -158,7 +166,8 @@ module.exports = {
     sendWarning: sendWarning,
     sendSuccess: sendSuccess,
     getItemObj: getItemObj,
-    sendEmail: sendEmail
+    sendEmail: sendEmail,
+    emailValidate: emailValidate
 }
 /*
 

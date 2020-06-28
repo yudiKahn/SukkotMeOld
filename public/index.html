@@ -8,17 +8,18 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="/style.css" rel="stylesheet">
     <link rel="icon" href="/imgs/icon.png">
-    <!--<meta name="theme-color" content="#ad9e86">-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/index.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--<meta name="theme-color" content="#ad9e86">-->
 </head>
 <body>
     <header class="header">
         <img alt="minim" src="/imgs/d-minim.jpg" id="bg-img-head">
         <div class="w-100 navbar px-3">
             <div class="w-100 p-2 row mx-0">
-                <div class="col col-10" style="text-shadow:1px 2px 1px #eff157;">
-                    <b><a class="text-success" id="update" style="cursor:pointer;">Update Order</a></b>
-                    &nbsp;<i class="fa fa-mouse-pointer text-success"></i>
+                <div class="col col-10 c-y txt-head">
+                    Home
                 </div>
                 <div class="col col-2 text-right" style="font-family: cursive;">
                     <h5 class="text-success">ב"ה</h5>
@@ -26,7 +27,6 @@
             </div>
             <nav class="navbar navbar-expand-lg navbar-light bg-success w-100" style="justify-content:space-between;border-radius:0 0 20px 20px;border-top:4px solid #eff157;">
                 <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
-                <h5 id="form-status" class="c-y text-center nav-item">- New Order</h5>
             </nav>
         </div>
         <div class="w-100 p-3 text-center" style="position:relative; top:70px;">
@@ -36,7 +36,87 @@
         <a href="#main"><i class="fa fa-caret-down fa-4x text-success" id="carret-down"></i></a>
     </header>
     <main id="main" class="py-5">
-        <form class="main-form form-size mx-auto bg-white" id="form" method="POST" action="/order">
+       
+
+        <div style="width: 100vw; min-height:50vh;">
+            <div id="carouselExampleControls" class="carousel slide" style="min-height:100%;" data-interval="false">
+                <div class="carousel-inner" style="min-height:100%;">
+                  <div class="carousel-item active text-center">
+                   <!--Signin Form-->
+                    <form class="main-form form-size my-2 p-2 mx-auto bg-white" id="form-sigin" method="POST" action="/signup">
+                        <div class="form-group">
+                            <label class="text-success" for="main-form-f-name">First Name <em style="color:red;">*</em></label>
+                            <input required type="text" class="form-control dis-on-up" placeholder="Enter First Name" id="main-form-f-name" name="firstName">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-success" for="main-form-l-name">Last Name <em style="color:red;">*</em></label>
+                            <input required type="text" class="form-control dis-on-up" placeholder="Enter Last Name" id="main-form-l-name" name="lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="main-form-address" class="text-success">Address <em style="color:red;">*</em></label>
+                            <input required type="text" class="form-control dis-on-up" id="main-form-address" name="address" placeholder="Enter Address">
+                        </div>
+                        <div class="form-group">
+                            <label for="main-form-email" class="text-success">Email address <em style="color:red;">*</em></label>
+                            <input required type="email" class="form-control dis-on-up" id="main-form-email" name="email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-success" for="main-form-phone">Phone Number <em style="color:red;">*</em></label>
+                            <input required type="tel" class="form-control dis-on-up" placeholder="Enter Phone Number" id="main-form-phone" name="phoneNumber">
+                        </div>
+                        <div class="form-group">
+                            <label for="sign-form-user" class="text-success">User Name <em style="color:red;">*</em></label>
+                            <input required type="text" class="form-control" id="sign-form-user" name="username" placeholder="Enter user name">
+                        </div>
+                        <div class="form-group">
+                            <label for="sign-form-pass" class="text-success">Password <em style="color:red;">*</em></label>
+                            <input required type="password" class="form-control" id="sign-form-pass" name="password" placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-success">Sign Up</button>
+                    </form>
+                    <a href="#carouselExampleControls" data-slide="next">Already logged in ?!</a>
+                  </div>
+                  <div class="carousel-item text-center">
+                    <!--Login Form-->
+                    <form class="main-form form-size my-2 px-2 mx-auto bg-white" id="form-sigin" method="POST" action="/login">
+                        <div class="form-group">
+                            <label for="login-form-user" class="text-success">User Name</label>
+                            <input required type="text" class="form-control" id="login-form-user" name="username" placeholder="Enter user name">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-form-pass" class="text-success">Password</label>
+                            <input required type="password" class="form-control" id="login-form-pass" name="password" placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-success">Log in</button>
+                    </form>
+                    <a href="#carouselExampleControls" data-slide="prev">Sign up</a>
+                  </div>
+                  
+                </div>
+            </div>
+           </div>
+
+    </main>
+    <footer class="bg-success p-3 pt-5 w-100 text-white">
+       <div class="row w-100 pl-3">
+            <div class="col-6 col-or-row">
+                <h5>About</h5>
+                <p><em id="yanky">Yanky Kahn</em> <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 
+                <a class="c-y" target="_blank" href="https://maps.google.com/?q=18253 Topham St Tarazana CA 91335"><i class="fa fa-map-marker"></i></a> 
+            </div>
+            <div class="col-6 col-or-row" id="sale">
+                <h5>Sale</h5>
+                <ul>
+                    <li class="c-y"><small class="text-white">Buy an israeli esrog & get the all set</small></li>
+                    <li class="c-y"><small class="text-white">Buy an yanever esrog in more then $75 & get the all set + 'meodar' Hadasim</small></li>
+                </ul>
+            </div>
+       </div>
+    </footer>
+</body>
+</html>
+<!-- 
+      <form class="main-form form-size mx-auto bg-white" id="form" method="POST" action="/order">
             <div class="form-size p-4">
                 <div class="form-group">
                     <label for="main-form-user" class="text-success">User Name</label>
@@ -103,29 +183,5 @@
                     <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
                 </div>
             </div>
-        </form>
-    </main>
-    <footer class="bg-success p-3 pt-5 w-100 text-white">
-       <div class="row w-100 pl-3">
-            <div class="col-6 col-or-row">
-                <h5>About</h5>
-                <p><em id="yanky">Yanky Kahn</em> <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 
-                <a class="c-y" target="_blank" href="https://maps.google.com/?q=18253 Topham St Tarazana CA 91335"><i class="fa fa-map-marker"></i></a> 
-            </div>
-            <div class="col-6 col-or-row" id="sale">
-                <h5>Sale</h5>
-                <ul>
-                    <li class="c-y"><small class="text-white">Buy an israeli esrog & get the all set</small></li>
-                    <li class="c-y"><small class="text-white">Buy an yanever esrog in more then $75 & get the all set + 'meodar' Hadasim</small></li>
-                </ul>
-            </div>
-       </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
-</html>
-<!-- 
-           
+        </form>      
 -->
