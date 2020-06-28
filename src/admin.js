@@ -109,7 +109,7 @@ window.onload = function(){
                     money += Number(d.sum ? d.sum : 0);
                     let itemStr = ['',''];
                     d.items.map(t=>{
-                        if(t.total>0){itemStr[0]+=`<tr><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
+                        if((t.total>0)&&(!t.byAdmin)){itemStr[0]+=`<tr><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
                         if(t.q>0){itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
                     })
                     if((!d.isDone)&&(!d.isPaid)){

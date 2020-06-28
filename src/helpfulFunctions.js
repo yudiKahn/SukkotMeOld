@@ -144,7 +144,8 @@ function sendEmail(userBody, txt, array=null){
         })
     }else{
         htmlTxtRes+=`<p>${txt}</p>`;
-    }htmlTxtRes+=`<p style="text-align:center;">PLEASE OPEN IMMEDIATELY AND INSPECT<br/>Place Lulavim in a cool area and a closed box
+    }htmlTxtRes+=`<h5 style="text-align:left;">SUM : $${userBody.sum}</h5>
+    <p style="text-align:center;">PLEASE OPEN IMMEDIATELY AND INSPECT<br/>Place Lulavim in a cool area and a closed box
     <br/>Hadasim and Aravos should be refrigerated<br/>Inspect all merchandise for Kashrus<br/>
     Report any damaged products within 24 hours of receiving shipment.<br/><br/>Thank you! Have a good Yom Tov!
     <br/>Send payment to Y Kahn 18253 Topham st Tarzana CA 91335<br/>8186052066</p>`
