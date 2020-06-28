@@ -140,7 +140,7 @@ function sendEmail(userBody, txt, array=null){
     let htmlTxtRes = `<h1>Sukkot Order.</h1>`;
     if(array){
         array.map(d=>{
-            htmlTxtRes+=`<p>${d.item} &times; ${d.q} = $${d.price}. h${d.byAdmin?'<small style="color:#ffc107;">Added by Yanky Kahn</small>':''}</p>`
+            htmlTxtRes+=`<p>${d.item} &times; ${d.q} = $${d.price}. ${d.byAdmin?'<small style="color:#ffc107;">Added by Yanky Kahn</small>':''}</p>`
         })
     }else{
         htmlTxtRes+=`<p>${txt}</p>`;
