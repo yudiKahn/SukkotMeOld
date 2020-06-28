@@ -75,6 +75,7 @@
 
     <script type="text/javascript">
         window.onload = ()=> {
+
              //some responsive effects
             function changeImgAndColOrRow(){
                 let w = window.innerWidth;
@@ -88,9 +89,8 @@
             window.addEventListener('resize', changeImgAndColOrRow)
 
             //get user name
-            let urlArray = window.location.href.toString().split('/');
+            let urlArray = window.location.href.toString().split(/[# , /]/);
             let urlId = urlArray[4];
-            
             let getUser = new XMLHttpRequest();
             getUser.onreadystatechange = function(){
                 if (this.readyState == 4 && this.status == 200){
@@ -106,7 +106,7 @@
             document.getElementById('d-minim-form').action=`/order/${urlId}/new`;
 
             //fill d minim form
-            let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hushanos','Schach'];
+            let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hoshnos','Schach'];
             let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {

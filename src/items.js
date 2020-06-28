@@ -21,7 +21,7 @@ module.exports = [
     {n:5,t:'Hadas A כולו חזון איש',p:15},
     {n:5,t:'Hadas B כולו חיים נאה',p:10},
     {n:5,t:'Hadas C רובו חיים נאה',p:5},
-    {n:6,t:'Hushanos',p:5},
+    {n:6,t:'Hoshnos',p:5},
     {n:7,t:"Koisaklach",p:0},
     {n:7,t:"Plastic bag",p:0},
     {n:7,t:"Hadas C",p:0},

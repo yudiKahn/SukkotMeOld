@@ -27,15 +27,18 @@ function trimDuplacate(arrOfDup, arrOriginal){
     let arrWithDup = arrOriginal.filter((v,i,a)=> arrOfDup.indexOf(v.item) > -1)
     let listToAdd=[]
     arrOfDup.map(d=>{
-        let q = 0;
-        let p = 0;
-        let t=0;
+        let q = 0; let p = 0; let t=0;
+        let paidFor = 0, free = 0;
         arrWithDup.map(i=>{
              if(i.item==d){
                 q+=i.q; p+=i.price;t+=i.total;
+                i.price > 0 ? paidFor+=i.q : free+=i.q;
              }
         })
-        listToAdd.push(getItemObj(d, q, p, t))
+        let obj = getItemObj(d, q, p, t);
+        obj.totalPaid = paidFor;
+        obj.totalFree = free;
+        listToAdd.push(obj)
     })
     listToAdd.map(d=>{
         arrWithOutDup.push(d);
@@ -64,7 +67,7 @@ function getUserItems(itemsAvailable, reqObj){
   
    //fill sets items
     itemsAvailable.map(d=>{
-      if(d.n==7){
+      if(d.n==7&&((sumOfYaneverSets + sumOfIsraeliSets)>0)){
          res.push(getItemObj(d.t , Number(sumOfYaneverSets + sumOfIsraeliSets) , 0 ))
       }else if((d.n==8)&&(sumOfYaneverSets>0)){
          res.push(getItemObj(d.t , sumOfYaneverSets , 0 ))
@@ -114,8 +117,15 @@ function sendSuccess(msg , details , user , sum){
   let allItems = '';
   if(details){
      details.map(d=>{
-         paidItems += d.total > 0 ? `<tr><td>${d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`:'';
-         allItems += d.q > 0 ? `<tr><td>${d.item.toString().includes('set')?d.item.replace('set','Esrog'):d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`:'';
+         if(d.totalPaid){
+            paidItems += `<tr><td>${d.item}</td><td>${d.totalPaid}</td><td>$ ${d.total}</td></tr>`;
+         }else if(d.total > 0){
+            paidItems += `<tr><td>${d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`;
+         }
+         if(d.q > 0){
+            allItems+=`<tr><td>${d.item.toString().includes('set')?d.item.replace('set','Esrog'):d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`;
+         }
+         
      })
   }
   return (`<div style="text-align: center;">

@@ -38,7 +38,7 @@ window.onload = function(){
     'Esrog Yannever A PITOM','Esrog Yannever B PITOM','Esrog Yannever C PITOM',
     'Esrog Yannever D PITOM','Esrog Yannever A NO PITOM','Esrog Yannever B NO PITOM',
     'Esrog Yannever C NO PITOM','Esrog Yannever D NO PITOM','Egyptian Lulav','Deri Lulav',
-    'Deri Much Lulav','Aruvos', 'Hadas A','Hadas B','Hadas C','Hushanos',"Koisaklach","Plastic bag"];
+    'Deri Much Lulav','Aruvos', 'Hadas A','Hadas B','Hadas C','Hoshnos',"Koisaklach","Plastic bag"];
     function showUpdateForm(username, id){
         const form = document.getElementById('admin-form');
         form.style.display='block';
@@ -109,8 +109,14 @@ window.onload = function(){
                     money += Number(d.sum ? d.sum : 0);
                     let itemStr = ['',''];
                     d.items.map(t=>{
-                        if((t.total>0)&&(!t.byAdmin)){itemStr[0]+=`<tr><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
-                        if(t.q>0){itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`}
+                        if(t.totalPaid){
+                            itemStr[0] += `<tr><td>${t.item}</td><td>${t.totalPaid}</td><td>$ ${t.total}</td></tr>`;
+                         }else if(t.total > 0){
+                            itemStr[0] += `<tr><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
+                         }
+                         if(t.q > 0){
+                            itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item.toString().includes('set')?t.item.replace('set','Esrog'):t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
+                         }
                     })
                     if((!d.isDone)&&(!d.isPaid)){
                         document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
