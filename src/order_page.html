@@ -35,25 +35,53 @@
         <a href="#main"><i class="fa fa-caret-down fa-4x text-success" id="carret-down"></i></a>
     </header>
 
-    <main id="main" class="py-5">
-        <form id="d-minim-form" class="main-form mx-3 bg-white" method="POST" action="">
-            <div class="p-4">
-                <div class="w-100 h-100" style="position: relative;">
-                    <div id="min" class="mb-3">
+    <main id="main" class="py-3">
 
+        <div style="width: 100vw; min-height:50vh;">
+            <div id="carousel-control" class="carousel slide" style="min-height:100%;" data-interval="false">
+                <div class="carousel-inner py-3" style="min-height:100%;">
+                    <div class="carousel-item active">
+                        <!--items form-->
+                        <form id="d-minim-form" class="main-form mx-3 bg-white" method="POST" action="">
+                            <div class="p-4">
+                                <div class="w-100 h-100" style="position: relative;">
+                                    <div id="min" class="mb-3">
+                
+                                    </div>
+                                    <div class="p-4">
+                                        <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
+                                        <small class="text-success">this is for Yanover</small>
+                                        <div class="row">
+                                            <div class="col">Esrog (min: $50, max:$100)</div>
+                                            <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
+                                            <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <h4 class="text-center my-4"><a  href="#carousel-control" data-slide="next">Send a comment <i class="fa fa-arrow-right"></i></a></h4>
                     </div>
-                    <div class="p-4">
-                        <h2 class="c-y">What is your budget ?!</h2>
-                        <div class="row">
-                            <div class="col">Esrog (min: $50, max:$300)</div>
-                            <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
-                            <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="300" class="form-control"/></div>
-                        </div>
+                    <div class="carousel-item text-center">
+                        <!--comment form-->
+                        <form id="comment-form" class="main-form form-size mx-auto bg-white p-4" method="POST" action="">
+                            <div class="form-group">
+                                <label for="subject-comment" class="text-info">Subject</label>
+                                <input class="form-control" type="text" id="subject-comment" name="subject" placeholder="Subject">
+                            </div>
+                            <div class="form-group">
+                                <label for="text-comment" class="text-info">Comment<em class="text-danger">*</em></label>
+                                <textarea required minlength="10" class="form-control" name="text" placeholder="Comment" id="text-comment" style="max-height:250px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-info">Send</button>
+                        </form>
+                        <h4 class="text-center my-4"><a  href="#carousel-control" data-slide="prev"><i class="fa fa-arrow-left"></i>Go back.</a></h4>
                     </div>
-                    <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
                 </div>
             </div>
-        </form>
+        </div>
+
     </main>
 
     <footer class="bg-success p-3 pt-5 w-100 text-white">
@@ -102,11 +130,14 @@
             getUser.open("GET", `/user/${urlId}`, true);
             getUser.send();
 
-            //form action
+            //form items action
             document.getElementById('d-minim-form').action=`/order/${urlId}/new`;
+            
+            //form comment action
+            document.getElementById('comment-form').action=`/comment/${urlId}/send`
 
             //fill d minim form
-            let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hoshnos','Schach'];
+            let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Hadasim','Aruvos','Hoshnos','Schach','Lulav Bag'];
             let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -117,16 +148,21 @@
                     let arava = arr.filter(d=>d.n==4);
                     let hadas = arr.filter(d=>d.n==5);
                     let husana = arr.filter(d=>d.n==6);
-                    let schach = arr.filter(d=>d.n==9)
+                    let schach = arr.filter(d=>d.n==9);
+                    let lulavBag = arr.filter(d=>d.n==10);
 
                     tmpMinimArr.map((d,index)=>{
-                        let a = [set,estrog, lulav, hadas, arava, husana, schach];
+                        let a = [set,estrog, lulav, hadas, arava, husana, schach, lulavBag];
+                        let comment = ['Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag',
+                         'Each set comes complete with Lulav, Esrog, Hadasim "רובו חיים נאה & כולו חיים נאה",  Aruvos & Plastic bag',
+                         'if you want additional lulavim', 'if you want additional hadasim', 'if you want additional aruvos']
                         let currentMin = a[index];
                         document.getElementById('min').innerHTML+=`<div class="p-3" id="min-${d}">
-                        <h2 class="text-success">${d}</h2>
+                        <h2 class="text-success">${d}</h2><small class="text-dark">${comment[index]?comment[index]:''}</small>
                         ${
                             currentMin.map(m=>`<div class="row">
-                            <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}</div>
+                            <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}
+                                ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Standard':'Chinuch'}</b>`:''}</div>
                             <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
                             <div class="col">$ ${m.p}</div>
                             </div>`)

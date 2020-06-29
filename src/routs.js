@@ -70,6 +70,10 @@ router.post('/order/:id/new', (req,res)=>{
   }).catch(err=>res.status(400).send(sendErr(err)));
 })
 
+//send comment
+router.post('/comment/:id/send', (req,res)=>{
+    res.send('hello')
+})
 
 //return all items available
 router.get('/items', (req,res)=>{
