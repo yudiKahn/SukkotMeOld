@@ -61,9 +61,9 @@
                                 </div>
                             </div>
                         </form>
-                        <h4 class="text-center my-4"><a  href="#carousel-control" data-slide="next">Send a comment <i class="fa fa-arrow-right"></i></a></h4>
+                        <h4 class="text-center my-4 toggle-carosel-forms"><a  href="#carousel-control" data-slide="next">Send a comment <i class="fa fa-arrow-right"></i></a></h4>
                     </div>
-                    <div class="carousel-item text-center">
+                    <div id="comment-form-div" class="carousel-item text-center" id="focus-on-form">
                         <!--comment form-->
                         <form id="comment-form" class="main-form form-size mx-auto bg-white p-4" method="POST" action="">
                             <div class="form-group">
@@ -76,8 +76,16 @@
                             </div>
                             <button type="submit" class="btn btn-info">Send</button>
                         </form>
-                        <h4 class="text-center my-4"><a  href="#carousel-control" data-slide="prev"><i class="fa fa-arrow-left"></i>Go back.</a></h4>
+                        <h4 class="text-center my-4 toggle-carosel-forms"><a  href="#carousel-control" data-slide="prev"><i class="fa fa-arrow-left"></i>Go back.</a></h4>
                     </div>
+                    <script type="text/javascript">
+                        document.querySelectorAll('.toggle-carosel-forms').forEach(el=>{
+                            el.addEventListener('click', ()=>{
+                                if(!document.getElementById('comment-form-div').classList.contains('active'))
+                                  document.getElementById('main').scrollIntoView();
+                            })
+                        })
+                    </script>
                 </div>
             </div>
         </div>

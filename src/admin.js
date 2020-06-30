@@ -110,9 +110,9 @@ window.onload = function(){
                     let itemStr = ['',''];
                     d.items.map(t=>{
                         if(t.totalPaid){
-                            itemStr[0] += `<tr><td>${t.item}</td><td>${t.totalPaid}</td><td>$ ${t.total}</td></tr>`;
+                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.totalPaid}</td><td>$ ${t.total}</td></tr>`;
                          }else if(t.total > 0){
-                            itemStr[0] += `<tr><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
+                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
                          }
                          if(t.q > 0){
                             itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item.toString().includes('set')?t.item.replace('set','Esrog'):t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
@@ -219,4 +219,21 @@ window.onload = function(){
     }
     names.open("GET", `/admin/getNames/${pass}`, true)
     names.send();
+
+    //fill comments list
+    let comments = new XMLHttpRequest();
+    comments.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            document.getElementById('comments-ul').innerHTML="";
+            JSON.parse(this.responseText).map(d=>{
+                document.getElementById('comments-ul').innerHTML=`<li>
+                <h4 style="border-bottom: 1px solid black;">${d.subject}</h4>
+                <p class="text-info">${d.text}</p>
+                <small>From :${d.firstName} ${d.lastName}<b>/</b>${d.email}<b>/</b>${d.phoneNumber}</small>
+                </li>`
+            })
+        }
+    }
+    comments.open("GET", "/admin/130240/getComments", true);
+    comments.send();
 }

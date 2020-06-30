@@ -100,7 +100,7 @@ function sendErr(msg){
   return (`<div style="text-align: center;">
   <h1 style="color:red;margin-top:20px;">An error has occurd.</h1>
   <p>${msg}</p>
-  <a href="/">Go Back</a></div>`);
+  <a onclick="window.history.back()">Go Back</a></div>`);
 }
 
 function sendWarning(msg){

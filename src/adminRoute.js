@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const items = require('./items');
-const Yanki = require('./model');
+const Yanki = require('./model').users;
+const comments = require('./model').comments;
 const {getUserItems, getUserSum, sendErr, sendWarning,
       sendSuccess, getItemObj, sendEmail, emailValidate} = require('./helpfulFunctions');
 
@@ -87,6 +88,11 @@ router.get('/admin/getNames/:pass', async (req, res)=>{
         res.send(names);
     }else 
       res.status(400).send(sendErr('Could not find'))
+})
+
+//get all comments
+router.get('/admin/130240/getComments', (req, res)=>{
+    comments.find({}).then(doc=>res.json(doc)).catch(err=>res.status(400).send(sendErr(err)));
 })
 
 module.exports = router;

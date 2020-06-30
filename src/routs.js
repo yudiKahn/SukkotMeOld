@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const items = require('./items');
-const Yanki = require('./model');
+const Yanki = require('./model').users;
+const Comment = require('./model').comments;
 const {getUserItems, getUserSum, sendErr, sendWarning,
       sendSuccess, getItemObj, sendEmail, emailValidate} = require('./helpfulFunctions');
 
@@ -72,7 +73,17 @@ router.post('/order/:id/new', (req,res)=>{
 
 //send comment
 router.post('/comment/:id/send', (req,res)=>{
-    res.send('hello')
+    let {subject, text} = req.body;
+    Yanki.findById(req.params.id).then((doc)=>{
+        let newComment = new Comment();
+        ['firstName','lastName','email','phoneNumber'].map(d=>{
+            newComment[d] = doc[d];
+        })
+        newComment.subject = subject;
+        newComment.text = text;
+         newComment.save().then(()=>{res.send(sendWarning('Comment was send successfuly'))})
+        .catch(err=>res.status(400).send(sendErr(err)))
+    }).catch(err=>res.status(400).send(sendErr(err)));
 })
 
 //return all items available
