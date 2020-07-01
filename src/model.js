@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
-    username: {type: String, trim: true},
     firstName: {type:String},
     lastName: {type:String},
     email: {type:String},
     phoneNumber: {type: String},
     password: {type:String, trim: true},
-    items:[],
+    comments: [],
     sum: {type:Number},
-    address: {type: String},
-    isDone: {type:Boolean},
-    isPaid: {type:Boolean}
-}, {timestamps: true});
+    address: {type: String}
+});
 
 const commentSchema = mongoose.Schema({
-    username: {type: String, trim: true},
-    firstName: {type:String},
-    lastName: {type:String},
-    email: {type:String},
-    phoneNumber: {type: String},
     subject: {type: String},
     text: {type: String}
 })
 
+const orderSchema = mongoose.Schema({
+    userId: {type: String},
+    items: [],
+    isDone: {type: Boolean},
+    isPaid: {type:Boolean},
+    sum: {type: Number}
+}, {timestamps: true})
+
 
 module.exports = {
-    users: new mongoose.model('YANKI', schema),
-    comments: new mongoose.model('Comments', commentSchema)
+    users: new mongoose.model('users', schema),
+    comments: new mongoose.model('comments', commentSchema),
+    orders: new mongoose.model('orders', orderSchema)
 }

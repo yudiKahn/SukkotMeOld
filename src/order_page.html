@@ -41,11 +41,55 @@
             <div id="carousel-control" class="carousel slide" style="min-height:100%;" data-interval="false">
                 <div class="carousel-inner py-3" style="min-height:100%;">
                     <div class="carousel-item active">
-                        <!--items form-->
-                        <form id="d-minim-form" class="main-form mx-3 bg-white" method="POST" action="">
+
+                        <h1 class="text-center text-warning">Actions</h1>
+                        <div class="container row mx-auto mb-5 py-5">
+                            <div class="card border-success m-2" style="max-width: 18rem;">
+                                <div class="card-header bg-success text-light" data-target="#carousel-control" data-slide-to="1">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                                <div class="card-body text-success">
+                                <h5 class="card-title">Create new order</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
+                            <div class="card border-warning m-2" style="max-width: 18rem;">
+                                <div class="card-header bg-warning text-light" data-target="#carousel-control" data-slide-to="2">
+                                    <i class="fa fa-cloud-upload"></i>
+                                </div>
+                                <div class="card-body text-warning">
+                                <h5 class="card-title">Update old order</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
+                            <div class="card border-dark m-2" style="max-width: 18rem;">
+                                <div class="card-header bg-dark text-light" data-target="#carousel-control" data-slide-to="3">
+                                    <i class="fa fa-trash"></i>
+                                </div>
+                                <div class="card-body text-dark">
+                                <h5 class="card-title">Delete old order</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h1 class="text-center text-primary">Your orders</h1>
+                        <div class="container mx-auto mb-5 py-5">
+                            <div id="user-orders-fill">
+
+                            </div>
+                            <h5 style="padding-right:1.25rem;" class="py-3 text-right">
+                                <span class="badge badge-primary badge-pill" id="user-order-sum"></span>
+                            </h5>
+                        </div>
+                       
+                    </div>
+                    <!--new order-->
+                    <div id="comment-form-div" class="carousel-item">
+                        <form id="form-new" class="main-form form-size mx-auto bg-white" method="POST" action="">
                             <div class="p-4">
                                 <div class="w-100 h-100" style="position: relative;">
-                                    <div id="min" class="mb-3">
+                                    <div class="mb-3 fill-d-minim">
                 
                                     </div>
                                     <div class="p-4">
@@ -61,42 +105,33 @@
                                 </div>
                             </div>
                         </form>
-                        <h4 class="text-center my-4 toggle-carosel-forms"><a  href="#carousel-control" data-slide="next">Send a comment <i class="fa fa-arrow-right"></i></a></h4>
+                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>                       
                     </div>
-                    <div id="comment-form-div" class="carousel-item text-center" id="focus-on-form">
-                        <!--comment form-->
-                        <form id="comment-form" class="main-form form-size mx-auto bg-white p-4" method="POST" action="">
-                            <div class="form-group">
-                                <label for="subject-comment" class="text-info">Subject</label>
-                                <input class="form-control" type="text" id="subject-comment" name="subject" placeholder="Subject">
-                            </div>
-                            <div class="form-group">
-                                <label for="text-comment" class="text-info">Comment<em class="text-danger">*</em></label>
-                                <textarea required minlength="10" class="form-control" name="text" placeholder="Comment" id="text-comment" style="max-height:250px;"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-info">Send</button>
-                        </form>
-                        <h4 class="text-center my-4 toggle-carosel-forms"><a  href="#carousel-control" data-slide="prev"><i class="fa fa-arrow-left"></i>Go back.</a></h4>
+                    <!--update order-->
+                    <div id="comment-form-div" class="carousel-item">
+                        <h4>Not Yet</h4>
+                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
-                    <script type="text/javascript">
-                        document.querySelectorAll('.toggle-carosel-forms').forEach(el=>{
-                            el.addEventListener('click', ()=>{
-                                if(!document.getElementById('comment-form-div').classList.contains('active'))
-                                  document.getElementById('main').scrollIntoView();
-                            })
-                        })
-                    </script>
+                    <!--delete order-->
+                    <div id="comment-form-div" class="carousel-item text-center">
+                        <div class="container" id="user-orders-delete">
+
+                        </div>
+                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
+                    </div>
+
                 </div>
             </div>
         </div>
-
+        
+       
     </main>
 
     <footer class="bg-success p-3 pt-5 w-100 text-white">
         <div class="row w-100 pl-3">
              <div class="col-6 col-or-row">
                  <h5>About</h5>
-                 <p><em id="yanky">Yanky Kahn</em> <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 
+                 <p><em class="btn-success btn" id="yanky">Yanky Kahn</em> <a class="c-y" href="tel:+18186052066"><i class="fa fa-phone"></i></a> <a class="c-y" href="mailto:chabad18@hotmail.com"><i class="fa fa-paper-plane"></i></a> 
                  <a class="c-y" target="_blank" href="https://maps.google.com/?q=18253 Topham St Tarazana CA 91335"><i class="fa fa-map-marker"></i></a> 
              </div>
              <div class="col-6 col-or-row" id="sale">
@@ -112,7 +147,7 @@
     <script type="text/javascript">
         window.onload = ()=> {
 
-             //some responsive effects
+            //some responsive effects
             function changeImgAndColOrRow(){
                 let w = window.innerWidth;
                 let img = document.getElementById('bg-img-head');
@@ -131,67 +166,119 @@
             getUser.onreadystatechange = function(){
                 if (this.readyState == 4 && this.status == 200){
                         let user = JSON.parse(this.responseText);
-                        let welcomeTxt = user.items.length>0 ? `Welcome back`:`Welcome`;
-                        document.getElementById('h1-name').innerHTML=`${welcomeTxt} ${user.firstName} ${user.lastName}`;
+                        //fill user name
+                        let welcomeTxt = user.orders.length>0 ? `Welcome back`:`Welcome`;
+                        document.getElementById('h1-name').innerHTML=`${welcomeTxt} ${user.firstName} ${user.lastName}`;                
                 }    
             }
             getUser.open("GET", `/user/${urlId}`, true);
             getUser.send();
 
-            //form items action
-            document.getElementById('d-minim-form').action=`/order/${urlId}/new`;
+            //gets all ordrs for user
+            function getAllOrders(){
+                let orders = new XMLHttpRequest();
+                orders.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        const orders = JSON.parse(this.responseText);
+                        let htmlTxt = "";
+                        let htmlTxtForDel="";
+                        if(orders.length>0){
+                            for(let order of orders){
+                                let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
+                                htmlTxtForDel+=`<button class="btn-delete-order btn btn-block btn-danger w-75 mx-auto my-4" 
+                                value="${order._id}">Delete order created at ${date}</button>`;
+                                htmlTxt+='<ul class="list-group">';
+                                for(let item of order.items){
+                                    htmlTxt+=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                                    ${item.item}<span class="badge badge-primary badge-pill">${item.q}</span></li>`
+                                }
+                                htmlTxt+=`</ul><h5 style="padding:1.25rem;" class="d-flex justify-content-between align-items-center py-3">
+                                <small>created at :${date}</small>
+                                <span class="badge badge-primary badge-pill">TOTAL :$${order.sum}</span></h5>`;
+                            }
+                        }else{
+                            let txt = '<h5 class="text-warning">There are no orders.</h5>';
+                            htmlTxtForDel=txt;htmlTxt=txt;
+                        }
+                        document.getElementById('user-orders-fill').innerHTML=htmlTxt;
+                        document.getElementById('user-orders-delete').innerHTML=htmlTxtForDel;
+                        enableBtns();
+                    }
+                }
+                orders.open("GET", `/orders/${urlId}/all`, true);
+                orders.send();
+            }getAllOrders();
+
+            //delete order
+            function enableBtns(){
+                document.querySelectorAll('.btn-delete-order').forEach(btn=>{
+                    btn.addEventListener('click', ()=>{
+                        let del = new XMLHttpRequest();
+                        del.onreadystatechange = function(){
+                            if(this.readyState==4 && this.status==200){
+                                location.reload();
+                            }
+                        }
+                        del.open("POST", `/order/${btn.value}/delete`, true);
+                        del.send();
+                    })
+                })
+            }
+
+            //form update order action
+            //document.getElementById('form-update').action=`/order/${urlId}/update`;
+
+            //form create order action
+            document.getElementById('form-new').action=`/order/${urlId}/new`;
             
             //form comment action
-            document.getElementById('comment-form').action=`/comment/${urlId}/send`
+            //document.getElementById('comment-form').action=`/comment/${urlId}/send`
+
+            //check inputs
+            function checkInputs(){
+                document.querySelectorAll('input').forEach((inp,ind)=>{
+                    if(inp.min){
+                        let min = inp.min;
+                        let max = inp.max||2000;
+                        inp.addEventListener('input', function(){
+                            if(Number(this.value) > max || Number(this.value) < min){
+                                this.style.color="red";
+                            }else{
+                                this.style.color="black"
+                            }
+                        })
+                    }
+                });
+            }
 
             //fill d minim form
-            let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Hadasim','Aruvos','Hoshnos','Schach','Lulav Bag'];
             let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     let arr = JSON.parse(this.responseText);
-                    let set = arr.filter(d=>d.n==1);
-                    let estrog = arr.filter(d=>d.n==2);
-                    let lulav = arr.filter(d=>d.n==3);
-                    let arava = arr.filter(d=>d.n==4);
-                    let hadas = arr.filter(d=>d.n==5);
-                    let husana = arr.filter(d=>d.n==6);
-                    let schach = arr.filter(d=>d.n==9);
-                    let lulavBag = arr.filter(d=>d.n==10);
-
-                    tmpMinimArr.map((d,index)=>{
-                        let a = [set,estrog, lulav, hadas, arava, husana, schach, lulavBag];
-                        let comment = ['Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag',
+                    let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Hadasim','Aruvos','Hoshnos','Schach','Lulav Bag'];
+                    let comment = ['Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag',
                          'Each set comes complete with Lulav, Esrog, Hadasim "רובו חיים נאה & כולו חיים נאה",  Aruvos & Plastic bag',
                          'if you want additional lulavim', 'if you want additional hadasim', 'if you want additional aruvos']
-                        let currentMin = a[index];
-                        document.getElementById('min').innerHTML+=`<div class="p-3" id="min-${d}">
-                        <h2 class="text-success">${d}</h2><small class="text-dark">${comment[index]?comment[index]:''}</small>
-                        ${
-                            currentMin.map(m=>`<div class="row">
-                            <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}
-                                ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Standard':'Chinuch'}</b>`:''}</div>
-                            <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
-                            <div class="col">$ ${m.p}</div>
-                            </div>`)
-                        }
-                        </div>`;
-                    });
+                    let itemsToGoOver = [1, 2 ,3 ,4, 5, 6, 9, 10];
+                    //israeli set, yanever, lulav, arava, hadas, hushana, schach, lulav bag.
 
-                    document.querySelectorAll('input').forEach((inp,ind)=>{
-                        if(inp.min){
-                            let min = inp.min;
-                            let max = inp.max||2000;
-                            inp.addEventListener('input', function(){
-                                if(Number(this.value) > max || Number(this.value) < min){
-                                    this.style.color="red";
-                                }else{
-                                    this.style.color="black"
-                                }
-                            })
-                        }
+                    document.querySelectorAll('.fill-d-minim').forEach(minim=>{
+                        tmpMinimArr.map((d,index)=>{
+                            minim.innerHTML+=`<div class="p-3" id="min-${d}">
+                            <h2 class="text-success">${d}</h2><small class="text-dark">${comment[index]?comment[index]:''}</small>
+                            ${
+                                arr.filter(d=>d.n==itemsToGoOver[index]).map(m=>`<div class="row">
+                                <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}
+                                    ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Standard':'Chinuch'}</b>`:''}</div>
+                                <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
+                                <div class="col">$ ${m.p}</div>
+                                </div>`)
+                            }
+                            </div>`;
+                        }); 
                     });
-                
+                    checkInputs();
                 }
             };
             xhttp.open("GET", "/items", true);
@@ -207,3 +294,26 @@
     </script>
 </body>
 </html>
+<!--                    
+                         <!--comment form--
+                        <form id="comment-form" class="main-form form-size mx-auto bg-white p-4" method="POST" action="">
+                            <div class="form-group">
+                                <label for="subject-comment" class="text-info">Subject</label>
+                                <input class="form-control" type="text" id="subject-comment" name="subject" placeholder="Subject">
+                            </div>
+                            <div class="form-group">
+                                <label for="text-comment" class="text-info">Comment<em class="text-danger">*</em></label>
+                                <textarea required minlength="10" class="form-control" name="text" placeholder="Comment" id="text-comment" style="max-height:250px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-info">Send</button>
+                        </form>
+
+                                            <script type="text/javascript">
+                        document.querySelectorAll('.toggle-carosel-forms').forEach(el=>{
+                            el.addEventListener('click', ()=>{
+                                if(!document.getElementById('comment-form-div').classList.contains('active'))
+                                  document.getElementById('main').scrollIntoView();
+                            })
+                        })
+                    </script>
+ -->

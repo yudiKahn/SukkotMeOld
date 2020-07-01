@@ -73,7 +73,7 @@ window.onload = function(){
                 <div data-toggle="collapse" data-target="#li${i}"
                 aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
                 <div id="li${i}" class="collapse" data-parent="#ul">
-                <p><small>${d.email}<b>/</b>${d.username}<b>/</b>password :${d.password}</small></p>
+                <p><small>${d.email}<b>/</b>password :${d.password}</small></p>
                 <h4 style="color:#ffc107;text-align:left;"><em>Order items.</em></h4>
                 <table style="width:100%;">
                 <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${items[0]}</tbody>
@@ -82,7 +82,6 @@ window.onload = function(){
                 <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${items[1]}</tbody>
                 </table>
                 <p><small>sum: $ ${d.sum ? d.sum:0}</small></p>
-                <p><small>created at: :${new Date(d.createdAt)} <b>/</b> updated at :${new Date(d.updatedAt)}</small></p> 
                 <button value="${d._id}" class="btn btn-outline-success">${paidBtn}</button>
                 <button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
                 <button value="${d._id}" class="btn btn-danger">Delete</button>
@@ -95,7 +94,7 @@ window.onload = function(){
 
     //fill page with orders
     function fillPage(){
-        let money = 0;
+        //let money = 0;
         document.getElementById('ul').innerHTML="";
         document.getElementById('ul-done').innerHTML="";
         document.getElementById('ul-paid').innerHTML="";
@@ -105,33 +104,14 @@ window.onload = function(){
             if(this.readyState == 4 && this.status == 200){
                 let data = JSON.parse(this.responseText);
                 data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((a.lastName.toLowerCase() < b.lastName.toLowerCase()) ? -1 : 0))
-                data.map((d,i)=>{
-                    money += Number(d.sum ? d.sum : 0);
-                    let itemStr = ['',''];
-                    d.items.map(t=>{
-                        if(t.totalPaid){
-                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.totalPaid}</td><td>$ ${t.total}</td></tr>`;
-                         }else if(t.total > 0){
-                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
-                         }
-                         if(t.q > 0){
-                            itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item.toString().includes('set')?t.item.replace('set','Esrog'):t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
-                         }
-                    })
-                    if((!d.isDone)&&(!d.isPaid)){
-                        document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
-                    }else if(d.isPaid&&d.isDone){
-                        document.getElementById('ul-done-paid').innerHTML+=getOrders(d,`done-paid`,itemStr);
-                    }else if(d.isDone){
-                        document.getElementById('ul-done').innerHTML+=getOrders(d,`${i}-done`,itemStr);
-                    }else if(d.isPaid){
-                        document.getElementById('ul-paid').innerHTML+=getOrders(d,`${i}-paid`,itemStr);}                    
+                data.map((d, i)=>{
+                    document.getElementById('ul').innerHTML+=getOrders(d,i,['','']);
                 })
                 enableBtns();
-                printMoney(money);
+                //printMoney(money);
             }
         }
-        xhttp.open("GET", "/orders/130240", true);
+        xhttp.open("GET", "/users/130240", true);
         xhttp.send();
     }
     fillPage()
@@ -230,6 +210,7 @@ window.onload = function(){
                 <h4 style="border-bottom: 1px solid black;">${d.subject}</h4>
                 <p class="text-info">${d.text}</p>
                 <small>From :${d.firstName} ${d.lastName}<b>/</b>${d.email}<b>/</b>${d.phoneNumber}</small>
+                <a href="mailto:${d.email}">Send Response</a>
                 </li>`
             })
         }
@@ -237,3 +218,27 @@ window.onload = function(){
     comments.open("GET", "/admin/130240/getComments", true);
     comments.send();
 }
+/**
+ * data.map((d,i)=>{
+                    money += Number(d.sum ? d.sum : 0);
+                    let itemStr = ['',''];
+                    d.items.map(t=>{
+                        if(t.totalPaid){
+                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.totalPaid}</td><td>$ ${t.total}</td></tr>`;
+                         }else if(t.total > 0){
+                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
+                         }
+                         if(t.q > 0){
+                            itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item.toString().includes('set')?t.item.replace('set','Esrog'):t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
+                         }
+                    })
+                    if((!d.isDone)&&(!d.isPaid)){
+                        document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
+                    }else if(d.isPaid&&d.isDone){
+                        document.getElementById('ul-done-paid').innerHTML+=getOrders(d,`done-paid`,itemStr);
+                    }else if(d.isDone){
+                        document.getElementById('ul-done').innerHTML+=getOrders(d,`${i}-done`,itemStr);
+                    }else if(d.isPaid){
+                        document.getElementById('ul-paid').innerHTML+=getOrders(d,`${i}-paid`,itemStr);}                    
+                })
+ */

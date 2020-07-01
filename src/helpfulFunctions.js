@@ -46,7 +46,7 @@ function trimDuplacate(arrOfDup, arrOriginal){
     return arrWithOutDup;
 }
 
-function getUserItems(itemsAvailable, reqObj){
+function getOrderItems(itemsAvailable, reqObj){
    let res = [];
    let sumOfIsraeliSets = 0;
    let sumOfYaneverSets = 0;
@@ -83,7 +83,7 @@ function getUserItems(itemsAvailable, reqObj){
 }
 
 
-function getUserSum(itemsAvailable, reqObj){
+function getOrderSum(itemsAvailable, reqObj){
    let res = 0;
    itemsAvailable.map((d,i)=>{
         if(d.n==0){
@@ -175,8 +175,8 @@ function sendEmail(userBody, txt, array=null){
 }
 
 module.exports = {
-    getUserItems: getUserItems,
-    getUserSum: getUserSum,
+    getOrderItems: getOrderItems,
+    getOrderSum: getOrderSum,
     sendErr: sendErr,
     sendWarning: sendWarning,
     sendSuccess: sendSuccess,
