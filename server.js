@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const sslRedirect = require('heroku-ssl-redirect');
-const app = express();
+const secure = require('express-force-https');
 
+const app = express();
+app.use(secure);
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(__dirname+'/public'));
-app.use(sslRedirect());
 
 let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
 
