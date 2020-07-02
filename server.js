@@ -4,15 +4,15 @@ const app = express();
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(__dirname+'/public'));
-app.use((req, res, next) => {
-    if (process.env.NODE_ENV === 'production') {
-        if (req.headers['x-forwarded-proto'] !== 'https')
-            return res.redirect('https://' + req.headers.host + req.url);
-        else
-            return next();
-    } else
-        return next();
-});
+function requireHTTPS(req, res, next) {
+    if (!req.secure) {
+        //FYI this should work for local development as well
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
+
+app.use(requireHTTPS);
 
 let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
 
