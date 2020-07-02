@@ -7,9 +7,9 @@ window.onload = function(){
 
 
     //show print page
-    function Print(d, whatPrint){
+    function Print(obj, whatPrint){
         let tmpItems = [];
-        let sortedItems = d.items.sort((a,b)=>(a.item.toLowerCase() > b.item.toLowerCase()) ? 1 : ((a.item.toLowerCase() < b.item.toLowerCase()) ? -1 : 0))
+        let sortedItems = obj.doc.items.sort((a,b)=>(a.item.toLowerCase() > b.item.toLowerCase()) ? 1 : ((a.item.toLowerCase() < b.item.toLowerCase()) ? -1 : 0))
         sortedItems.map(i=>{
                 tmpItems+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
                 <td scope="row">${i.byAdmin?'+ ':''}${i.item.toString().replace('set','Esrog')}</td>
@@ -19,12 +19,13 @@ window.onload = function(){
         })
         document.getElementById('popup-print').style.display='block';
         document.getElementById('popup-print').innerHTML=`<a id="close-popup" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>
-        <p>${d.firstName} ${d.lastName} <b>/</b> ${d.email} <b>/</b> ${d.phoneNumber}  <b>/</b> ${d.address}</p>
+        <p>${obj.user.firstName} ${obj.user.lastName} <b>/</b> ${obj.user.email} <b>/</b> ${obj.user.phoneNumber}  <b>/</b> 
+        ${obj.user.address.city} ${obj.user.address.street} ${obj.user.address.zip} ${obj.user.address.state}</p>
         ${
             whatPrint=="Order"?
             `<table class="table table-bordered"><thead><tr><td scope="col">#</td><td scope="col">Quantity</td>
-             <td scope="col">Price</td></tr></thead> <tbody>${tmpItems}<tr><th scope="row">SUM :</th><th></th><th>$${d.sum ? d.sum: 0}</th></tr>
-            </tbody></table>`: `<p><b>Email</b> ${d.email}</p><p><b>Phone number</b> ${d.phoneNumber}</p><p><b>Box No.</b> </p>`
+             <td scope="col">Price</td></tr></thead> <tbody>${tmpItems}<tr><th scope="row">SUM :</th><th></th><th>$${obj.doc.sum ? obj.doc.sum: 0}</th></tr>
+            </tbody></table>`: `<p><b>Email</b> ${obj.user.email}</p><p><b>Phone number</b> ${obj.user.phoneNumber}</p><p><b>Box No.</b> </p>`
         }
         <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
         document.getElementById('close-popup').addEventListener('click', ()=>{
@@ -80,8 +81,9 @@ window.onload = function(){
                         let doneBtn = order.isDone ? 'unDone' : 'Done';
                         let paidBtn = order.isPaid ? 'unPaid' : 'Paid';
                         tableTxt+=
-                        `<table style="width:100%;"><thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead><tbody>`;
-                        order.items.map(d=>tableTxt+=`<tr><td>${d.item}</td><td>${d.q}</td><td>${d.price}</td></tr>`);
+                        `<div class="mb-5"><table style="width:100%;"><thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead><tbody>`;
+                        order.items.map(d=>tableTxt+=`<tr class="${d.byAdmin?'bg-dark text-white':''}">
+                        <td>${d.item}</td><td>${d.q}</td><td>${d.price}</td></tr>`);
                         tableTxt+=`</tbody></table>
                         <p><small>sum: $ ${order.sum ? order.sum:0}</small></p>
                         <button value="${order._id}" class="btn btn-outline-success">${paidBtn}</button>
@@ -90,7 +92,7 @@ window.onload = function(){
                         <button value="${order._id}" class="btn btn-info">Order</button>
                         <button value="${order._id}" class="btn btn-info">Shipping</button>
                         <button value="${order._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-outline-dark">Edit</button>
-                        <button value="${order._id}" data-user="${d.firstName} ${d.lastName}-${d.email}" class="btn btn-outline-primary">Email</button> `;
+                        <button value="${order._id}" data-user="${d.firstName} ${d.lastName}-${d.email}" class="btn btn-outline-primary">Email</button></div>`;
                     })
                 }${tableTxt}
                 </div></div>`);
@@ -98,14 +100,22 @@ window.onload = function(){
         
     }
 
+    //increase total
+    function increaseTotal(userObj){
+        let res=0;
+        userObj.order.map(o=>res+=Number(o.sum));
+        userObj.done_orders.map(o=>res+=Number(o.sum));
+        return Number(res);
+    }
+
     //fill page with orders
     function fillPage(){
-        //let money = 0;
+        let money = 0;
         let ul = document.getElementById('ul');
         let ul_done = document.getElementById('ul-done');
         let ul_paid = document.getElementById('ul-paid');
         let ul_done_paid = document.getElementById('ul-done-paid');
-        ul.innerHTML="";ul_done.innerHTML="";ul_paid.innerHTML="";ul_done_paid="";
+        ul.innerHTML="";ul_done.innerHTML="";ul_paid.innerHTML="";ul_done_paid.innerHTML="";
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
@@ -115,13 +125,12 @@ window.onload = function(){
                     ul.innerHTML+=getOrders(d.user,i, d.order);
                     ul_done.innerHTML+=getOrders(d.user,i, d.done_orders);
                     ul_paid.innerHTML+=getOrders(d.user, i, d.paid_orders);
-                    ul_done_paid.innerHTML+=getOrders(d.user, i , d.done_paid)
-                })
-                
-                console.log(data)
+                    ul_done_paid.innerHTML+=getOrders(d.user, i , d.done_paid);
+                    money += increaseTotal(d);
+                });
                 enableBtns();
-                //printMoney(money);
             }
+            printMoney(money);
         }
         xhttp.open("GET", "/users-and-orders/130240", true);
         xhttp.send();
@@ -230,27 +239,4 @@ window.onload = function(){
     comments.open("GET", "/admin/130240/getComments", true);
     comments.send();
 }
-/**
- * data.map((d,i)=>{
-                    money += Number(d.sum ? d.sum : 0);
-                    let itemStr = ['',''];
-                    d.items.map(t=>{
-                        if(t.totalPaid){
-                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.totalPaid}</td><td>$ ${t.total}</td></tr>`;
-                         }else if(t.total > 0){
-                            itemStr[0] += `<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
-                         }
-                         if(t.q > 0){
-                            itemStr[1]+=`<tr class="${t.byAdmin?'bg-dark text-white':''}"><td>${t.item.toString().includes('set')?t.item.replace('set','Esrog'):t.item}</td><td>${t.q}</td><td>$ ${t.total}</td></tr>`;
-                         }
-                    })
-                    if((!d.isDone)&&(!d.isPaid)){
-                        document.getElementById('ul').innerHTML+=getOrders(d,i,itemStr);
-                    }else if(d.isPaid&&d.isDone){
-                        document.getElementById('ul-done-paid').innerHTML+=getOrders(d,`done-paid`,itemStr);
-                    }else if(d.isDone){
-                        document.getElementById('ul-done').innerHTML+=getOrders(d,`${i}-done`,itemStr);
-                    }else if(d.isPaid){
-                        document.getElementById('ul-paid').innerHTML+=getOrders(d,`${i}-paid`,itemStr);}                    
-                })
- */
+/**/

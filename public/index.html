@@ -54,7 +54,12 @@
                         </div>
                         <div class="form-group">
                             <label for="main-form-address" class="text-success">Address <em style="color:red;">*</em></label>
-                            <input required type="text" class="form-control dis-on-up" id="main-form-address" name="address" placeholder="Enter Address">
+                            <div class="row px-2">
+                                <input style="min-width:150px;" required type="text" class="form-control m-1 col dis-on-up" name="city" placeholder="City">
+                                <input style="min-width:150px;" required type="text" class="form-control m-1 col dis-on-up" name="state" placeholder="State">
+                                <input style="min-width:150px;" required type="number" class="form-control m-1 col dis-on-up" name="zip" placeholder="Zip">
+                                <input style="min-width:150px;" required type="text" class="form-control m-1 col dis-on-up" name="street" placeholder="Street" id="main-form-address">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="main-form-email" class="text-success">Email address <em style="color:red;">*</em></label>
@@ -108,76 +113,8 @@
                 </ul>
             </div>
        </div>
+       <p><small>Created with &#10084; by Yudi Kahn &copy; <script>document.write(new Date().getFullYear())</script></small></p>
     </footer>
 </body>
 </html>
-<!-- 
-      <form class="main-form form-size mx-auto bg-white" id="form" method="POST" action="/order">
-            <div class="form-size p-4">
-                <div class="form-group">
-                    <label for="main-form-user" class="text-success">User Name</label>
-                    <input required type="text" class="form-control" id="main-form-user" name="username" placeholder="Enter user name">
-                </div>
-                <div class="form-group">
-                    <label for="main-form-pass" class="text-success">Password</label>
-                    <input required type="password" class="form-control" id="main-form-pass" name="password" placeholder="Enter password">
-                    <input type="checkbox" id="toggle-pass">&nbsp;<label class="text-muted" for="toggle-pass"><small>Show / Hide password</small>.</label>
-                    <small class="form-text text-muted" id="form-note">You can change you'r order in the future with this username & password.</small>
-                </div>
-                <a href="#show-loc" class="btn btn-success">Next &gt;</a>
-            </div>
-
-            <div id="show-loc" class="form-size p-4">
-                <div class="form-group">
-                    <label for="main-form-address" class="text-success">Address <em style="color:red;">*</em></label>
-                    <input required type="text" class="form-control dis-on-up" id="main-form-address" name="address" placeholder="Enter Address">
-                </div>
-                <div class="form-group">
-                    <label for="main-form-email" class="text-success">Email address <em style="color:red;">*</em></label>
-                    <input required type="email" class="form-control dis-on-up" id="main-form-email" name="email" placeholder="Enter Email">
-                </div>
-                <div class="form-group">
-                    <label class="text-success" for="main-form-phone">Phone Number <em style="color:red;">*</em></label>
-                    <input required type="tel" class="form-control dis-on-up" placeholder="Enter Phone Number" id="main-form-phone" name="phoneNumber">
-                </div>
-                <a href="#show-next" class="btn btn-success">Next &gt;</a>
-            </div>
-
-            <div id="show-next" class="form-size p-4">
-                <div class="form-group">
-                    <label class="text-success" for="main-form-f-name">First Name</label>
-                    <input type="text" class="form-control dis-on-up" placeholder="Enter First Name" id="main-form-f-name" name="firstName">
-                </div>
-                <div class="form-group">
-                    <label class="text-success" for="main-form-l-name">Last Name</label>
-                    <input type="text" class="form-control dis-on-up" placeholder="Enter Last Name" id="main-form-l-name" name="lastName">
-                </div>
-                <a href="#items" id="to-items" class="btn btn-success">Next &gt;</a>
-            </div>
-
-            <div id="items" class="p-4">
-                <div class="w-100 h-100" style="position: relative;">
-                    <div class="row p-1 position-fixed bg-white text-dark" style="z-index:100;height:40px;top:31px;width:88%;border-bottom:1px solid #28a745;">
-                        <div class="col text-center">Type</div>
-                        <div class="col text-center">Quantity</div>
-                        <div class="col text-center">Price</div>
-                    </div>
-                    <br/>
-                    <a class="btn btn-outline-success" href="#close-items" style="transform: rotate(90deg);">&rsaquo;</a>
-                    <div id="min" class="mb-3">
-
-                    </div>
-                    <div class="p-4">
-                        <h2 class="c-y">What is your budget ?!</h2>
-                        <div class="row">
-                            <div class="col">Esrog (min: 50$, max:300$)</div>
-                            <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
-                            <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="300" class="form-control"/></div>
-                        </div>
-                    </div>
-                    <button type="button" id="close-items" class="btn btn-outline-success">Back</button>
-                    <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
-                </div>
-            </div>
-        </form>      
--->
+<!---->

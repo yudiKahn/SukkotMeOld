@@ -39,7 +39,11 @@ router.get('/delete/:id', (req, res)=>{
 
 //returns order for print
 router.get('/get/:id', (req,res)=>{
-    orders.findById(req.params.id).then(doc=>res.json(doc)).catch(er=>res.status(400).json(er))
+    orders.findById(req.params.id).then(doc=>{
+        users.findById(doc.userId).then(user=>{
+            res.json({doc, user});
+        }).catch(er=>res.status(400).json(er));
+    }).catch(er=>res.status(400).json(er));
 })
 
 //change order status to done || undone
@@ -56,13 +60,13 @@ router.get('/orderpaid/:id', (req,res)=>{
     }).catch(er=>res.status(400).json(er))
 })
 
-//admin update order
+//update order admin 
 router.post('/admin/update/130240/:id', (req,res)=>{
     orders.findById(req.params.id).then(doc=>{
         let oldItems = doc.items;
         oldItems.push(getItemObj(req.body.item, Number(req.body.q), Number(req.body.price), null, true))
         orders.updateOne({_id:req.params.id}, {items: oldItems}).then(()=>{
-            res.status(200).send(sendSuccess('Order update successfuly'))
+            res.status(200).send(sendSuccess('Order update successfuly', oldItems))
         }).catch(err=>res.status(400).send(sendErr(err)))
     }).catch(err=>res.status(400).send(sendErr(err)));
 })

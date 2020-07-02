@@ -1,14 +1,12 @@
 const router = require('express').Router();
 const items = require('./items');
-const User = require('./model').users;
-const Order = require('./model').orders;
 const {getUserItems, getUserSum, sendErr, sendWarning, getOrderItems,
       sendSuccess, getItemObj, sendEmail, emailValidate, getOrderSum} = require('./helpfulFunctions');
-const { orders } = require('./model');
+const { orders, users } = require('./model');
 
 //middlewere
 function checkIfSignIn(req, res, next){
-    User.findById(req.params.id).then(doc=>{
+    users.findById(req.params.id).then(doc=>{
         if(doc){return next();}
         res.redirect('/')
     }).catch(()=>res.redirect('/'));
@@ -25,8 +23,11 @@ router.post('/signup', (req,res)=>{
     if(!isEmail){
         return res.send(sendErr('Email is not valid'))
     }
-    const newUser = new User(req.body);
-    User.findOne({email: newUser.email, password: newUser.password}).then(doc=>{
+    const newUser = new users(req.body);
+    const {city, state, street, zip} = req.body;
+    newUser.address.city = city; newUser.address.street = street;
+    newUser.address.state = state; newUser.address.zip = zip;
+    users.findOne({email: newUser.email, password: newUser.password}).then(doc=>{
         if(doc){
             res.status(400).send(sendErr('This email is already used.'))
         }else{
@@ -39,11 +40,28 @@ router.post('/signup', (req,res)=>{
 
 //login
 router.post('/login',(req, res)=>{
-    User.findOne({email:req.body.email, password:req.body.password}).then(doc=>{
+    users.findOne({email:req.body.email, password:req.body.password}).then(doc=>{
         if(doc){ return res.redirect(`/order/${doc._id}`); }
         res.redirect('/');
     }).catch(err=>res.status(400).send(sendErr(err)));
 });
+
+//update user profile
+router.post('/profile/update/:id', (req, res)=>{
+    users.findOne({email: req.body.email, password:req.body.password}).then(doc=>{
+        if(doc){
+            res.status(400).send(sendErr('User Email is already taken'))
+        }else{
+            const newUser = req.body;
+            const {city, state, street, zip} = req.body;
+            newUser.address.city = city; newUser.address.street = street;
+            newUser.address.state = state; newUser.address.zip = zip;
+            users.updateOne({_id:req.params.id}, newUser).then(()=>{
+                res.send(sendWarning('Your Profile as updated'))
+            }).catch(err=>res.status(400).json(err))
+        }
+    }).catch(err=>res.status(400).json(err))
+})
 
 //order-page
 router.get('/order/:id', checkIfSignIn, (req,res)=>{
@@ -52,14 +70,15 @@ router.get('/order/:id', checkIfSignIn, (req,res)=>{
 
 //get user
 router.get('/user/:id', (req, res)=>{
-    User.findById(req.params.id).then(doc=>{
-        res.json(doc)
+    users.findById(req.params.id).then(doc=>{
+        let {firstName, lastName, email, address, phoneNumber} = doc;
+        res.json({firstName, lastName, email, address, phoneNumber})
     }).catch(err=>res.status(400).json(err));
 })
 
 //create order
 router.post('/order/:id/new', (req,res)=>{
-    let newOrder = new Order();
+    let newOrder = new orders();
     let newItems = getOrderItems(items, req.body);
     let sum = getOrderSum(items, req.body);
     newOrder.items = newItems;
@@ -74,13 +93,13 @@ router.post('/order/:id/new', (req,res)=>{
 
 //update order
 router.post('/order/:id/update', (req,res)=>{
-  User.findById(req.params.id).then(doc=>{
+  users.findById(req.params.id).then(doc=>{
     let myItems = getUserItems(items, req.body);
     let sum = getUserSum(items, req.body);
     if(sum<=0){
         res.status(400).send(sendErr('You did not order any items'))
     }else{
-       User.updateOne({email: doc.email, password:doc.password}, {}).then(()=>{
+       users.updateOne({email: doc.email, password:doc.password}, {}).then(()=>{
             res.send(sendSuccess(`user <em>'${doc.username}'</em> is updated`,myItems, null, sum))
         }).catch(err=>res.status(400).send(sendErr(err)));
     }
@@ -89,14 +108,14 @@ router.post('/order/:id/update', (req,res)=>{
 
 //get all orders for user
 router.get('/orders/:id/all',(req, res)=>{
-    Order.find({userId: req.params.id}).then(doc=>{
+    orders.find({userId: req.params.id}).then(doc=>{
         res.send(doc);
     })
 })
 
 //delete order
 router.post('/order/:id/delete', (req, res)=>{
-    Order.deleteOne({_id: req.params.id}).then(doc=>{
+    orders.deleteOne({_id: req.params.id}).then(doc=>{
         res.send('deleted');
     }).catch(err=>res.status(400).send(sendErr(err)));
 })

@@ -7,7 +7,12 @@ const schema = mongoose.Schema({
     phoneNumber: {type: String},
     password: {type:String, trim: true},
     sum: {type:Number},
-    address: {type: String}
+    address: {
+        street: String,
+        city: String,
+        state: String,
+        zip: Number
+    }
 });
 
 const commentSchema = mongoose.Schema({

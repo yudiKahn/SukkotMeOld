@@ -42,9 +42,9 @@
                 <div class="carousel-inner py-3" style="min-height:100%;">
                     <div class="carousel-item active">
 
-                        <h1 class="text-center text-warning">Actions</h1>
+                        <h1 class="text-center text-warning"><i class="fa fa-plus"></i> Actions</h1>
                         <div class="container row mx-auto mb-5 py-5">
-                            <div class="card border-success m-2" style="max-width: 18rem;">
+                            <div class="card border-success mx-auto m-2" style="max-width: 18rem;">
                                 <div class="card-header bg-success text-light" data-target="#carousel-control" data-slide-to="1">
                                     <i class="fa fa-plus"></i>
                                 </div>
@@ -53,7 +53,7 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
-                            <div class="card border-warning m-2" style="max-width: 18rem;">
+                            <div class="card border-warning mx-auto m-2" style="max-width: 18rem;">
                                 <div class="card-header bg-warning text-light" data-target="#carousel-control" data-slide-to="2">
                                     <i class="fa fa-cloud-upload"></i>
                                 </div>
@@ -62,7 +62,7 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
-                            <div class="card border-dark m-2" style="max-width: 18rem;">
+                            <div class="card border-dark mx-auto m-2" style="max-width: 18rem;">
                                 <div class="card-header bg-dark text-light" data-target="#carousel-control" data-slide-to="3">
                                     <i class="fa fa-trash"></i>
                                 </div>
@@ -73,7 +73,7 @@
                             </div>
                         </div>
 
-                        <h1 class="text-center text-primary">Your orders</h1>
+                        <h1 class="text-center text-primary"><i class="fa fa-shopping-bag"></i> Your orders</h1>
                         <div class="container mx-auto mb-5 py-5">
                             <div id="user-orders-fill">
 
@@ -81,6 +81,20 @@
                             <h5 style="padding-right:1.25rem;" class="py-3 text-right">
                                 <span class="badge badge-primary badge-pill" id="user-order-sum"></span>
                             </h5>
+                        </div>
+
+                        <h1 class="text-center text-dark"><i class="fa fa-cogs"></i> Profile</h1>
+                        <form class="container mx-auto mb-5 py-5" method="POST" id="modify-profile-form">
+                            <ul id="user-profile-fill" class="list-group">
+                                
+                            </ul>
+                        </form>
+
+                        <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
+                        <div class="container mx-auto mb-5 py-5">
+                            <h4>Payment can be sent to Yanky Kahn 18253 Topham St Tarzana CA 91335 818-605-2066</h4>
+                            <p><i class="p-3 text-primary fa fa-paypal"></i> Paypal chabad18@hotmail.com</p>
+                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App  8186052066</p>
                         </div>
                        
                     </div>
@@ -147,6 +161,10 @@
     <script type="text/javascript">
         window.onload = ()=> {
 
+            //user id
+            const urlArray = window.location.href.toString().split(/[# , /]/);
+            const urlId = urlArray[4];
+
             //some responsive effects
             function changeImgAndColOrRow(){
                 let w = window.innerWidth;
@@ -157,11 +175,44 @@
                 document.querySelectorAll('.col-or-row').forEach(d=>{ if(w<500){ d.classList.remove('col-6');}  else{ d.classList.add('col-6');}})
             }
             changeImgAndColOrRow();
-            window.addEventListener('resize', changeImgAndColOrRow)
+            window.addEventListener('resize', changeImgAndColOrRow);
+
+            //fill user profile
+            function fillUserProfile(user){
+               let profileDiv = document.getElementById('user-profile-fill');
+               let txt=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="modify-profile">
+                <label class="custom-control-label" for="modify-profile">Modify profile.</label>
+                </div><button type="button" class="p-1 badge badge-primary badge-pill" id="submit-profile">SUBMIT</button>         
+                </li>`;
+               Object.keys(user).sort().map(d=>{
+                   if(d == 'address'){
+                        Object.keys(user[d]).sort().map(a=>{
+                            txt+=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                             ${a}<input name="${d}" style="max-width:200px" type="text" value="${user[d][a]}" disabled class="form-control profile-input"></li>`;
+                        })
+                   }else
+                   txt+=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${d}<input style="max-width:200px" name="${d}" type="text" value="${user[d]}" disabled class="form-control profile-input"></li>`;
+               })
+               profileDiv.innerHTML=txt;
+               document.getElementById('modify-profile').addEventListener('click', function(e){
+                   let btn = document.getElementById('submit-profile');
+                   let form = document.getElementById('modify-profile-form');
+                   let isCheck = e.target.checked;
+                   btn.addEventListener('click',()=>{
+                        form.action = `/profile/update/${urlId}`;
+                        form.submit();
+                   });
+                   btn.disabled = !isCheck;
+                   document.querySelectorAll('.profile-input').forEach(input=>{
+                       input.disabled = !isCheck;
+                   })
+               })
+            }
 
             //get user name
-            let urlArray = window.location.href.toString().split(/[# , /]/);
-            let urlId = urlArray[4];
             let getUser = new XMLHttpRequest();
             getUser.onreadystatechange = function(){
                 if (this.readyState == 4 && this.status == 200){
@@ -169,6 +220,8 @@
                         //fill user name
                         let welcomeTxt = `Welcome`;
                         document.getElementById('h1-name').innerHTML=`${welcomeTxt} ${user.firstName} ${user.lastName}`;                
+                        //fill user profile
+                        fillUserProfile(user);
                 }    
             }
             getUser.open("GET", `/user/${urlId}`, true);
@@ -197,7 +250,7 @@
                                 <span class="badge badge-primary badge-pill">TOTAL :$${order.sum}</span></h5>`;
                             }
                         }else{
-                            let txt = '<h5 class="text-warning">There are no orders.</h5>';
+                            let txt = '<h5 class="text-warning text-center">There are no orders.</h5>';
                             htmlTxtForDel=txt;htmlTxt=txt;
                         }
                         document.getElementById('user-orders-fill').innerHTML=htmlTxt;
