@@ -167,7 +167,7 @@
                 if (this.readyState == 4 && this.status == 200){
                         let user = JSON.parse(this.responseText);
                         //fill user name
-                        let welcomeTxt = user.orders.length>0 ? `Welcome back`:`Welcome`;
+                        let welcomeTxt = `Welcome`;
                         document.getElementById('h1-name').innerHTML=`${welcomeTxt} ${user.firstName} ${user.lastName}`;                
                 }    
             }

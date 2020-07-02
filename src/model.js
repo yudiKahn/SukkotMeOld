@@ -6,12 +6,12 @@ const schema = mongoose.Schema({
     email: {type:String},
     phoneNumber: {type: String},
     password: {type:String, trim: true},
-    comments: [],
     sum: {type:Number},
     address: {type: String}
 });
 
 const commentSchema = mongoose.Schema({
+    userId: {type: String},
     subject: {type: String},
     text: {type: String}
 })

@@ -6,9 +6,22 @@ const { sendErr, sendWarning,
       sendSuccess, getItemObj, sendEmail, emailValidate} = require('./helpfulFunctions');
 
 //gets all users for admin
-router.get('/users/:id', (req,res)=>{
-    if(req.params.id == 130240)
-    users.find().then(doc=>res.json(doc)).catch(err=>res.send(err))
+router.get('/users-and-orders/:id', (req,res)=>{
+    if(req.params.id == 130240){
+        let result = [];
+        users.find().then(doc=>{
+           doc.map(user=>{
+                orders.find({userId: user._id}).then(ordersArr=>{
+                    result.push({ user,
+                        order: ordersArr.filter(d=>d.isDone==false && d.isPaid==false),
+                        done_orders: ordersArr.filter(d=>d.isDone==true && d.isPaid==false),
+                        paid_orders:ordersArr.filter(d=>d.isDone==false && d.isPaid==true),
+                        done_paid:ordersArr.filter(d=>d.isDone==true && d.isPaid==true) });
+                        res.send(result);
+               }).catch(err=>res.send(err))
+           })         
+       }).catch(err=>res.send(err))
+    }
     else res.send('not found.')
 })
 
@@ -89,7 +102,7 @@ const pass = 0;
 router.get('/admin/getNames/:pass', async (req, res)=>{
     if(req.params.pass==pass){
         let names = [];
-        await orders.find({}).then(doc=>{
+        await users.find({}).then(doc=>{
             doc.map(d=>names.push(`${d.firstName} ${d.lastName}`));
         }).catch(err=>res.status(400).send(sendErr(err)));
         res.send(names);

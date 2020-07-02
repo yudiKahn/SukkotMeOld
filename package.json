@@ -9,11 +9,9 @@
   "author": "Yudi Kahn",
   "license": "MIT",
   "dependencies": {
-    "connect-mongo": "^3.2.0",
     "express": "^4.17.1",
     "express-force-https": "^1.0.0",
     "express-session": "^1.17.1",
-    "heroku-ssl-redirect": "0.0.4",
     "mongoose": "^5.9.19",
     "nodemailer": "^6.4.10"
   }

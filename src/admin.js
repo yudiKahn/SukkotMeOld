@@ -65,53 +65,65 @@ window.onload = function(){
     }
 
     //returns order in html
-    function getOrders(d, i, items){
-        let doneBtn = i.toString().includes('done')? 'unDone' : 'Done';
-        let paidBtn = i.toString().includes('paid')? 'unPaid' : 'Paid';
-        return (`<style>table, th, td {border: 1px solid #17a2b8;} th{background-color:#17a2b8;color:white;}</style>
+    function getOrders(d, i, orders){
+        if(orders.length>0){
+            let tableTxt='';
+            return (`<style>table, th, td {border: 1px solid #17a2b8;} th{background-color:#17a2b8;color:white;}</style>
                 <div class="list-group-item">
                 <div data-toggle="collapse" data-target="#li${i}"
                 aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
                 <div id="li${i}" class="collapse" data-parent="#ul">
                 <p><small>${d.email}<b>/</b>password :${d.password}</small></p>
                 <h4 style="color:#ffc107;text-align:left;"><em>Order items.</em></h4>
-                <table style="width:100%;">
-                <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${items[0]}</tbody>
-                </table><h4 style="color:#ffc107;text-align:left;"><em>What's in the box.</em></h4>
-                <table style="width:100%;">
-                <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${items[1]}</tbody>
-                </table>
-                <p><small>sum: $ ${d.sum ? d.sum:0}</small></p>
-                <button value="${d._id}" class="btn btn-outline-success">${paidBtn}</button>
-                <button value="${d._id}" class="btn btn-warning text-white">${doneBtn}</button>
-                <button value="${d._id}" class="btn btn-danger">Delete</button>
-                <button value="${d._id}" class="btn btn-info">Order</button>
-                <button value="${d._id}" class="btn btn-info">Shipping</button>
-                <button value="${d._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-outline-dark">Edit</button>
-                <button value="${d._id}" data-user="${d.firstName} ${d.lastName}-${d.email}" class="btn btn-outline-primary">Email</button> </div>
-                </div>`);
+                ${
+                    orders.map(order=>{
+                        let doneBtn = order.isDone ? 'unDone' : 'Done';
+                        let paidBtn = order.isPaid ? 'unPaid' : 'Paid';
+                        tableTxt+=
+                        `<table style="width:100%;"><thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead><tbody>`;
+                        order.items.map(d=>tableTxt+=`<tr><td>${d.item}</td><td>${d.q}</td><td>${d.price}</td></tr>`);
+                        tableTxt+=`</tbody></table>
+                        <p><small>sum: $ ${order.sum ? order.sum:0}</small></p>
+                        <button value="${order._id}" class="btn btn-outline-success">${paidBtn}</button>
+                        <button value="${order._id}" class="btn btn-warning text-white">${doneBtn}</button>
+                        <button value="${order._id}" class="btn btn-danger">Delete</button>
+                        <button value="${order._id}" class="btn btn-info">Order</button>
+                        <button value="${order._id}" class="btn btn-info">Shipping</button>
+                        <button value="${order._id}" data-user="${d.firstName} ${d.lastName}" class="btn btn-outline-dark">Edit</button>
+                        <button value="${order._id}" data-user="${d.firstName} ${d.lastName}-${d.email}" class="btn btn-outline-primary">Email</button> `;
+                    })
+                }${tableTxt}
+                </div></div>`);
+        }else return '';
+        
     }
 
     //fill page with orders
     function fillPage(){
         //let money = 0;
-        document.getElementById('ul').innerHTML="";
-        document.getElementById('ul-done').innerHTML="";
-        document.getElementById('ul-paid').innerHTML="";
-        document.getElementById('ul-done-paid').innerHTML="";
+        let ul = document.getElementById('ul');
+        let ul_done = document.getElementById('ul-done');
+        let ul_paid = document.getElementById('ul-paid');
+        let ul_done_paid = document.getElementById('ul-done-paid');
+        ul.innerHTML="";ul_done.innerHTML="";ul_paid.innerHTML="";ul_done_paid="";
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
                 let data = JSON.parse(this.responseText);
-                data = data.sort((a,b) => (a.lastName.toLowerCase() > b.lastName.toLowerCase()) ? 1 : ((a.lastName.toLowerCase() < b.lastName.toLowerCase()) ? -1 : 0))
-                data.map((d, i)=>{
-                    document.getElementById('ul').innerHTML+=getOrders(d,i,['','']);
+                data = data.sort((a,b) => (a.user.lastName.toLowerCase() > b.user.lastName.toLowerCase()) ? 1 : ((a.user.lastName.toLowerCase() < b.user.lastName.toLowerCase()) ? -1 : 0))
+                data.map((d,i)=>{
+                    ul.innerHTML+=getOrders(d.user,i, d.order);
+                    ul_done.innerHTML+=getOrders(d.user,i, d.done_orders);
+                    ul_paid.innerHTML+=getOrders(d.user, i, d.paid_orders);
+                    ul_done_paid.innerHTML+=getOrders(d.user, i , d.done_paid)
                 })
+                
+                console.log(data)
                 enableBtns();
                 //printMoney(money);
             }
         }
-        xhttp.open("GET", "/users/130240", true);
+        xhttp.open("GET", "/users-and-orders/130240", true);
         xhttp.send();
     }
     fillPage()
