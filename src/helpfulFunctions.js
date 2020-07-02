@@ -174,6 +174,16 @@ function sendEmail(userBody, txt, array=null){
     return res;
 }
 
+function requireHTTPS(req, res, next) {
+    if (process.env.NODE_ENV === 'production') {
+        if (!req.secure) {
+            return res.redirect('https://' + req.get('host') + req.url);
+        }
+        next();
+    } else
+        return next();
+}
+
 module.exports = {
     getOrderItems: getOrderItems,
     getOrderSum: getOrderSum,
@@ -182,7 +192,8 @@ module.exports = {
     sendSuccess: sendSuccess,
     getItemObj: getItemObj,
     sendEmail: sendEmail,
-    emailValidate: emailValidate
+    emailValidate: emailValidate,
+    requireHTTPS: requireHTTPS
 }
 /*
 

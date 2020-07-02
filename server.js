@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
+const { requireHTTPS } = require('./src/helpfulFunctions');
+app.use(requireHTTPS);
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(__dirname+'/public'));
 

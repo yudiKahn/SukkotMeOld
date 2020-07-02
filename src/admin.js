@@ -64,7 +64,7 @@ window.onload = function(){
         })   
     }
 
-    //returns all orders
+    //returns order in html
     function getOrders(d, i, items){
         let doneBtn = i.toString().includes('done')? 'unDone' : 'Done';
         let paidBtn = i.toString().includes('paid')? 'unPaid' : 'Paid';
