@@ -2,7 +2,7 @@ const router = require('express').Router();
 const items = require('./items');
 const {getUserItems, getUserSum, sendErr, sendWarning, getOrderItems,
       sendSuccess, getItemObj, sendEmail, emailValidate, getOrderSum} = require('./helpfulFunctions');
-const { orders, users } = require('./model');
+const { orders, users, comments } = require('./model');
 
 //middlewere
 function checkIfSignIn(req, res, next){
@@ -47,20 +47,24 @@ router.post('/login',(req, res)=>{
 });
 
 //update user profile
-router.post('/profile/update/:id', (req, res)=>{
-    users.findOne({email: req.body.email, password:req.body.password}).then(doc=>{
-        if(doc){
-            res.status(400).send(sendErr('User Email is already taken'))
-        }else{
-            const newUser = req.body;
-            const {city, state, street, zip} = req.body;
-            newUser.address.city = city; newUser.address.street = street;
-            newUser.address.state = state; newUser.address.zip = zip;
-            users.updateOne({_id:req.params.id}, newUser).then(()=>{
-                res.send(sendWarning('Your Profile as updated'))
-            }).catch(err=>res.status(400).json(err))
+function existEmail(req,res, next){
+    users.find({email: req.body.email}).then(doc=>{
+        if(doc.length>1){
+            return res.status(400).send(sendErr('Email already taken'))
+        }else if(doc.length==0){
+            return next();
+        }else if(doc.length==1){
+             return next();//fix me
         }
-    }).catch(err=>res.status(400).json(err))
+    })
+}
+router.post('/profile/update/:id',existEmail, (req, res)=>{
+    let {email, firstName, lastName, phoneNumber} = req.body;
+    let {city, street, state, zip} = req.body;
+    users.updateOne({_id: req.params.id}, 
+        {email, firstName, lastName, phoneNumber, address:{city, street, state, zip}}).then(doc=>{
+        res.send(sendWarning('Your profile was update'));
+    }).catch(err=>res.status(400).send(sendErr(err)))
 })
 
 //order-page
@@ -120,6 +124,14 @@ router.post('/order/:id/delete', (req, res)=>{
     }).catch(err=>res.status(400).send(sendErr(err)));
 })
 
+//send comment
+router.post('/user/:id/comment', (req,res)=>{
+    let newComment = new comments(req.body);
+    newComment.userId = req.params.id;
+    newComment.save().then(()=>{
+        res.send(sendWarning('Your comment was saved'))
+    }).catch(err=>res.status(400).send(sendErr(err)))
+})
 
 //return all items available
 router.get('/items', (req,res)=>{

@@ -71,6 +71,15 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
+                            <div class="card border-info mx-auto m-2" style="max-width: 18rem;">
+                                <div class="card-header bg-light text-info" data-target="#carousel-control" data-slide-to="4">
+                                    <i class="fa fa-comments"></i>
+                                </div>
+                                <div class="card-body text-info">
+                                <h5 class="card-title">Let's be in touch</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
                         </div>
 
                         <h1 class="text-center text-primary"><i class="fa fa-shopping-bag"></i> Your orders</h1>
@@ -84,7 +93,7 @@
                         </div>
 
                         <h1 class="text-center text-dark"><i class="fa fa-cogs"></i> Profile</h1>
-                        <form class="container mx-auto mb-5 py-5" method="POST" id="modify-profile-form">
+                        <form target="_" class="container mx-auto mb-5 py-5" method="POST" id="profile-form">
                             <ul id="user-profile-fill" class="list-group">
                                 
                             </ul>
@@ -99,7 +108,7 @@
                        
                     </div>
                     <!--new order-->
-                    <div id="comment-form-div" class="carousel-item">
+                    <div class="carousel-item">
                         <form id="form-new" class="main-form form-size mx-auto bg-white" method="POST" action="">
                             <div class="p-4">
                                 <div class="w-100 h-100" style="position: relative;">
@@ -122,18 +131,37 @@
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>                       
                     </div>
                     <!--update order-->
-                    <div id="comment-form-div" class="carousel-item">
+                    <div class="carousel-item">
                         <h4>Not Yet</h4>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
                     <!--delete order-->
-                    <div id="comment-form-div" class="carousel-item text-center">
+                    <div class="carousel-item text-center">
                         <div class="container" id="user-orders-delete">
 
                         </div>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
-
+                    <!--Comment form-->
+                    <div class="carousel-item text-center">
+                        <div class="container">
+                            <form method="POST" id="comment-form" class=" text-left form-size main-form bg-white mx-auto">
+                                <h5 class="text-info p-4">Send Comment.</h5>
+                                <div class="form-group p-4">
+                                    <label for="subject" class="text-info">Subject</label>
+                                    <input name="subject" id="subject" type="text" class="form-control" placeholder="Enter Subject">
+                                </div>
+                                <div class="form-group p-4">
+                                    <label for="comment" class="text-info">Comment</label>
+                                    <textarea name="text" style="max-height:200px;" id="comment" type="text" class="form-control" placeholder="Enter Subject"></textarea>
+                                </div>
+                                <div class="form-group p-4">
+                                    <button class="btn btn-info">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,6 +184,7 @@
                  </ul>
              </div>
         </div>
+        <p><small>Created with &#10084; by Yudi Kahn &copy; <script>document.write(new Date().getFullYear())</script></small></p>
      </footer>
 
     <script type="text/javascript">
@@ -164,6 +193,18 @@
             //user id
             const urlArray = window.location.href.toString().split(/[# , /]/);
             const urlId = urlArray[4];
+
+            //comment form action
+            document.getElementById('comment-form').action=`/user/${urlId}/comment`;
+            //profile form action
+            document.getElementById('profile-form').action=`/profile/update/${urlId}`;
+            document.getElementById('profile-form').addEventListener('submit',function(e){
+                location.reload();
+               /* e.preventDefault();
+                for(let i=2;i<10;i++){
+                    console.log(e.target[i].value)
+                }*/
+            })
 
             //some responsive effects
             function changeImgAndColOrRow(){
@@ -184,27 +225,24 @@
                 <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" id="modify-profile">
                 <label class="custom-control-label" for="modify-profile">Modify profile.</label>
-                </div><button type="button" class="p-1 badge badge-primary badge-pill" id="submit-profile">SUBMIT</button>         
+                </div><button disabled type="submit" class="p-1 badge badge-primary badge-pill" id="submit-profile">SUBMIT</button>         
                 </li>`;
                Object.keys(user).sort().map(d=>{
                    if(d == 'address'){
                         Object.keys(user[d]).sort().map(a=>{
                             txt+=`<li class="list-group-item d-flex justify-content-between align-items-center">
-                             ${a}<input name="${d}" style="max-width:200px" type="text" value="${user[d][a]}" disabled class="form-control profile-input"></li>`;
+                             ${a}<input name="${a}" style="max-width:200px" type="${a=='zip'?'number':'text'}" value="${user[d][a]}" disabled class="form-control profile-input"></li>`;
                         })
                    }else
                    txt+=`<li class="list-group-item d-flex justify-content-between align-items-center">
                     ${d}<input style="max-width:200px" name="${d}" type="text" value="${user[d]}" disabled class="form-control profile-input"></li>`;
                })
                profileDiv.innerHTML=txt;
+               //manage profile update
                document.getElementById('modify-profile').addEventListener('click', function(e){
                    let btn = document.getElementById('submit-profile');
-                   let form = document.getElementById('modify-profile-form');
+                   
                    let isCheck = e.target.checked;
-                   btn.addEventListener('click',()=>{
-                        form.action = `/profile/update/${urlId}`;
-                        form.submit();
-                   });
                    btn.disabled = !isCheck;
                    document.querySelectorAll('.profile-input').forEach(input=>{
                        input.disabled = !isCheck;
@@ -347,26 +385,4 @@
     </script>
 </body>
 </html>
-<!--                    
-                         <!--comment form--
-                        <form id="comment-form" class="main-form form-size mx-auto bg-white p-4" method="POST" action="">
-                            <div class="form-group">
-                                <label for="subject-comment" class="text-info">Subject</label>
-                                <input class="form-control" type="text" id="subject-comment" name="subject" placeholder="Subject">
-                            </div>
-                            <div class="form-group">
-                                <label for="text-comment" class="text-info">Comment<em class="text-danger">*</em></label>
-                                <textarea required minlength="10" class="form-control" name="text" placeholder="Comment" id="text-comment" style="max-height:250px;"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-info">Send</button>
-                        </form>
-
-                                            <script type="text/javascript">
-                        document.querySelectorAll('.toggle-carosel-forms').forEach(el=>{
-                            el.addEventListener('click', ()=>{
-                                if(!document.getElementById('comment-form-div').classList.contains('active'))
-                                  document.getElementById('main').scrollIntoView();
-                            })
-                        })
-                    </script>
- -->
+<!---->

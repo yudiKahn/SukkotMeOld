@@ -7,7 +7,7 @@ body, html{scroll-behavior: smooth;margin:0; padding:0;width:100vw;height: 100vh
 }
 .txt-head{
   position: relative;font-family:cursive;
-  text-shadow:1px 2px 3px #28a745;top:40%;
+  text-shadow:-1px -1px 0 #28a745, 1px -1px 0 #28a745,-1px 1px 0 #28a745, 1px 1px 0 #28a745;top:40%;
 }
 #main{background-image: linear-gradient(180deg, rgba(194,203,210,0.33) 0%, #ffffff 36%);}
 .c-y{
