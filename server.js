@@ -1,18 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const sslRedirect = require('heroku-ssl-redirect');
 const app = express();
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(__dirname+'/public'));
-function requireHTTPS(req, res, next) {
-    if (!req.secure) {
-        //FYI this should work for local development as well
-        return res.redirect('https://' + req.get('host') + req.url);
-    }
-    next();
-}
-
-app.use(requireHTTPS);
+app.use(sslRedirect());
 
 let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
 
@@ -24,6 +17,7 @@ app.use('/', routs)
 
 const adminRouts = require('./src/adminRoute');
 app.use('/', adminRouts)
+
 
 const listener = app.listen(process.env.PORT || 8080, ()=>{
     console.log(`listening on port ${listener.address().port}`);
