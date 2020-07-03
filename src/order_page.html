@@ -28,7 +28,7 @@
                 <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
             </nav>
         </div>
-        <div class="w-100 p-3 text-center" style="position:relative; top:70px;">
+        <div class="p-3 text-center header-txt-bg mx-auto py-5" style="position:relative; top:70px;">
              <h1 class="c-y txt-head" id="h1-name"></h1>
              <a href="#sale"><h5 class="c-y txt-head"><small><i class="fa fa-arrow-right"></i> Hot sales <i class="fa fa-arrow-left"></i></small></h5></a>
         </div>
@@ -98,6 +98,18 @@
                                 
                             </ul>
                         </form>
+
+                        <h1 class="text-center text-danger"><i class="fa fa-file-o"></i> Instructions</h1>
+                        <div class="container mx-auto mb-5 py-5">
+                            <h4 class="text-danger">PLEASE OPEN IMMEDIATELY AND INSPECT.</h4>
+                            <p>
+                                Place Lulavim in a cool area and a closed box
+                                Hadasim and Aravos should be refrigerated
+                                Inspect all merchandise for Kashrus
+                                Report any damaged products within 24 hours of receiving shipment.
+                            </p>
+                            <p> Thank you! Have a good Yom Tov! </p>
+                        </div>
 
                         <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
                         <div class="container mx-auto mb-5 py-5">
@@ -200,10 +212,6 @@
             document.getElementById('profile-form').action=`/profile/update/${urlId}`;
             document.getElementById('profile-form').addEventListener('submit',function(e){
                 location.reload();
-               /* e.preventDefault();
-                for(let i=2;i<10;i++){
-                    console.log(e.target[i].value)
-                }*/
             })
 
             //some responsive effects
@@ -361,7 +369,7 @@
                             ${
                                 arr.filter(d=>d.n==itemsToGoOver[index]).map(m=>`<div class="row">
                                 <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}
-                                    ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Standard':'Chinuch'}</b>`:''}</div>
+                                    ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Chinuch':'Standard'}</b>`:''}</div>
                                 <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
                                 <div class="col">$ ${m.p}</div>
                                 </div>`)

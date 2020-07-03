@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const secure = require('express-force-https');
+const robots= require('express-robots-txt');
 
 const app = express();
 app.use(secure);
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(__dirname+'/public'));
+app.use(robots(__dirname+'/public/robots.txt'));
 
 let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
 
