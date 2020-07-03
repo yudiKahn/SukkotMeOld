@@ -96,7 +96,7 @@ window.onload = ()=> {
                         for(let item of order.items){
                             if(item.price>0){
                                 orderMin+= `<li class="list-group-item d-flex justify-content-between align-items-center">
-                                ${item.item}<span class="badge badge-primary badge-pill">${item.q}</span></li>`;
+                                ${item.item}<span class="badge badge-primary badge-pill">${item.totalPaid||item.q}</span></li>`;
                             }
                             orderMax+=`<li class="list-group-item d-flex justify-content-between align-items-center">
                             ${item.item.replace('set','Esrog')}<span class="badge badge-primary badge-pill">${item.q}</span></li>`;

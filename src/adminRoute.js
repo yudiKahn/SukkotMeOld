@@ -5,21 +5,22 @@ const comments = require('./model').comments;
 const { sendErr, sendWarning,
       sendSuccess, getItemObj, sendEmail, emailValidate} = require('./helpfulFunctions');
 
+const pass = 123240;
 //gets all users for admin
 router.get('/users-and-orders/:id', (req,res)=>{
-    if(req.params.id == 130240){
+    if(req.params.id == pass){
         let result = [];
-        users.find().then(doc=>{
-           doc.map(user=>{
-                orders.find({userId: user._id}).then(ordersArr=>{
+        users.find().then(async doc=>{
+            for(let user of doc){
+               await orders.find({userId: user._id}).then(ordersArr=>{
                     result.push({ user,
                         order: ordersArr.filter(d=>d.isDone==false && d.isPaid==false),
                         done_orders: ordersArr.filter(d=>d.isDone==true && d.isPaid==false),
                         paid_orders:ordersArr.filter(d=>d.isDone==false && d.isPaid==true),
                         done_paid:ordersArr.filter(d=>d.isDone==true && d.isPaid==true) });
-                        res.send(result);
-               }).catch(err=>res.send(err))
-           })         
+               }).catch(err=>res.send(err));
+           };
+           res.send(result)      
        }).catch(err=>res.send(err))
     }
     else res.send('not found.')
@@ -27,7 +28,7 @@ router.get('/users-and-orders/:id', (req,res)=>{
 
 //gets all orders for admin
 router.get('/orders/:code/:id', (req,res)=>{
-    if(req.params.code == 130240)
+    if(req.params.code == pass)
     orders.find({userId: req.params.id}).then(doc=>res.json(doc)).catch(err=>res.send(err))
     else res.send('not found.')
 })
@@ -61,14 +62,18 @@ router.get('/orderpaid/:id', (req,res)=>{
 })
 
 //update order admin 
-router.post('/admin/update/130240/:id', (req,res)=>{
-    orders.findById(req.params.id).then(doc=>{
-        let oldItems = doc.items;
-        oldItems.push(getItemObj(req.body.item, Number(req.body.q), Number(req.body.price), null, true))
-        orders.updateOne({_id:req.params.id}, {items: oldItems}).then(()=>{
-            res.status(200).send(sendSuccess('Order update successfuly', oldItems))
-        }).catch(err=>res.status(400).send(sendErr(err)))
-    }).catch(err=>res.status(400).send(sendErr(err)));
+router.post('/admin/update/:adminId/:id', (req,res)=>{
+    if(req.params.adminId==pass){
+        orders.findById(req.params.id).then(doc=>{
+            let oldItems = doc.items;
+            oldItems.push(getItemObj(req.body.item, Number(req.body.q), Number(req.body.price), null, true))
+            orders.updateOne({_id:req.params.id}, {items: oldItems}).then(()=>{
+                res.status(200).send(sendSuccess('Order update successfuly', oldItems))
+            }).catch(err=>res.status(400).send(sendErr(err)))
+        }).catch(err=>res.status(400).send(sendErr(err)));
+    }else{
+        res.status(400).send('not found')
+    }
 })
 
 //auth
@@ -102,7 +107,6 @@ router.post('/admin/email-update/130240/:id', (req,res)=>{
 })
 
 //get all users names
-const pass = 0;
 router.get('/admin/getNames/:pass', async (req, res)=>{
     if(req.params.pass==pass){
         let names = [];
@@ -115,8 +119,10 @@ router.get('/admin/getNames/:pass', async (req, res)=>{
 })
 
 //get all comments
-router.get('/admin/130240/getComments', (req, res)=>{
-    comments.find({}).then(doc=>res.json(doc)).catch(err=>res.status(400).send(sendErr(err)));
+router.get('/admin/:pass/getComments', (req, res)=>{
+    if(req.params.pass=pass)
+     comments.find({}).then(doc=>res.json(doc)).catch(err=>res.status(400).send(sendErr(err)));
+    else res.status(400).send('not found')
 })
 
 module.exports = router;
