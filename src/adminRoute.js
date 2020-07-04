@@ -119,10 +119,20 @@ router.get('/admin/getNames/:pass', async (req, res)=>{
 })
 
 //get all comments
-router.get('/admin/:pass/getComments', (req, res)=>{
-    if(req.params.pass=pass)
-     comments.find({}).then(doc=>res.json(doc)).catch(err=>res.status(400).send(sendErr(err)));
-    else res.status(400).send('not found')
+router.get('/admin/getComments/:pass', (req, res)=>{
+    if(req.params.pass == pass){
+        let result = [];
+        users.find().then(async doc=>{
+            for(let user of doc){
+               await comments.find({userId: user._id}).then(commsArr=>{
+                   if(commsArr.length>0)
+                    result.push({ user, commsArr})
+               }).catch(err=>res.send(err));
+           };
+           res.json(result)      
+       }).catch(err=>res.send(err))
+    }
+    else res.send('not found.')
 })
 
 module.exports = router;

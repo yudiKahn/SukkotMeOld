@@ -1,13 +1,17 @@
 const pass = 123240;
-$(window).ready(()=>{
-    init();
-})
+
+function runOnReady(func){
+    $(window).ready(func);
+}
 
 function init(){
-    //json's
-    $.getJSON(`/users-and-orders/${pass}`, data=> fillUsersOrders(data));
-    $.getJSON(`/admin/getNames/${pass}`,data=> fillUsersNames(data));
-}
+    $.getJSON(`/users-and-orders/${pass}`, data=> runOnReady(fillUsersOrders(data))  );
+    $.getJSON(`/admin/getNames/${pass}`,data=> runOnReady(fillUsersNames(data)) );
+    $.getJSON(`/admin/getComments/${pass}`, data => runOnReady(fillUsersComments(data)) );
+};
+
+//init page
+init();
 
 function fillUsersOrders(usersArray){
     let totalMoney = getTotalMoney(usersArray);
@@ -19,6 +23,32 @@ function fillUsersOrders(usersArray){
     printMoney(totalMoney);
     printUsers([orders, doneOrders, paidOrders, paidAndDoneOrders]);
     enableBtns();
+}
+
+function fillUsersNames(arr){
+    $('#names-ul').html('');
+    let res = arr.sort();
+    res = res.filter((v,i,a)=>a.indexOf(v)==i);
+    res.map(d=>$('#names-ul').append(`<li class="list-group-item">${d}</li>`))
+}
+
+function fillUsersComments(arr){
+    $('#comments-ul').html('');
+    let res = arr.sort((a,b) => a.user.firstName.toLowerCase() > b.user.lastName.toLowerCase() ? 1 : a.user.firstName.toLowerCase() < b.user.lastName.toLowerCase() ? -1 : 0);
+    res.map(d=> $('#comments-ul').append(getCommentInHTML(d)));
+}
+
+function getCommentInHTML(commentObj){
+    let comments = "";
+    for(let comment of commentObj.commsArr){
+        comments+=`<b>${comment.subject}</b><p>${comment.text}</p>`
+    }
+    let res = `<li class="list-group-item">
+    <h6 class="text-info">${comments}</h6>
+    <small>${commentObj.user.lastName} ${commentObj.user.firstName}. 
+    <a href="mailto:${commentObj.user.email}">Send Response</a></small></li>`;
+
+    return res;
 }
 
 function getTotalMoney(arr){
@@ -84,12 +114,7 @@ function printUsers(usersArr){
         document.getElementById(d).innerHTML=usersArr[i];
     })
 }
-function fillUsersNames(arr){
-    document.getElementById('names-ul').innerHTML="";
-    let res = arr.sort();
-    res = res.filter((v,i,a)=>a.indexOf(v)==i);
-    res.map(d=>document.getElementById('names-ul').innerHTML+=`<li class="list-group-item">${d}</li>`)
-}
+
 //enable btns
 function enableBtns(){
     //delete
@@ -103,32 +128,24 @@ function enableBtns(){
     //print
     $('.btn-info').each((i,btn)=>{
         $(btn).click(()=>{
-             $.ajax({url: `/get/${btn.value}`, success: result => Print(result, $(btn).text()) });
+              $.ajax({url: `/get/${btn.value}`, success: result => Print(result, $(btn).text()) });
         })
     })
     //done
     $('.btn-warning').each((i,btn)=>{
-        $(btn).click(()=>{
-            $.ajax({url: `/orderdone/${btn.value}`, success: init });
-        })
+        $(btn).click(()=>{ $.ajax({url: `/orderdone/${btn.value}`, success: init }); })
     })
     //edit
     $('.btn-outline-dark').each((i,btn)=>{
-        $(btn).click(()=>{
-            showUpdateForm($(btn).attr('data-user'), btn.value);
-        })
+        $(btn).click(()=>{ showUpdateForm($(btn).attr('data-user'), btn.value); })
     })
     //paid
     $('.btn-outline-success').each((i,btn)=>{
-       $(btn).click(()=>{
-            $.ajax({url: `/orderpaid/${btn.value}`, success: init });
-       })
+       $(btn).click(()=>{  $.ajax({url: `/orderpaid/${btn.value}`, success: init });  })
     })
     //email
     $('.btn-outline-primary').each((i,btn)=>{
-        $(btn).click(()=>{
-            showEmailForm($(btn).attr('data-user'), btn.value);
-        })
+        $(btn).click(()=> showEmailForm($(btn).attr('data-user'), btn.value) );
     })
 }
  //show print page

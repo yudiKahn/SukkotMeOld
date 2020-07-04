@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const items = require('./items');
 const {getUserItems, getUserSum, sendErr, sendWarning, getOrderItems,
-      sendSuccess, getItemObj, sendEmail, emailValidate, getOrderSum} = require('./helpfulFunctions');
+      sendSuccess, getItemObj, sendEmail, getOrderSum} = require('./helpfulFunctions');
 const { orders, users, comments } = require('./model');
+const CRUD = require('./crud');
+const Middleware = require('./middleware');
 
 //middlewere
 function checkIfSignIn(req, res, next){
@@ -17,25 +19,15 @@ router.get('/', (req,res)=>{
     res.sendFile(__dirname+'/index.html')
 })
 
+
+
 //sign up
-router.post('/signup', (req,res)=>{
-    let isEmail = emailValidate(req.body.email);
-    if(!isEmail){
-        return res.send(sendErr('Email is not valid'))
-    }
-    const newUser = new users(req.body);
-    const {city, state, street, zip} = req.body;
-    newUser.address.city = city; newUser.address.street = street;
-    newUser.address.state = state; newUser.address.zip = zip;
-    users.findOne({email: newUser.email, password: newUser.password}).then(doc=>{
-        if(doc){
-            res.status(400).send(sendErr('This email is already used.'))
-        }else{
-            newUser.save().then(doc=>{
-                res.redirect(`/order/${doc._id}`);
-            }).catch(err=>res.send(err))
-        }
-    }).catch(err=>res.status(400).send(sendErr(err)));
+router.post('/signup', Middleware.SignUp, (req,res)=>{
+    let crud = new CRUD('users');
+    const {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
+    let userObj = {firstName, lastName, email, phoneNumber,password, address:{city, state, street, zip} };
+    crud.Create(userObj);
+    res.status(200).redirect(`/order/${isCreated._id}`);
 })
 
 //login
@@ -129,7 +121,7 @@ router.post('/user/:id/comment', (req,res)=>{
     let newComment = new comments(req.body);
     newComment.userId = req.params.id;
     newComment.save().then(()=>{
-        res.send(sendWarning('Your comment was saved'))
+        res.send(sendWarning("Thank you ! we'll be in touch with you soon."))
     }).catch(err=>res.status(400).send(sendErr(err)))
 })
 
