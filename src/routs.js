@@ -13,6 +13,12 @@ router.get('/', (req,res)=>{
      res.sendFile(`${__dirname}/index.html`)
 })
 
+//sign out
+router.get('/signOut', (req,res)=>{
+    req.session = null;
+    res.redirect('/')
+})
+
 //sign up
 router.post('/signup', Middleware.SignUp, (req,res)=>{
     const {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
