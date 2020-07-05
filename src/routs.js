@@ -7,22 +7,27 @@ const Middleware = require('./middleware');
 
 //Home page
 router.get('/', (req,res)=>{
-    res.sendFile(__dirname+'/index.html')
+    if(req.session.id)
+     res.redirect(`/order/${req.session.id}`);
+    else
+     res.sendFile(`${__dirname}/index.html`)
 })
 
 //sign up
 router.post('/signup', Middleware.SignUp, (req,res)=>{
-    let crud = new CRUD('users');
     const {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
     let userObj = {firstName, lastName, email, phoneNumber,password, address:{city, state, street, zip} };
     let newUser = new users(userObj);
-    newUser.save().then(doc=>res.send(doc._id)).catch(err=>res.status(400).send(sendErr(err)));
+    newUser.save().then(doc=>{
+        req.session.id = doc._id;
+        res.send(doc._id);
+    }).catch(err=>res.status(400).send(sendErr(err)));
 })
 
 //login
 router.post('/login',(req, res)=>{
     users.findOne({email:req.body.email, password:req.body.password}).then(doc=>{
-        if(doc){ return res.send(doc._id); }
+        if(doc){ req.session.id = doc._id; return res.send(doc._id); }
         else { res.status(400).send('No user found. Please try again') };
     }).catch(err=>res.status(400).send(sendErr(err)));
 });
