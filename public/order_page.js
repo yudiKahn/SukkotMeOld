@@ -4,6 +4,16 @@ window.onload = ()=> {
     const urlArray = window.location.href.toString().split(/[# , /]/);
     const urlId = urlArray[4];
 
+    //get user name
+    $.ajax({type: "GET", url: `/user/${urlId}`, success: d => {
+        $('#h1-name').html(`Welcome ${d.firstName} ${d.lastName}`); fillUserProfile(d);
+    } })
+
+    //all orders ajax
+    $.ajax({type: "GET", url: `/orders/${urlId}/all`, success: data => {
+        fillOrders(data); fillDeleteOrders(data); fillUpdateOrders(data);
+    }})
+
     //comment form action
     document.getElementById('comment-form').action=`/user/${urlId}/comment`;
     //profile form action
@@ -23,6 +33,81 @@ window.onload = ()=> {
         }}); 
     })
 
+    function fillOrders(orders){
+        $('#user-orders-fill').html('');
+        let resMin = ""; let resMax = "";
+        if(orders.length<0){
+            resMin='<h5 class="text-warning text-center">There are no orders.</h5>';
+        }else{
+            for(let order of orders){
+                let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
+                resMin=`<h5 class="p-3 text-primary justify-content-between d-flex">
+                <span class="badge badge-primary badge-pill">Order - ${date}</span>
+                <i class="fa fa-bell-o text-dark bell" data-ready="${order.isDone}" data-paid="${order.isPaid}"></i></h5>
+                <ul id="user-order-min" class="list-group">`;
+                resMax=`<h5 class="p-3 collapsed justify-content-between align-items-center d-flex" data-toggle="collapse" aria-expanded="false"
+                data-target="#li${order._id.toString().slice(0,6)}" aria-controls="collapseOne">
+                <span class="badge badge-primary badge-pill">What's in the box &nbsp;<i class="fa fa-mouse-pointer"></i></span>
+                <span class="badge badge-primary badge-pill">TOTAL :$${order.sum}</span></h5>
+                <ul id="li${order._id.toString().slice(0,6)}" class="list-group collapse" data-parent="#user-orders-fill">`;
+                for(let item of order.items){
+                    const li = (isMin) => `<li class="list-group-item d-flex justify-content-between align-items-center">${isMin?item.item:item.item.replace('set','Esrog')}<span class="badge badge-primary badge-pill">${isMin?(item.totalPaid||item.q):item.q}</span></li>`;
+                    if(item.price>0)
+                        resMin+= li(true);
+                    resMax+=li(false);
+                }
+                resMin+="</ul>";resMax+="</ul>";
+                $('#user-orders-fill').append(`${resMin}${resMax}`);
+            }
+        }
+        $('.bell').each((i,bell)=>{
+            const handlein = (e) => $('#order-status').css({'display':'block','left':e.originalEvent.layerX-100,'top':e.originalEvent.layerY-100})
+            .html(`<i>paid</i> :${$(bell).attr('data-paid')}<br/><i>ready</i> :${$(bell).attr('data-ready')}`)
+            const handleOut = (e) => $('#order-status').css('display','none');
+            //(e)=>{console.log( $(bell).attr('data-ready'), $(bell).attr('data-paid') )}
+            $(bell).hover( handlein, handleOut )
+        })
+    }
+
+
+    function fillDeleteOrders(orders){
+        let res = "";
+        if(orders.length<0){
+            res='<h5 class="text-warning text-center">There are no orders.</h5>';
+        }else{
+            for(let order of orders){
+                let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
+                res+=`<button class="btn-delete-order btn btn-block btn-danger w-75 mx-auto my-4" 
+                value="${order._id}">Delete order created at ${date}</button>`;
+            }
+        }
+        $('#user-orders-delete').html(res);
+        $('.btn-delete-order').each((i,btn)=>{
+            $(btn).click(()=>{
+                $.ajax({ type: "POST", url: `/order/${$(btn).val()}/delete`, success: d => location.reload() })
+            })
+        })
+    }
+
+    function fillUpdateOrders(orders){
+        let res = "";
+        if(orders.length<0){
+            res='<h5 class="text-warning text-center">There are no orders.</h5>';
+        }else{
+            for(let order of orders){
+                let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
+                res+=`<button class="btn-update-order btn btn-block btn-info w-75 mx-auto my-4" 
+                value="${order._id}">Update order created at ${date}</button>`;
+            }
+        }
+        $('#user-orders-update').html(res);
+        $('.btn-update-order').each((i,btn)=>{
+            $(btn).click(()=>{
+                console.log(btn)
+                //$.ajax({ type: "POST", url: `/order/${$(btn).val()}/delete`, success: d => location.reload() })
+            })
+        })
+    }
     //some responsive effects
     function changeImgAndColOrRow(){
         let w = window.innerWidth;
@@ -67,92 +152,9 @@ window.onload = ()=> {
        })
     }
 
-    //get user name
-    let getUser = new XMLHttpRequest();
-    getUser.onreadystatechange = function(){
-        if (this.readyState == 4 && this.status == 200){
-                let user = JSON.parse(this.responseText);
-                //fill user name
-                let welcomeTxt = `Welcome`;
-                document.getElementById('h1-name').innerHTML=`${welcomeTxt} ${user.firstName} ${user.lastName}`;                
-                //fill user profile
-                fillUserProfile(user);
-        }    
-    }
-    getUser.open("GET", `/user/${urlId}`, true);
-    getUser.send();
-
-    //gets all ordrs for user
-    function getAllOrders(){
-        let orders = new XMLHttpRequest();
-        orders.onreadystatechange = function(){
-            if(this.readyState == 4 && this.status == 200){
-                const orders = JSON.parse(this.responseText);
-                let htmlTxtOrder = "";
-                let htmlTxtForDel="";
-                if(orders.length>0){
-                    for(let order of orders){
-                        let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
-                        let orderMin = `<h5 class="p-3 text-primary"><span class="badge badge-primary badge-pill">Order items</span> <b>/</b> ${date}</h5>
-                        <ul id="user-order-min" class="list-group">`;
-                        let orderMax = `<h5 class="p-3 collapsed justify-content-between align-items-center d-flex" data-toggle="collapse" aria-expanded="false"
-                        data-target="#li${order._id.toString().slice(0,6)}" aria-controls="collapseOne">
-                        <span class="badge badge-primary badge-pill">What's in the box &nbsp;<i class="fa fa-mouse-pointer"></i></span>
-                        <span class="badge badge-primary badge-pill">TOTAL :$${order.sum}</span></h5>
-                        <ul id="li${order._id.toString().slice(0,6)}" class="list-group collapse" data-parent="#user-orders-fill">`;
-                        //delete page
-                        htmlTxtForDel+=`<button class="btn-delete-order btn btn-block btn-danger w-75 mx-auto my-4" 
-                        value="${order._id}">Delete order created at ${date}</button>`;
-                        //orders page
-                        for(let item of order.items){
-                            if(item.price>0){
-                                orderMin+= `<li class="list-group-item d-flex justify-content-between align-items-center">
-                                ${item.item}<span class="badge badge-primary badge-pill">${item.totalPaid||item.q}</span></li>`;
-                            }
-                            orderMax+=`<li class="list-group-item d-flex justify-content-between align-items-center">
-                            ${item.item.replace('set','Esrog')}<span class="badge badge-primary badge-pill">${item.q}</span></li>`;
-                        }
-                        orderMin+="</ul>";orderMax+="</ul>";
-                        //price
-                        htmlTxtOrder+=`${orderMin}${orderMax}`;
-                    }
-                }else{
-                    let txt = '<h5 class="text-warning text-center">There are no orders.</h5>';
-                    htmlTxtForDel=txt;htmlTxtOrderMin=txt;
-                }
-                document.getElementById('user-orders-fill').innerHTML=htmlTxtOrder;
-                document.getElementById('user-orders-delete').innerHTML=htmlTxtForDel;
-                enableBtns();
-            }
-        }
-        orders.open("GET", `/orders/${urlId}/all`, true);
-        orders.send();
-    }getAllOrders();
-
-    //delete order
-    function enableBtns(){
-        document.querySelectorAll('.btn-delete-order').forEach(btn=>{
-            btn.addEventListener('click', ()=>{
-                let del = new XMLHttpRequest();
-                del.onreadystatechange = function(){
-                    if(this.readyState==4 && this.status==200){
-                        location.reload();
-                    }
-                }
-                del.open("POST", `/order/${btn.value}/delete`, true);
-                del.send();
-            })
-        })
-    }
-
-    //form update order action
-    //document.getElementById('form-update').action=`/order/${urlId}/update`;
 
     //form create order action
     document.getElementById('form-new').action=`/order/${urlId}/new`;
-    
-    //form comment action
-    //document.getElementById('comment-form').action=`/comment/${urlId}/send`
 
     //check inputs
     function checkInputs(){

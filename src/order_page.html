@@ -29,7 +29,7 @@
                 <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
                 <form method="GET" action="/signOut" class="navbar-item">
                     <small class="c-y">Sign out</small>
-                    <button class="btn"><i class="fa fa-sign-out fa-2x c-y"></i></button></form>
+                    <button class="btn"><i class="fa  fa-user-circle-o fa-2x c-y"></i></button></form>
             </nav>
         </div>
         <div class="p-3 text-center header-txt-bg mx-auto py-5" style="position:relative; top:70px;">
@@ -87,6 +87,9 @@
                         </div>
 
                         <h1 class="text-center text-primary"><i class="fa fa-shopping-bag"></i> Your orders</h1>
+                        <div id="order-status" style="display:none;z-index:100;position:absolute;width:100px;height:100px;top:0;border-radius:10px;border:2px solid #007bff;" class="pl-1 bg-light">
+                            
+                        </div>
                         <div class="container mx-auto mb-5 py-5">
                             <div id="user-orders-fill">
 
@@ -110,21 +113,24 @@
 
                         <h1 class="text-center text-danger"><i class="fa fa-file-o"></i> Instructions</h1>
                         <div class="container mx-auto mb-5 py-5">
-                            <h4 class="text-danger">PLEASE OPEN IMMEDIATELY AND INSPECT.</h4>
+                            <h4 class="text-danger">WHEN YOU RECIEVE YOUR ORDER.</h4>
                             <p>
-                                Place Lulavim in a cool area and a closed box
+                                Place Lulavim in a cool area and keep in a closed box
                                 Hadasim and Aravos should be refrigerated
                                 Inspect all merchandise for Kashrus
                                 Report any damaged products within 24 hours of receiving shipment.
+                                <br/>Have a good Yom Tov!
+                                <br/><small>Yanky Kahn - 818-605-2066</small>
                             </p>
-                            <p> Thank you! Have a good Yom Tov! </p>
                         </div>
 
                         <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
                         <div class="container mx-auto mb-5 py-5">
-                            <h4>Payment can be sent to Yanky Kahn 18253 Topham St Tarzana CA 91335 818-605-2066</h4>
-                            <p><i class="p-3 text-primary fa fa-paypal"></i> Paypal chabad18@hotmail.com</p>
-                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App  8186052066</p>
+                            <h4 class="text-success">Thank you for your order !</h4>
+                            <h6>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</h6>
+                            <p><i class="p-3 text-primary fa fa-paypal"></i> Paypal :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App :<em> 8186052066</em></p>
+                            <p><i style="color:#7133a3;" class="p-3">Z</i>Zelle :<em> chabad18@hotmail.com</em></p>
                         </div>
                        
                     </div>
@@ -153,7 +159,9 @@
                     </div>
                     <!--update order-->
                     <div class="carousel-item">
-                        <h4>Not Yet</h4>
+                        <div class="container" id="user-orders-update">
+
+                        </div>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
                     <!--delete order-->
