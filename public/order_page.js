@@ -7,9 +7,20 @@ window.onload = ()=> {
     //comment form action
     document.getElementById('comment-form').action=`/user/${urlId}/comment`;
     //profile form action
-    document.getElementById('profile-form').action=`/profile/update/${urlId}`;
-    document.getElementById('profile-form').addEventListener('submit',function(e){
-        location.reload();
+    $('#profile-form').submit(function(e){
+        $('#form-loader-profile').css('display','block');
+        e.preventDefault();
+        let form = $(this);
+        $.ajax({ type: "POST", url: `/profile/update/${urlId}`, data: form.serialize(), success: data => {
+            $('#errors-for-profile').html('');
+            $('#form-loader-profile').css('display','none');
+            location.reload();
+        }, error: err => {
+            $('#form-loader-profile').css('display','none');
+            $('#errors-for-profile').html(`<div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
+             ${err.responseText}<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+             <span aria-hidden="true">&times;</span></button></div>`)
+        }}); 
     })
 
     //some responsive effects

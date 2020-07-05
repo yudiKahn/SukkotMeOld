@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
-    firstName: {type:String},
-    lastName: {type:String},
-    email: {type:String},
-    phoneNumber: {type: String},
-    password: {type:String, trim: true},
+    firstName: {type:String,required: true},
+    lastName: {type:String,required: true},
+    email: {type:String,required: true},
+    phoneNumber: {type: String,required: true},
+    password: {type:String, trim: true,required: true},
     sum: {type:Number},
     address: {
         street: String,

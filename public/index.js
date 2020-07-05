@@ -10,91 +10,39 @@ window.onload = () =>{
        document.querySelectorAll('.col-or-row').forEach(d=>{ if(w<500){ d.classList.remove('col-6');}  else{ d.classList.add('col-6');}})
     }
     changeImgAndColOrRow();
-    window.addEventListener('resize', changeImgAndColOrRow)
+    window.addEventListener('resize', changeImgAndColOrRow);
+    $('#form-sigup').submit(function(e){
+        e.preventDefault();
+        let form = $(this);
+        let url = form.attr('action');
+        $('#form-loader').css('display','block');
+        $.ajax({ type: "POST", url: url, data: form.serialize(), success: data => {
+            $('#errors-for-signUp').html('');
+            window.location = `/order/${data}`;   
+        }, error: err => {
+            $('#form-loader').css('display','none');
+            $('#errors-for-signUp').html(`<div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
+             ${err.responseText}<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+             <span aria-hidden="true">&times;</span></button></div>`)
+        }});    
 
-    //toggle password input to type text
-    /*
-    document.getElementById('toggle-pass').addEventListener('click', function(){
-        document.getElementById('main-form-pass').type = this.checked ? 'text':'password';
-    });*/
+    });
+    $('#form-signin').submit(function(e){
+        e.preventDefault();
+        let form = $(this);
+        let url = form.attr('action');
+        $('#form-loader-login').css('display','block');
+        $.ajax({ type: "POST", url: url, data: form.serialize(), success: data => {
+            $('#errors-for-signIn').html('');
+            window.location = `/order/${data}`;   
+        }, error: err => {
+            $('#form-loader-login').css('display','none');
+            $('#errors-for-signin').html(`<div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
+             ${err.responseText}<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+             <span aria-hidden="true">&times;</span></button></div>`)
+        }});    
 
-    //display & undisplay main form
-    /*
-    document.getElementById('to-items').addEventListener('click',()=>{
-        document.getElementById('items').style.display='block';
     })
-    document.getElementById('close-items').addEventListener('click',()=>{
-        document.getElementById('items').style.display='none';
-    })
-    document.getElementById('submit-btn').addEventListener('click',()=>{
-        document.getElementById('items').style.display='none';
-    })*/
-
-    //change form action from order to update
-    /*
-    let update = false;
-    document.getElementById('update').addEventListener('click', function(){
-        let placehold = ['Address','Email','Phone Number','First Name','Last Name'];
-        update = !update;
-        this.innerHTML = update? 'New Order' : 'Update Order';
-        document.getElementById('form').action = update ? '/update' : '/order';
-        document.getElementById('form-status').innerHTML = update ? '- Update' : '- New Order';
-        document.getElementById('form-note').innerHTML = update ? 'Forgot password / username ?!<a href="tel:+18186052066">call me</a>.':"You can change you'r order in the future with this username & password."
-        document.querySelectorAll('.dis-on-up').forEach((input,index)=>{
-          input.placeholder = update ? 'Not Requierd on updating order':`Enter ${placehold[index]}`;
-          input.disabled = update;
-        })
-    })*/
-
-
-    //fill main form with d minim & items
-    /*
-    let tmpMinimArr = ['Israeli set','Esrog','Lulav','Hadasim','Aruvos','Hushanos','Schach'];
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let arr = JSON.parse(this.responseText);
-            let set = arr.filter(d=>d.n==1);
-            let estrog = arr.filter(d=>d.n==2);
-            let lulav = arr.filter(d=>d.n==3);
-            let arava = arr.filter(d=>d.n==4);
-            let hadas = arr.filter(d=>d.n==5);
-            let husana = arr.filter(d=>d.n==6);
-            let schach = arr.filter(d=>d.n==9)
-
-            tmpMinimArr.map((d,index)=>{
-                let a = [set,estrog, lulav, hadas, arava, husana, schach];
-                let currentMin = a[index];
-                document.getElementById('min').innerHTML+=`<div class="p-3" id="min-${d}">
-                <h2 class="text-success">${d}</h2>
-                ${
-                    currentMin.map(m=>`<div class="row">
-                    <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}</div>
-                    <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
-                    <div class="col">$ ${m.p}</div>
-                    </div>`)
-                }
-                </div>`;
-            })
-            
-           document.querySelectorAll('input').forEach((inp,ind)=>{
-               if(inp.min){
-                   let min = inp.min;
-                   let max = inp.max||2000;
-                   inp.addEventListener('input', function(){
-                       if(Number(this.value) > max || Number(this.value) < min){
-                           this.style.color="red";
-                       }else{
-                         this.style.color="black"
-                       }
-                   })
-               }
-           })
-        }
-    };
-    xhttp.open("GET", "/items", true);
-    xhttp.send();*/
-
     //secret
     document.getElementById('yanky').addEventListener('click', e=>{
         if(e.detail==3){
