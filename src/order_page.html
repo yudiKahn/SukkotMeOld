@@ -48,8 +48,8 @@
 
                         <h1 class="text-center text-warning"><i class="fa fa-plus"></i> Actions</h1>
                         <div class="container row mx-auto mb-5 py-5">
-                            <div class="card border-success mx-auto m-2" style="max-width: 18rem;">
-                                <div class="card-header bg-success text-light" data-target="#carousel-control" data-slide-to="1">
+                            <div class="card border-success mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="1">
+                                <div class="card-header bg-success text-light">
                                     <i class="fa fa-plus"></i>
                                 </div>
                                 <div class="card-body text-success">
@@ -57,8 +57,8 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
-                            <div class="card border-warning mx-auto m-2" style="max-width: 18rem;">
-                                <div class="card-header bg-warning text-light" data-target="#carousel-control" data-slide-to="2">
+                            <div class="card border-warning mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="2">
+                                <div class="card-header bg-warning text-light">
                                     <i class="fa fa-cloud-upload"></i>
                                 </div>
                                 <div class="card-body text-warning">
@@ -66,8 +66,8 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
-                            <div class="card border-dark mx-auto m-2" style="max-width: 18rem;">
-                                <div class="card-header bg-dark text-light" data-target="#carousel-control" data-slide-to="3">
+                            <div class="card border-dark mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="3">
+                                <div class="card-header bg-dark text-light">
                                     <i class="fa fa-trash"></i>
                                 </div>
                                 <div class="card-body text-dark">
@@ -75,8 +75,8 @@
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                             </div>
-                            <div class="card border-info mx-auto m-2" style="max-width: 18rem;">
-                                <div class="card-header bg-light text-info" data-target="#carousel-control" data-slide-to="4">
+                            <div class="card border-info mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="4">
+                                <div class="card-header bg-light text-info">
                                     <i class="fa fa-comments"></i>
                                 </div>
                                 <div class="card-body text-info">
@@ -139,7 +139,7 @@
                         <form id="form-new" class="main-form form-size mx-auto bg-white" method="POST" action="">
                             <div class="p-4">
                                 <div class="w-100 h-100" style="position: relative;">
-                                    <div class="mb-3 fill-d-minim">
+                                    <div class="mb-3" id="fill-d-minim">
                 
                                     </div>
                                     <div class="p-4">
@@ -162,6 +162,14 @@
                         <div class="container" id="user-orders-update">
 
                         </div>
+                        <form id="update-order-form" class="form-size main-form bg-light" method="POST" style="position:fixed;display:none;left:30px;top:30px;">
+                            <i id="i-close" class="fa fa-close text-danger" style="position:relative;top:5px;left:5px;"></i>
+                            <script>$('#i-close').click(e=>$('#update-order-form').css('display','none'))</script>
+                            <div class="p-3 text-left" id="update-form-div">
+
+                            </div>
+                            <div class="p-3 text-left"><button class="btn btn-outline-success">Update</button></div>
+                        </form>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
                     <!--delete order-->

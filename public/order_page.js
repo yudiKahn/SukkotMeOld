@@ -9,10 +9,13 @@ window.onload = ()=> {
         $('#h1-name').html(`Welcome ${d.firstName} ${d.lastName}`); fillUserProfile(d);
     } })
 
-    //all orders ajax
-    $.ajax({type: "GET", url: `/orders/${urlId}/all`, success: data => {
-        fillOrders(data); fillDeleteOrders(data); fillUpdateOrders(data);
-    }})
+    //all orders
+    $.ajax({type: "GET", url:'/items', success: items => {
+        fillMinimForm(items)
+        $.ajax({type: "GET", url: `/orders/${urlId}/all`, success: data => {
+            fillOrders(data); fillDeleteOrders(data); fillUpdateOrders(data,items);       
+        }})
+    }});
 
     //comment form action
     document.getElementById('comment-form').action=`/user/${urlId}/comment`;
@@ -47,8 +50,8 @@ window.onload = ()=> {
                 <ul id="user-order-min" class="list-group">`;
                 resMax=`<h5 class="p-3 collapsed justify-content-between align-items-center d-flex" data-toggle="collapse" aria-expanded="false"
                 data-target="#li${order._id.toString().slice(0,6)}" aria-controls="collapseOne">
-                <span class="badge badge-primary badge-pill">What's in the box &nbsp;<i class="fa fa-mouse-pointer"></i></span>
-                <span class="badge badge-primary badge-pill">TOTAL :$${order.sum}</span></h5>
+                <span class="badge badge-warning badge-pill">What's in the box &nbsp;<i class="fa fa-mouse-pointer"></i></span>
+                <span class="badge badge-warning badge-pill">TOTAL :$${order.sum}</span></h5>
                 <ul id="li${order._id.toString().slice(0,6)}" class="list-group collapse" data-parent="#user-orders-fill">`;
                 for(let item of order.items){
                     const li = (isMin) => `<li class="list-group-item d-flex justify-content-between align-items-center">${isMin?item.item:item.item.replace('set','Esrog')}<span class="badge badge-primary badge-pill">${isMin?(item.totalPaid||item.q):item.q}</span></li>`;
@@ -64,7 +67,6 @@ window.onload = ()=> {
             const handlein = (e) => $('#order-status').css({'display':'block','left':e.originalEvent.layerX-100,'top':e.originalEvent.layerY-100})
             .html(`<i>paid</i> :${$(bell).attr('data-paid')}<br/><i>ready</i> :${$(bell).attr('data-ready')}`)
             const handleOut = (e) => $('#order-status').css('display','none');
-            //(e)=>{console.log( $(bell).attr('data-ready'), $(bell).attr('data-paid') )}
             $(bell).hover( handlein, handleOut )
         })
     }
@@ -89,7 +91,7 @@ window.onload = ()=> {
         })
     }
 
-    function fillUpdateOrders(orders){
+    function fillUpdateOrders(orders, items){
         let res = "";
         if(orders.length<0){
             res='<h5 class="text-warning text-center">There are no orders.</h5>';
@@ -103,11 +105,17 @@ window.onload = ()=> {
         $('#user-orders-update').html(res);
         $('.btn-update-order').each((i,btn)=>{
             $(btn).click(()=>{
-                console.log(btn)
-                //$.ajax({ type: "POST", url: `/order/${$(btn).val()}/delete`, success: d => location.reload() })
+                $('#update-order-form').css('display','block').submit(function(e){
+                    e.preventDefault();let form = $(this);
+                    $.ajax({ type:"POST",url:`/order/${$(btn).val()}/update`,data:form.serialize(),success:data=>location.reload()});
+                })
+                $('#update-form-div').html(dMinimForm(items))
             })
         })
     }
+
+    const fillMinimForm = (items) =>  $('#fill-d-minim').html( dMinimForm(items) );
+
     //some responsive effects
     function changeImgAndColOrRow(){
         let w = window.innerWidth;
@@ -158,58 +166,38 @@ window.onload = ()=> {
 
     //check inputs
     function checkInputs(){
-        document.querySelectorAll('input').forEach((inp,ind)=>{
+        document.querySelectorAll('input').forEach((inp)=>{
             if(inp.min){
-                let min = inp.min;
-                let max = inp.max||2000;
+                let min = inp.min; let max = inp.max||2000;
                 inp.addEventListener('input', function(){
-                    if(Number(this.value) > max || Number(this.value) < min){
-                        this.style.color="red";
-                    }else{
-                        this.style.color="black"
-                    }
+                    this.style.color=(Number(this.value) > max || Number(this.value) < min)?'red':'black';
                 })
             }
         });
     }
 
-    //fill d minim form
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let arr = JSON.parse(this.responseText);
-            let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Hadasim','Aruvos','Hoshnos','Schach','Lulav Bag'];
-            let comment = ['Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag',
-                 'Each set comes complete with Lulav, Esrog, Hadasim "רובו חיים נאה & כולו חיים נאה",  Aruvos & Plastic bag',
-                 'if you want additional lulavim', 'if you want additional hadasim', 'if you want additional aruvos']
-            let itemsToGoOver = [1, 2 ,3 ,4, 5, 6, 9, 10];
-            //israeli set, yanever, lulav, arava, hadas, hushana, schach, lulav bag.
+    function dMinimForm(items){
+        let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Hadasim','Aruvos','Hoshnos','Schach','Lulav Bag'];
+        let comment = ['Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag',
+             'Each set comes complete with Lulav, Esrog, Hadasim "רובו חיים נאה & כולו חיים נאה",  Aruvos & Plastic bag',
+             'if you want additional lulavim', 'if you want additional hadasim', 'if you want additional aruvos']
+        let itemsToGoOver = [1, 2 ,3 ,4, 5, 6, 9, 10];
+        //israeli set, yanever, lulav, arava, hadas, hushana, schach, lulav bag.
+        let res = "";
+        tmpMinimArr.map((d,index)=>{
+            res+=`<div class="p-3" id="min-${d}">
+            <h2 class="text-success">${d}</h2><small class="text-dark">${comment[index]?comment[index]:''}</small>
+            ${items.filter(d=>d.n==itemsToGoOver[index]).map(m=>
+                `<div class="row"><div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}
+                ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Chinuch':'Standard'}</b>`:''}</div>
+               <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
+               <div class="col">$ ${m.p}</div></div>`
+            )}</div>`;
 
-            document.querySelectorAll('.fill-d-minim').forEach(minim=>{
-                tmpMinimArr.map((d,index)=>{
-                    minim.innerHTML+=`<div class="p-3" id="min-${d}">
-                    <h2 class="text-success">${d}</h2><small class="text-dark">${comment[index]?comment[index]:''}</small>
-                    ${
-                        arr.filter(d=>d.n==itemsToGoOver[index]).map(m=>`<div class="row">
-                        <div class="col ${m.t.toString().includes('NO')?'text-warning':''}">${m.t}
-                            ${m.n==1?`<b style="color:black;text-decoration:underline;">${m.p>25?'Mehudar':m.p<25?'Chinuch':'Standard'}</b>`:''}</div>
-                        <div class="col"><input type="number" name="${m.t}" min="0" class="form-control"></div>
-                        <div class="col">$ ${m.p}</div>
-                        </div>`)
-                    }
-                    </div>`;
-                }); 
-            });
-            checkInputs();
-        }
-    };
-    xhttp.open("GET", "/items", true);
-    xhttp.send();
+        })
+        return res;
+    }
 
     //secret
-    document.getElementById('yanky').addEventListener('click', e=>{
-        if(e.detail==3){
-            window.location = "/auth.html";
-        }
-    })
+    $('#yanky').click(e=>e.detail==3?window.location = "/auth.html":'')
 }

@@ -77,20 +77,11 @@ router.post('/order/:id/new', (req,res)=>{
 })
 
 //update order
-/*
 router.post('/order/:id/update', (req,res)=>{
-  users.findById(req.params.id).then(doc=>{
-    let myItems = getUserItems(items, req.body);
-    let sum = getUserSum(items, req.body);
-    if(sum<=0){
-        res.status(400).send(sendErr('You did not order any items'))
-    }else{
-       users.updateOne({email: doc.email, password:doc.password}, {}).then(()=>{
-            res.send(sendSuccess(`user <em>'${doc.username}'</em> is updated`,myItems, null, sum))
-        }).catch(err=>res.status(400).send(sendErr(err)));
-    }
-  }).catch(err=>res.status(400).send(sendErr(err)));
-})*/
+  let newItems = getOrderItems(items, req.body);
+  let newSum = getOrderSum(items, req.body);
+  orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum}).then(doc=>res.send('updated')).catch(err=>res.status(400).send(err));
+})
 
 //get all orders for user
 router.get('/orders/:id/all',(req, res)=>{
