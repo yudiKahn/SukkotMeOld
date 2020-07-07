@@ -134,5 +134,8 @@ router.get('/admin/getComments/:pass', (req, res)=>{
     }
     else res.send('not found.')
 })
-
+//delete comment
+router.get('/admin/delete/comment/:id', (req,res)=>{
+    comments.deleteOne({_id: req.params.id}).then(()=>res.send('deleted')).catch(err=>res.status(400).send(err));
+})
 module.exports = router;

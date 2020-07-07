@@ -36,18 +36,18 @@ function fillUsersComments(arr){
     $('#comments-ul').html('');
     let res = arr.sort((a,b) => a.user.firstName.toLowerCase() > b.user.lastName.toLowerCase() ? 1 : a.user.firstName.toLowerCase() < b.user.lastName.toLowerCase() ? -1 : 0);
     res.map(d=> $('#comments-ul').append(getCommentInHTML(d)));
+    $('.del-comment').each((i,btn)=> $(btn).click(()=> $.ajax({ url: `/admin/delete/comment/${$(btn).attr('value')}`, success: init }) ));
 }
 
 function getCommentInHTML(commentObj){
     let comments = "";
     for(let comment of commentObj.commsArr){
-        comments+=`<b>${comment.subject}</b><p>${comment.text}</p>`
+        comments+=`<div class="row"><span class="col-10"><b>${comment.subject}</b><p>${comment.text}</p></span><i value="${comment._id}" class="text-danger del-comment col-2 text-right">&times;</i></div>`
     }
     let res = `<li class="list-group-item">
     <h6 class="text-info">${comments}</h6>
     <small>${commentObj.user.lastName} ${commentObj.user.firstName}. 
     <a href="mailto:${commentObj.user.email}">Send Response</a></small></li>`;
-
     return res;
 }
 
