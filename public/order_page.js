@@ -133,6 +133,7 @@ function fillUpdateOrders(orders, items){
             $('#update-order-form').css('display','block').submit(function(e){
                 e.preventDefault();let form = $(this);
                 $.ajax({ type:"POST",url:`/order/${$(btn).val()}/update`,data:form.serialize(),success:d=>{init();$('#update-order-form').css('display','none')}});
+                $('#carousel-control').carousel(0);
             })
             $('#update-form-div').html(dMinimForm(items))
         })

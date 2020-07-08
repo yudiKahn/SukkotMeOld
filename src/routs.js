@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const items = require('./items');
-const {sendErr, sendWarning, getOrderItems,sendSuccess, getItemObj, sendEmail, getOrderSum} = require('./helpfulFunctions');
+const { getOrderItems,  sendEmail, getOrderSum} = require('./helpfulFunctions');
 const { orders, users, comments } = require('./model');
 const CRUD = require('./crud');
 const Middleware = require('./middleware');
@@ -27,7 +27,7 @@ router.post('/signup', Middleware.SignUp, (req,res)=>{
     newUser.save().then(doc=>{
         req.session.id = doc._id;
         res.send(doc._id);
-    }).catch(err=>res.status(400).send(sendErr(err)));
+    }).catch(err=>res.status(400).send(err));
 })
 
 //login
@@ -35,7 +35,7 @@ router.post('/login',(req, res)=>{
     users.findOne({email:req.body.email, password:req.body.password}).then(doc=>{
         if(doc){ req.session.id = doc._id; return res.send(doc._id); }
         else { res.status(400).send('No user found. Please try again') };
-    }).catch(err=>res.status(400).send(sendErr(err)));
+    }).catch(err=>res.status(400).send(err));
 });
 
 //update user profile
@@ -73,14 +73,18 @@ router.post('/order/:id/new', (req,res)=>{
     newOrder.userId = req.params.id;
     newOrder.save().then(()=>{
             res.redirect(`/order/${req.params.id}`);
-    }).catch(err=>res.status(400).send(sendErr(err)));
+    }).catch(err=>res.status(400).send(err));
+    sendEmail(newItems, sum, req.params.id)
 })
 
 //update order
 router.post('/order/:id/update', (req,res)=>{
   let newItems = getOrderItems(items, req.body);
   let newSum = getOrderSum(items, req.body);
-  orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum}).then(doc=>res.send('updated')).catch(err=>res.status(400).send(err));
+  orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum}).then(doc=>{
+    res.send('updated');
+    sendEmail(newItems, newSum, req.params.id);
+  }).catch(err=>res.status(400).send(err));
 })
 
 //get all orders for user
@@ -94,7 +98,7 @@ router.get('/orders/:id/all',(req, res)=>{
 router.post('/order/:id/delete', (req, res)=>{
     orders.deleteOne({_id: req.params.id}).then(doc=>{
         res.send('deleted');
-    }).catch(err=>res.status(400).send(sendErr(err)));
+    }).catch(err=>res.status(400).send(err));
 })
 
 //send comment
@@ -102,8 +106,8 @@ router.post('/user/:id/comment', (req,res)=>{
     let newComment = new comments(req.body);
     newComment.userId = req.params.id;
     newComment.save().then(()=>{
-        res.send(sendWarning("Thank you ! we'll be in touch with you soon."))
-    }).catch(err=>res.status(400).send(sendErr(err)))
+        res.send("Thank you ! we'll be in touch with you soon.");
+    }).catch(err=>res.status(400).send(err))
 })
 
 //return all items available

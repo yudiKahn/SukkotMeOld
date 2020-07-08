@@ -2,8 +2,7 @@ const router = require('express').Router();
 const items = require('./items');
 const {users, orders} = require('./model');
 const comments = require('./model').comments;
-const { sendErr, sendWarning,
-      sendSuccess, getItemObj, sendEmail, emailValidate} = require('./helpfulFunctions');
+const {  getItemObj, sendEmail} = require('./helpfulFunctions');
 
 const pass = 123240;
 //gets all users for admin
@@ -69,8 +68,8 @@ router.post('/admin/update/:adminId/:id', (req,res)=>{
             oldItems.push(getItemObj(req.body.item, Number(req.body.q), Number(req.body.price), null, true))
             orders.updateOne({_id:req.params.id}, {items: oldItems}).then(()=>{
                 res.status(200).send(sendSuccess('Order update successfuly', oldItems))
-            }).catch(err=>res.status(400).send(sendErr(err)))
-        }).catch(err=>res.status(400).send(sendErr(err)));
+            }).catch(err=>res.status(400).send(err))
+        }).catch(err=>res.status(400).send(err));
     }else{
         res.status(400).send('not found')
     }
@@ -83,7 +82,7 @@ router.post('/admin/auth', (req, res)=>{
     if((req.body.username==adminName)&&(req.body.password==adminPass)){
         res.sendFile(__dirname+'/admin.html');
     }else{
-        res.status(400).send(sendErr('oops. something went wrong...'))
+        res.status(400).send('oops. something went wrong...')
     }
 })
 
@@ -95,14 +94,14 @@ router.get('/admin/script-js/130240/GET', (req,res)=>{
 //admin send email
 router.post('/admin/email/130240/:id', (req,res)=>{
     orders.findById(req.params.id).then(doc=>{
-        let isMaild = sendEmail(doc, req.body.contant)
-        res.send(sendWarning(isMaild));
+        sendEmail(doc, req.body.contant)
+        res.send('email send');
     }).catch(err=>res.status(400).send(err));
 })
 router.post('/admin/email-update/130240/:id', (req,res)=>{
     orders.findById(req.params.id).then(doc=>{
-        let isMaild = sendEmail(doc, '', doc.items);
-        res.send(sendWarning(isMaild));
+        sendEmail(doc, '', doc.items);
+        res.send('email send');
     }).catch(err=>res.status(400).send(err));
 })
 
@@ -137,5 +136,15 @@ router.get('/admin/getComments/:pass', (req, res)=>{
 //delete comment
 router.get('/admin/delete/comment/:id', (req,res)=>{
     comments.deleteOne({_id: req.params.id}).then(()=>res.send('deleted')).catch(err=>res.status(400).send(err));
+})
+//backup
+router.get('/admin/backup/:pass', async (req,res)=>{
+    if(req.params.pass==pass){
+        let result = [];
+        await users.find({}).then(doc=>result.push(doc)).catch(err=>{ return res.status(400) });
+        await comments.find({}).then(doc=>result.push(doc)).catch(err=>{ return res.status(400) });
+        await orders.find({}).then(doc=>result.push(doc)).catch(err=>{ return res.status(400) });
+        res.json({ users: result[0], comments: result[1], orders: result[2] });
+    }
 })
 module.exports = router;

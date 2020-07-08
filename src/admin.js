@@ -204,4 +204,14 @@ function showEmailForm(username, id){
         this.type='submit';
     })   
 }
+//create backup
+function backup(){
+    $.ajax({ type:"GET", url:`/admin/backup/${pass}` , success: data => {
+        let file = new Blob([JSON.stringify(data)], {type: 'text/plain'});
+        $('#backup-a').attr({'href':URL.createObjectURL(file),
+        'download':`sukkot_backup_${new Date().toDateString().replace(/\s/g, "_")}.json`,
+        'class':'badge badge-primary'});
+        
+    }})
+} runOnReady(backup)
 /**/

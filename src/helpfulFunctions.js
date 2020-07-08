@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const items = require('./items');
+const { use } = require('./routs');
 const mailSender  = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -7,11 +8,6 @@ const mailSender  = nodemailer.createTransport({
       pass: 'sukkot130ME'
     }
 });
-
-function emailValidate(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-}
 
 function getItemObj(item, q, price, total=null, byAdmin=false){
     return {item: item, q:q, price: price, total: total ? total :Number(price*q), byAdmin: byAdmin }
@@ -95,95 +91,55 @@ function getOrderSum(itemsAvailable, reqObj){
    return res ? res : 0;
 }
 
-function sendErr(msg){
-    console.log(msg)
-  return (`<div style="text-align: center;">
-  <h1 style="color:red;margin-top:20px;">An error has occurd.</h1>
-  <p>${msg}</p>
-  <a onclick="window.history.back()">Go Back</a></div>`);
-}
-
-function sendWarning(msg){
-   return (`<div style="text-align: center;">
-   <h1 style="color:#eff157;margin-top:20px;">${msg}.</h1>
-   <a style="cursor: pointer;" id="go-back">Go Back</a></div>
-   <script type="text/javascript">document.getElementById('go-back').addEventListener('click',()=>{
-    window.history.back();
-   })</script>`)
-}
-
-function sendSuccess(msg , details , user , sum){
-  let paidItems = '';
-  let allItems = '';
-  if(details){
-     details.map(d=>{
-         if(d.totalPaid){
-            paidItems += `<tr><td>${d.item}</td><td>${d.totalPaid}</td><td>$ ${d.total}</td></tr>`;
-         }else if(d.total > 0){
-            paidItems += `<tr><td>${d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`;
-         }
-         if(d.q > 0){
-            allItems+=`<tr><td>${d.item.toString().includes('set')?d.item.replace('set','Esrog'):d.item}</td><td>${d.q}</td><td>$ ${d.total}</td></tr>`;
-         }
-         
-     })
-  }
-  return (`<div style="text-align: center;">
-  <h1 style="color:#28a745;margin-top:20px;">${msg}.</h1>
-  ${ user ? `<p>Full Name :${user.firstName} ${user.lastName}</p>
-     <p>Email :${user.email} <b>/</b> Username :${user.username}</p>`:''}
-     <h2 style="color:#ffc107;text-align:left;"><em>Order items.</em></h2>
-     <style>table, th, td {border: 1px solid #17a2b8;} th{background-color:#17a2b8;color:white;}</style>
-     <table style="width:100%;">
-       <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${paidItems}</tbody>
-     </table>
-     <p style="color:#28a745;text-align:right;"><b style="color:#ffc107;">Total :</b>$ ${sum}</p>
-     <h2 style="color:#ffc107;text-align:left;"><em>What's in the box.</em></h2>
-     <table style="width:100%;">
-     <thead><tr><th>Items</th><th>Quantity</th><th>Price</th></tr></thead> <tbody>${allItems}</tbody>
-     </table>
-     <p style="color:#28a745;text-align:right;"><b style="color:#ffc107;">Total :</b>$ ${sum}</p><a onclick="window.history.back()">Go Back</a>
-     <p style="text-align:center;">PLEASE OPEN IMMEDIATELY AND INSPECT<br/>Place Lulavim in a cool area and a closed box
-    <br/>Hadasim and Aravos should be refrigerated<br/>Inspect all merchandise for Kashrus<br/>
-    Report any damaged products within 24 hours of receiving shipment.<br/><br/>Thank you! Have a good Yom Tov!
-    <br/>Send payment to Y Kahn 18253 Topham st Tarzana CA 91335<br/>8186052066</p></div>`)
-}
-
-function sendEmail(userBody, txt, array=null){
-    let res = 'Email was send';
-    let htmlTxtRes = `<h1>Sukkot Order.</h1>`;
-    if(array){
-        array.map(d=>{
-            htmlTxtRes+=`<p>${d.item} &times; ${d.q} = $${d.price}. ${d.byAdmin?'<small style="color:#ffc107;">Added by Yanky Kahn</small>':''}</p>`
+function sendEmail(items, sum, id){
+    items = items.sort((a,b)=>a.item.toLowerCase()>b.item.toLowerCase()?1:a.item.toLowerCase()<b.item.toLowerCase()?-1:0)
+    const htmlRes = (first, last) => {
+        let min="", max="";
+        for(let item of items){
+            if(item.total>0) min+=`<p>${item.item} &times; ${item.totalPaid||item.q}</p>`;
+            max+=`<p>${item.item.replace('set','esrog')} &times; ${item.q}</p>`;
+        }
+        return(`<h2>Hello ${first} ${last}. Here is your order details</h2>
+        <h4>Your order items</h4>
+        ${min}
+        <h4>Wht's in the box</h4>
+        ${max}
+        <b>SUM :$${sum}</b>
+        <p>Thank you for your order !</p>
+        <p>WHEN YOU RECIEVE YOUR ORDER.
+        Place Lulavim in a cool area and keep in a closed box
+        Hadasim and Aravos should be refrigerated
+        Inspect all merchandise for Kashrus
+        Report any damaged products within 24 hours of receiving shipment.</p>
+        <p>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</p><br/>
+        <small>Have a good Yom Tov!</small>`);
+    }
+    const { users, orders } = require('./model');
+    orders.findById(id).then(order=>{
+        users.findById(order.userId).then(user=>{
+            let mailOptions = {
+                from: 'sukkotme@gmail.com',
+                to: user.email,
+                subject: 'Thank you !',
+                html: htmlRes(user.firstName, user.lastName)
+            }
+            mailSender.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+            });
         })
-    }else{
-        htmlTxtRes+=`<p>${txt}</p>`;
-    }htmlTxtRes+=`<h5 style="text-align:left;">SUM : $${userBody.sum}</h5>
-    <p style="text-align:center;">PLEASE OPEN IMMEDIATELY AND INSPECT<br/>Place Lulavim in a cool area and a closed box
-    <br/>Hadasim and Aravos should be refrigerated<br/>Inspect all merchandise for Kashrus<br/>
-    Report any damaged products within 24 hours of receiving shipment.<br/><br/>Thank you! Have a good Yom Tov!
-    <br/>Send payment to Y Kahn 18253 Topham st Tarzana CA 91335<br/>8186052066</p>`
-    mailSender.sendMail({
-        from: 'sukkotme@gmail.com',
-        to: userBody.email,
-        subject: 'Thank you !',
-        html: htmlTxtRes
-    }, (err, info)=>{
-        err ? res='Email was not send':'';
-    });
-    return res;
+    })
 }
 
 
 module.exports = {
     getOrderItems: getOrderItems,
     getOrderSum: getOrderSum,
-    sendErr: sendErr,
-    sendWarning: sendWarning,
-    sendSuccess: sendSuccess,
-    getItemObj: getItemObj,
     sendEmail: sendEmail,
-    emailValidate: emailValidate
+    getItemObj:getItemObj
 }
 /*
 
