@@ -91,29 +91,31 @@ function getOrderSum(itemsAvailable, reqObj){
    return res ? res : 0;
 }
 
+const htmlResEmail = (first, last, items, sum) => {
+    let min="", max="";
+    for(let item of items){
+        if(item.total>0) min+=`<p>${item.item} &times; ${item.totalPaid||item.q}</p>`;
+        max+=`<p>${item.item.replace('set','esrog')} &times; ${item.q}</p>`;
+    }
+    return(`${(first&&last)?`<h2>Hello ${first} ${last}. Here is your order details</h2>`:''}
+    <h4>Your order items</h4>
+    ${min}
+    <h4>Wht's in the box</h4>
+    ${max}
+    <b>SUM :$${sum}</b>
+    <p>Thank you for your order !</p>
+    <p>WHEN YOU RECIEVE YOUR ORDER.
+    Place Lulavim in a cool area and keep in a closed box
+    Hadasim and Aravos should be refrigerated
+    Inspect all merchandise for Kashrus
+    Report any damaged products within 24 hours of receiving shipment.</p>
+    <p>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</p><br/>
+    <small>Have a good Yom Tov!</small>`);
+}
+
+
 function sendEmail(items, sum, id){
     items = items.sort((a,b)=>a.item.toLowerCase()>b.item.toLowerCase()?1:a.item.toLowerCase()<b.item.toLowerCase()?-1:0)
-    const htmlRes = (first, last) => {
-        let min="", max="";
-        for(let item of items){
-            if(item.total>0) min+=`<p>${item.item} &times; ${item.totalPaid||item.q}</p>`;
-            max+=`<p>${item.item.replace('set','esrog')} &times; ${item.q}</p>`;
-        }
-        return(`<h2>Hello ${first} ${last}. Here is your order details</h2>
-        <h4>Your order items</h4>
-        ${min}
-        <h4>Wht's in the box</h4>
-        ${max}
-        <b>SUM :$${sum}</b>
-        <p>Thank you for your order !</p>
-        <p>WHEN YOU RECIEVE YOUR ORDER.
-        Place Lulavim in a cool area and keep in a closed box
-        Hadasim and Aravos should be refrigerated
-        Inspect all merchandise for Kashrus
-        Report any damaged products within 24 hours of receiving shipment.</p>
-        <p>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</p><br/>
-        <small>Have a good Yom Tov!</small>`);
-    }
     const { users, orders } = require('./model');
     orders.findById(id).then(order=>{
         users.findById(order.userId).then(user=>{
@@ -121,7 +123,7 @@ function sendEmail(items, sum, id){
                 from: 'sukkotme@gmail.com',
                 to: user.email,
                 subject: 'Thank you !',
-                html: htmlRes(user.firstName, user.lastName)
+                html: htmlResEmail(user.firstName, user.lastName, items, sum)
             }
             mailSender.sendMail(mailOptions, function(error, info){
                 if (error) {
@@ -134,13 +136,35 @@ function sendEmail(items, sum, id){
     })
 }
 
+async function adminSendEmail(doc, reqObj){
+    const { users } = require('../src/model');
+    let email="";
+    await users.findById(doc.userId).then(doc=>email=doc.email)
+    let htmlTxt="";
+    if(reqObj){
+       htmlTxt=`<p>${reqObj}</p>`;
+    }else{
+        htmlTxt=htmlResEmail(null,null,doc.items,doc.sum);
+    }
+    let mailOptions = {
+        from: 'sukkotme@gmail.com',
+        to: email,
+        subject: 'Message from Yanky kahn',
+        html: htmlTxt
+    }
+    mailSender.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+    });
+}
 
 module.exports = {
     getOrderItems: getOrderItems,
     getOrderSum: getOrderSum,
     sendEmail: sendEmail,
-    getItemObj:getItemObj
+    getItemObj:getItemObj,
+    adminSendEmail:adminSendEmail
 }
-/*
-
- */
