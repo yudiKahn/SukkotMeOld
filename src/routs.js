@@ -2,7 +2,7 @@ const router = require('express').Router();
 const items = require('./items');
 const { getOrderItems,  sendEmail, getOrderSum} = require('./helpfulFunctions');
 const { orders, users, comments } = require('./model');
-const CRUD = require('./crud');
+const bcrypt = require('bcrypt');
 const Middleware = require('./middleware');
 
 //Home page
@@ -21,7 +21,8 @@ router.get('/signOut', (req,res)=>{
 
 //sign up
 router.post('/signup', Middleware.SignUp, (req,res)=>{
-    const {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
+    let {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
+    password = bcrypt.hashSync(password, 10);
     let userObj = {firstName, lastName, email, phoneNumber,password, address:{city, state, street, zip} };
     let newUser = new users(userObj);
     newUser.save().then(doc=>{
@@ -32,10 +33,11 @@ router.post('/signup', Middleware.SignUp, (req,res)=>{
 
 //login
 router.post('/login',(req, res)=>{
-    users.findOne({email:req.body.email, password:req.body.password}).then(doc=>{
-        if(doc){ req.session.id = doc._id; return res.send(doc._id); }
+    users.findOne({email:req.body.email}).then(doc=>{
+        let isPass = bcrypt.compareSync(req.body.password, doc.password);
+        if(isPass){ req.session.id = doc._id; return res.send(doc._id); }
         else { res.status(400).send('No user found. Please try again') };
-    }).catch(err=>res.status(400).send(err));
+    }).catch(()=>res.status(400).send('No user found. Please try again'));
 });
 
 //update user profile

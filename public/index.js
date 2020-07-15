@@ -18,7 +18,7 @@ window.onload = () =>{
         $('#form-loader').css('display','block');
         $.ajax({ type: "POST", url: url, data: form.serialize(), success: data => {
             $('#errors-for-signUp').html('');
-            window.location = `/order/${data}`;   
+            window.location = `/order/${data}`;
         }, error: err => {
             $('#form-loader').css('display','none');
             $('#errors-for-signUp').html(`<div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">

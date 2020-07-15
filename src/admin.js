@@ -79,7 +79,7 @@ function getOrders(arr, typeOfOrder){
             <div data-toggle="collapse" data-target="#li${i}"
             aria-expanded="true" aria-controls="collapseOne">${d.lastName} ${d.firstName}</div>
             <div id="li${i}" class="collapse" data-parent="#ul">
-            <p><small>${d.email}<b>/</b>password :${d.password}</small></p>
+            <p><small>${d.email}</small></p>
             <h4 style="color:#ffc107;text-align:left;"><em>Order items.</em></h4>
             ${
                 orders.map(order=>{
@@ -111,7 +111,7 @@ function printMoney(money){
 //print users orders
 function printUsers(usersArr){
     ['ul','ul-done','ul-paid','ul-done-paid'].map((d,i)=>{
-        document.getElementById(d).innerHTML=usersArr[i];
+        document.getElementById(d).innerHTML=usersArr[i] || '<h3 class="text-center">No data here )-:</h3>';
     })
 }
 

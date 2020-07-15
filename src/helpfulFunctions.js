@@ -97,7 +97,13 @@ const htmlResEmail = (first, last, items, sum) => {
         if(item.total>0) min+=`<p>${item.item} &times; ${item.totalPaid||item.q}</p>`;
         max+=`<p>${item.item.replace('set','esrog')} &times; ${item.q}</p>`;
     }
-    return(`${(first&&last)?`<h2>Hello ${first} ${last}. Here is your order details</h2>`:''}
+    return(`
+    <img src="" />
+    <p>blalbla</p>
+    <h3 style="padding:20px;background-color:#28a745;color:white;"></h3>`)
+    /*return(`${(first&&last)?`<h2 style="padding:20px;background-color:#28a745;color:white;">
+    <img src="/imgs/icon.png" style="max-width:15px;"/>&nbsp;
+    Hello ${first} ${last}. Here is your order details</h2>`:''}
     <h4>Your order items</h4>
     ${min}
     <h4>Wht's in the box</h4>
@@ -110,7 +116,7 @@ const htmlResEmail = (first, last, items, sum) => {
     Inspect all merchandise for Kashrus
     Report any damaged products within 24 hours of receiving shipment.</p>
     <p>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</p><br/>
-    <small>Have a good Yom Tov!</small>`);
+    <small>Have a good Yom Tov!</small>`);*/
 }
 
 
