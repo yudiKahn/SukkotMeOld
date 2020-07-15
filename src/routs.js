@@ -52,7 +52,10 @@ router.post('/profile/update/:id', Middleware.UpdateProfile, (req, res)=>{
 
 //order-page
 router.get('/order/:id', Middleware.UserHomePage, (req,res)=>{
-    res.sendFile(__dirname+'/order_page.html')
+    if(req.session.id==req.params.id)
+     res.sendFile(__dirname+'/order_page.html')
+    else
+     res.send('404 - not found.')
 })  
 
 //get user
