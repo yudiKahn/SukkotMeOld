@@ -34,7 +34,6 @@
         </div>
         <div class="p-3 text-center header-txt-bg mx-auto py-5" style="position:relative; top:70px;">
              <h1 class="c-y txt-head" id="h1-name"></h1>
-             <a href="#sale"><h5 class="c-y txt-head"><small><i class="fa fa-arrow-right"></i> Hot sales <i class="fa fa-arrow-left"></i></small></h5></a>
         </div>
         <a href="#main"><i class="fa fa-caret-down fa-4x text-success" id="carret-down"></i></a>
     </header>
@@ -46,47 +45,39 @@
                 <div class="carousel-inner py-3" style="min-height:100%;">
                     <div class="carousel-item active">
 
-                        <h1 class="text-center text-warning"><i class="fa fa-plus"></i> Actions</h1>
-                        <div class="container row mx-auto mb-5 py-5">
-                            <div class="card border-success mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="1">
-                                <div class="card-header bg-success text-light">
+                        <h1 class="text-center text-warning"><i class="fa fa-plus"></i> Add order</h1>
+                        <div class="container mb-5 py-5">
+                            <div class="card border-warning mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="1">
+                                <div class="card-header bg-warning text-light">
                                     <i class="fa fa-plus"></i>
                                 </div>
-                                <div class="card-body text-success">
+                                <div class="card-body text-warning">
                                 <h5 class="card-title">Create new order</h5>
                                 <p class="card-text">You will recive an email once creating the order.</p>
-                                </div>
-                            </div>
-                            <div class="card border-warning mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="2">
-                                <div class="card-header bg-warning text-light">
-                                    <i class="fa fa-cloud-upload"></i>
-                                </div>
-                                <div class="card-body text-warning">
-                                <h5 class="card-title">Update old order</h5>
-                                <p class="card-text">You will recive an email once updating the order.</p>
-                                </div>
-                            </div>
-                            <div class="card border-dark mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="3">
-                                <div class="card-header bg-dark text-light">
-                                    <i class="fa fa-trash"></i>
-                                </div>
-                                <div class="card-body text-dark">
-                                <h5 class="card-title">Delete old order</h5>
-                                <p class="card-text">Once deleted the order will be remove permanently.</p>
-                                </div>
-                            </div>
-                            <div class="card border-info mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="4">
-                                <div class="card-header bg-light text-info">
-                                    <i class="fa fa-comments"></i>
-                                </div>
-                                <div class="card-body text-info">
-                                <h5 class="card-title">Let's be in touch</h5>
-                                <p class="card-text">Send me a message and i'll answer you as soon as i can.</p>
                                 </div>
                             </div>
                         </div>
 
                         <h1 class="text-center text-primary"><i class="fa fa-shopping-bag"></i> Your orders</h1>
+                        <div id="order-set-popup">
+                            <h3 class="text-left"><i id="close-o-set-pop" class="p-3 fa fa-close text-danger"></i></h3>
+                            <div id="order-set-btns"></div>
+                            <form id="update-order-form" class="form-size main-form bg-light" method="POST" style="position:absolute;display:none;right:10px;top:50px;">
+                                <div class="p-3 text-left" id="update-form-div">
+    
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
+                                    <small class="text-success">this is for Yanover</small>
+                                    <div class="row">
+                                        <div class="col">Esrog (min: $50, max:$100)</div>
+                                        <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
+                                        <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
+                                    </div>
+                                </div>
+                                <div class="p-3 text-left"><button type="submit" class="btn btn-outline-success">Update</button></div>
+                            </form>
+                        </div>
                         <div id="order-status" style="display:none;z-index:100;position:absolute;width:100px;height:100px;top:0;border-radius:10px;border:2px solid #007bff;" class="pl-1 bg-light">
                             
                         </div>
@@ -98,18 +89,6 @@
                                 <span class="badge badge-primary badge-pill" id="user-order-sum"></span>
                             </h5>
                         </div>
-
-                        <h1 class="text-center text-dark"><i class="fa fa-cogs"></i> Profile</h1>
-                        <span id="errors-for-profile">
-                        </span>
-                        <form class="container mx-auto mb-5 py-5" style="position:relative;" method="POST" id="profile-form">
-                            <div id="form-loader-profile" class="text-center container" style="height:90%;display:none;position:absolute;opacity:0.6;background-color:#fff;z-index:99;">
-                                <i style="position:relative;top:40%;left:0%;" class="fa-li fa fa-spinner fa-spin text-success fa-5x"></i>
-                            </div>
-                            <ul id="user-profile-fill" class="list-group">
-                                
-                            </ul>
-                        </form>
 
                         <h1 class="text-center text-danger"><i class="fa fa-file-o"></i> Instructions</h1>
                         <div class="container mx-auto mb-5 py-5">
@@ -128,15 +107,28 @@
                         <div class="container mx-auto mb-5 py-5">
                             <h4 class="text-success">Thank you for your order !</h4>
                             <h6>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</h6>
-                            <p><i class="p-3 text-primary fa fa-paypal"></i> Paypal :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 text-primary fa fa-paypal"></i>Paypal :<em> chabad18@hotmail.com</em></p>
                             <p><i class="p-3 text-success fa fa-dollar"></i>Cash App :<em> 8186052066</em></p>
                             <p><i style="color:#7133a3;" class="p-3">Z</i>Zelle :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 fa fa-list-alt text-info"></i>Check :<em> 18253 Topham St Tarzana CA 91335</em></p>
                         </div>
+
+                        <h1 class="text-center text-dark"><i class="fa fa-cogs"></i> Profile</h1>
+                        <span id="errors-for-profile">
+                        </span>
+                        <form class="container mx-auto mb-5 py-5" style="position:relative;" method="POST" id="profile-form">
+                            <div id="form-loader-profile" class="text-center container" style="height:90%;display:none;position:absolute;opacity:0.6;background-color:#fff;z-index:99;">
+                                <i style="position:relative;top:40%;left:0%;" class="fa-li fa fa-spinner fa-spin text-success fa-5x"></i>
+                            </div>
+                            <ul id="user-profile-fill" class="list-group">
+                                
+                            </ul>
+                        </form>
                        
                     </div>
                     <!--new order-->
                     <div class="carousel-item">
-                        <form id="form-new" class="main-form form-size mx-auto bg-white" method="POST" action="">
+                        <form id="form-new" class="main-form form-size mx-auto bg-white" method="POST" action="" style="height:auto;max-height:fit-content;">
                             <div class="p-4">
                                 <div class="w-100 h-100" style="position: relative;">
                                     <div class="mb-3" id="fill-d-minim">
@@ -144,49 +136,24 @@
                                     </div>
                                     <div class="p-4">
                                         <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
-                                        <small class="text-success">this is for Yanover</small>
+                                        <small class="text-success">this is for Yanover. Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag</small>
                                         <div class="row">
-                                            <div class="col">Esrog (min: $50, max:$100)</div>
-                                            <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
-                                            <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
+                                            <div class="col-3">Esrog <small>(min: $50, max:$100)</small></div>
+                                            <div class="col-3"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
+                                            <div class="col-6"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
                                         </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <a data-toggle="collapse" data-target="#c-text">Add a comment <i class="fa fa-arrow-circle-o-right"></i></a>
+                                        <textarea id="c-text" class="form-control collapse mt-4" style="max-height:200px;" name="comment">
+
+                                        </textarea>
                                     </div>
                                     <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
                                 </div>
                             </div>
                         </form>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>                       
-                    </div>
-                    <!--update order-->
-                    <div class="carousel-item">
-                        <div class="container" id="user-orders-update">
-
-                        </div>
-                        <form id="update-order-form" class="form-size main-form bg-light" method="POST" style="position:fixed;display:none;left:30px;top:30px;">
-                            <i id="i-close" class="fa fa-close text-danger" style="position:relative;top:5px;left:5px;"></i>
-                            <script>$('#i-close').click(e=>$('#update-order-form').css('display','none'))</script>
-                            <div class="p-3 text-left" id="update-form-div">
-
-                            </div>
-                            <div class="p-4">
-                                <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
-                                <small class="text-success">this is for Yanover</small>
-                                <div class="row">
-                                    <div class="col">Esrog (min: $50, max:$100)</div>
-                                    <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
-                                    <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
-                                </div>
-                            </div>
-                            <div class="p-3 text-left"><button type="submit" class="btn btn-outline-success">Update</button></div>
-                        </form>
-                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
-                    </div>
-                    <!--delete order-->
-                    <div class="carousel-item text-center">
-                        <div class="container" id="user-orders-delete">
-
-                        </div>
-                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
                     <!--Comment form-->
                     <div class="carousel-item text-center">

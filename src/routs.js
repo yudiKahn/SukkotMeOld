@@ -23,7 +23,7 @@ router.get('/signOut', (req,res)=>{
 router.post('/signup', Middleware.SignUp, (req,res)=>{
     let {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
     password = bcrypt.hashSync(password, 10);
-    let userObj = {firstName, lastName, email, phoneNumber,password, address:{city, state, street, zip} };
+    let userObj = {firstName, lastName, email, phoneNumber,password, address:{street, city, state, zip} };
     let newUser = new users(userObj);
     newUser.save().then(doc=>{
         req.session.id = doc._id;
@@ -45,7 +45,7 @@ router.post('/profile/update/:id', Middleware.UpdateProfile, (req, res)=>{
     let {email, firstName, lastName, phoneNumber} = req.body;
     let {city, street, state, zip} = req.body;
     users.updateOne({_id: req.params.id}, 
-        {email, firstName, lastName, phoneNumber, address:{city, street, state, zip}}).then(doc=>{
+        {email, firstName, lastName, phoneNumber, address:{street, city, state, zip}}).then(doc=>{
         res.send('Your profile was update');
     }).catch(err=>res.status(400).send(err))
 })
@@ -55,7 +55,7 @@ router.get('/order/:id', Middleware.UserHomePage, (req,res)=>{
     if(req.session.id==req.params.id)
      res.sendFile(__dirname+'/order_page.html')
     else
-     res.send('404 - not found.')
+     res.redirect('/');
 })  
 
 //get user
@@ -86,10 +86,15 @@ router.post('/order/:id/new', (req,res)=>{
 router.post('/order/:id/update', (req,res)=>{
   let newItems = getOrderItems(items, req.body);
   let newSum = getOrderSum(items, req.body);
-  orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum}).then(doc=>{
-    res.send('updated');
-    sendEmail(newItems, newSum, req.params.id);
-  }).catch(err=>res.status(400).send(err));
+  orders.findById(req.params.id).then(doc=>{
+      if(doc.isDone){
+          return res.status(400).send('Order is already pack.')
+      }
+      orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum}).then(doc=>{
+        res.send('updated');
+        sendEmail(newItems, newSum, req.params.id);
+      }).catch(err=>res.status(400).send(err));
+  })
 })
 
 //get all orders for user

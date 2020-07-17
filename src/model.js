@@ -26,7 +26,8 @@ const orderSchema = mongoose.Schema({
     items: [],
     isDone: {type: Boolean},
     isPaid: {type:Boolean},
-    sum: {type: Number}
+    sum: {type: Number},
+    comment: {type: String}
 }, {timestamps: true})
 
 

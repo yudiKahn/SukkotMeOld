@@ -43,6 +43,14 @@ body, html{scroll-behavior: smooth;margin:0; padding:0;width:100vw;height: 100vh
 ::-webkit-scrollbar {
     width: 10px;
 }
+.o-set:hover, .bell:hover{
+ cursor: pointer; color: #007bff !important;
+}
+#order-set-popup{
+  position: fixed; display: block; min-height: 400px; z-index: 5; display: none;
+  left: 10px; top: 20px; background-color: rgba(255, 255, 255, 0.8);
+  width:calc(100vw - 20px); height:calc(100vh - 10px); border-radius:20px;
+}
 footer{
   position: relative;
   right: 0;

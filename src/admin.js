@@ -90,6 +90,8 @@ function getOrders(arr, typeOfOrder){
                     order.items.map(d=>tableTxt+=`<tr class="${d.byAdmin?'bg-dark text-white':''}">
                     <td>${d.item}</td><td>${d.q}</td><td>${d.price}</td></tr>`);
                     tableTxt+=`</tbody></table>
+                    <p>Comments.</p>
+                    <div><small>${order.comment||'NULL'}</small></div>
                     <p><small>sum: $ ${order.sum ? order.sum:0}</small></p>
                     <button value="${order._id}" class="btn btn-outline-success">${paidBtn}</button>
                     <button value="${order._id}" class="btn btn-warning text-white">${doneBtn}</button>

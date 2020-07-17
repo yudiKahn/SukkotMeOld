@@ -9,8 +9,7 @@ function init(){
     } })
     $.ajax({type: "GET", url:'/items', success: items => {
         $.ajax({type: "GET", url: `/orders/${urlId}/all`, success: data => {onReady(()=>{
-            fillOrders(data); fillDeleteOrders(data); fillUpdateOrders(data,items);
-            $('#fill-d-minim').html(dMinimForm(items));
+            fillOrders(data, items); $('#fill-d-minim').html(dMinimForm(items));
         })}})
     }});
 }
@@ -25,9 +24,9 @@ function fillUserProfile(user){
     <label class="custom-control-label" for="modify-profile">Modify profile.</label>
     </div><button disabled type="submit" class="p-1 badge badge-primary badge-pill" id="submit-profile">SUBMIT</button>         
     </li>`;
-    Object.keys(user).sort().map(d=>{
+    Object.keys(user).map(d=>{
         if(d == 'address'){
-                Object.keys(user[d]).sort().map(a=>{
+                Object.keys(user[d]).map(a=>{
                     txt+=`<li class="list-group-item d-flex justify-content-between align-items-center">
                     ${a}<input name="${a}" style="max-width:200px" type="${a=='zip'?'number':'text'}" value="${user[d][a]}" disabled class="form-control profile-input"></li>`;
                 })
@@ -62,7 +61,7 @@ function fillUserProfile(user){
     })
 }
 
-function fillOrders(orders){
+function fillOrders(orders, items){
     $('#user-orders-fill').html('');
     let resMin = ""; let resMax = "";
     if(orders.length<1){
@@ -72,7 +71,11 @@ function fillOrders(orders){
             let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
             resMin=`<h5 class="p-3 text-primary justify-content-between d-flex">
             <span class="badge badge-primary badge-pill">Order - ${date}</span>
-            <i class="fa fa-bell-o text-dark bell" data-ready="${order.isDone}" data-paid="${order.isPaid}"></i></h5>
+            <span>
+            <i class="fa fa-bell-o text-dark bell" data-ready="${order.isDone}" data-paid="${order.isPaid}"></i>
+            <i class="fa fa-cog text-dark o-set" data-id="${order._id}" data-done="${order.isDone}"></i>
+            </span>
+            </h5>
             <ul id="user-order-min" class="list-group">`;
             resMax=`<h5 class="p-3 collapsed justify-content-between align-items-center d-flex" data-toggle="collapse" aria-expanded="false"
             data-target="#li${order._id.toString().slice(0,6)}" aria-controls="collapseOne">
@@ -95,48 +98,48 @@ function fillOrders(orders){
         const handleOut = (e) => $('#order-status').css('display','none');
         $(bell).hover( handlein, handleOut )
     })
-}
-
-function fillDeleteOrders(orders){
-    let res = "";
-    if(orders.length<1){
-        res='<h5 class="text-warning text-center">You have no orders.</h5>';
-    }else{
-        for(let order of orders){
-            let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
-            res+=`<button class="btn-delete-order btn btn-block btn-danger w-75 mx-auto my-4" 
-            value="${order._id}">Delete order created at ${date}</button>`;
-        }
-    }
-    $('#user-orders-delete').html(res);
-    $('.btn-delete-order').each((i,btn)=>{
-        $(btn).click(()=>{
-            $.ajax({ type: "POST", url: `/order/${$(btn).val()}/delete`, success: d => init() })
-        })
+    $('#close-o-set-pop').click(()=>{ $('#order-set-popup').css('display','none'); $('#update-order-form').css('display','none');});
+    const add = (id) => $(`<div>
+    ${[{c:'danger',t:''},{c:'info',t:''}].map((d,i)=>
+    `<div class="card border-${d.c} mx-auto m-2" style="max-width: 18rem;" value="${id}" id="order-${d.c}">
+        <div class="card-header bg-${d.c} text-light"><i class="fa fa-${i<1?'trash':'cloud-upload'}"></i></div>
+        <div class="card-body text-${d.c}">
+        <h5 class="card-title">${i<1?'Delete':'Update'}</h5>
+        <p class="card-text">${d.t}</p>
+        </div>
+    </div>`)}  
+    </div>`);
+    $('.o-set').each((i,cog)=>{
+        $(cog).click(()=>{ 
+            $('#order-set-popup').css({'display':'inline'});
+            $('#order-set-btns').html(add($(cog).attr('data-id')));  enableOrderBtns(items, $(cog).attr('data-done'))
+        });
     })
 }
 
-function fillUpdateOrders(orders, items){
-    let res = "";
-    if(orders.length<1){
-        res='<h5 class="text-warning text-center">You have no orders.</h5>';
-    }else{
-        for(let order of orders){
-            let date = `${new Date(order.createdAt).toDateString()} ${new Date(order.createdAt).getHours()}:${new Date(order.createdAt).getMinutes()}`;
-            res+=`<button class="btn-update-order btn btn-block btn-info w-75 mx-auto my-4" 
-            value="${order._id}">Update order created at ${date}</button>`;
-        }
-    }
-    $('#user-orders-update').html(res);
-    $('.btn-update-order').each((i,btn)=>{
-        $(btn).click(()=>{
+function enableOrderBtns(items, isDone){
+    $('#order-danger').click(()=>{
+       $.ajax({ type: "POST", url: `/order/${$('#order-danger').attr('value')}/delete`, success:()=>{
+            init(); $('#order-set-popup').css('display','none');
+       }});
+    })
+    $('#order-info').click((btn)=>{
+        let val = $('#order-info').attr('value');
+        console.log()
+        if(isDone=='false'){
             $('#update-order-form').css('display','block').submit(function(e){
                 e.preventDefault();let form = $(this);
-                $.ajax({ type:"POST",url:`/order/${$(btn).val()}/update`,data:form.serialize(),success:d=>{init();$('#update-order-form').css('display','none')}});
-                $('#carousel-control').carousel(0);
+                $.ajax({ type:"POST",url:`/order/${val}/update`,data:form.serialize(),success:()=>{
+                    init(); $('#update-order-form').css('display','none')
+                }, error:er=>alert(er.responseText) });
             })
             $('#update-form-div').html(dMinimForm(items))
-        })
+        }else{
+           $('#order-set-btns').append(`<div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
+           You can't update order, it's already packed.<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+           <span aria-hidden="true">&times;</span></button></div>`)
+        }
+        
     })
 }
 
@@ -152,10 +155,10 @@ function changeImgAndColOrRow(){
 window.addEventListener('resize', changeImgAndColOrRow);
 
 function dMinimForm(items){
-    let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Hadasim','Aruvos','Hoshnos','Schach','Lulav Bag'];
+    let tmpMinimArr = ['Israeli Esrog set','Yanover Esrog set','Lulav','Aruvos','Hadasim','Hoshnos','Schach','Lulav Bag'];
     let comment = ['Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag',
          'Each set comes complete with Lulav, Esrog, Hadasim "רובו חיים נאה & כולו חיים נאה",  Aruvos & Plastic bag',
-         'if you want additional lulavim', 'if you want additional hadasim', 'if you want additional aruvos']
+         'if you want additional lulavim', 'if you want additional aruvos', 'if you want additional hadasim']
     let itemsToGoOver = [1, 2 ,3 ,4, 5, 6, 9, 10];
     //israeli set, yanever, lulav, arava, hadas, hushana, schach, lulav bag.
     let res = "";
@@ -192,3 +195,9 @@ onReady(()=>{ changeImgAndColOrRow(); checkInputs();
     $('#comment-form').attr('action',`/user/${urlId}/comment`);
     $('#form-new').attr('action',`/order/${urlId}/new`);
 });
+
+/*
+
+
+
+*/
