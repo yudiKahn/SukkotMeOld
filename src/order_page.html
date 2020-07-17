@@ -45,19 +45,6 @@
                 <div class="carousel-inner py-3" style="min-height:100%;">
                     <div class="carousel-item active">
 
-                        <h1 class="text-center text-warning"><i class="fa fa-plus"></i> Add order</h1>
-                        <div class="container mb-5 py-5">
-                            <div class="card border-warning mx-auto m-2" style="max-width: 18rem;" data-target="#carousel-control" data-slide-to="1">
-                                <div class="card-header bg-warning text-light">
-                                    <i class="fa fa-plus"></i>
-                                </div>
-                                <div class="card-body text-warning">
-                                <h5 class="card-title">Create new order</h5>
-                                <p class="card-text">You will recive an email once creating the order.</p>
-                                </div>
-                            </div>
-                        </div>
-
                         <h1 class="text-center text-primary"><i class="fa fa-shopping-bag"></i> Your orders</h1>
                         <div id="order-set-popup">
                             <h3 class="text-left"><i id="close-o-set-pop" class="p-3 fa fa-close text-danger"></i></h3>
@@ -68,11 +55,11 @@
                                 </div>
                                 <div class="p-4">
                                     <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
-                                    <small class="text-success">this is for Yanover</small>
+                                    <small class="text-success">this is for Yanover. Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag</small>
                                     <div class="row">
-                                        <div class="col">Esrog (min: $50, max:$100)</div>
-                                        <div class="col"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
-                                        <div class="col"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
+                                        <div class="col-3">Esrog <small>(min: $50, max:$100)</small></div>
+                                        <div class="col-3"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
+                                        <div class="col-6"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
                                     </div>
                                 </div>
                                 <div class="p-3 text-left"><button type="submit" class="btn btn-outline-success">Update</button></div>
@@ -85,8 +72,8 @@
                             <div id="user-orders-fill">
 
                             </div>
-                            <h5 style="padding-right:1.25rem;" class="py-3 text-right">
-                                <span class="badge badge-primary badge-pill" id="user-order-sum"></span>
+                            <h5 style="padding-right:1.25rem;" class="py-3">
+                                <button class="btn btn-primary" data-target="#carousel-control" data-slide-to="1">New order <i class="fa fa-arrow-circle-o-right"></i></button>
                             </h5>
                         </div>
 
@@ -103,16 +90,6 @@
                             </p>
                         </div>
 
-                        <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
-                        <div class="container mx-auto mb-5 py-5">
-                            <h4 class="text-success">Thank you for your order !</h4>
-                            <h6>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</h6>
-                            <p><i class="p-3 text-primary fa fa-paypal"></i>Paypal :<em> chabad18@hotmail.com</em></p>
-                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App :<em> 8186052066</em></p>
-                            <p><i style="color:#7133a3;" class="p-3">Z</i>Zelle :<em> chabad18@hotmail.com</em></p>
-                            <p><i class="p-3 fa fa-list-alt text-info"></i>Check :<em> 18253 Topham St Tarzana CA 91335</em></p>
-                        </div>
-
                         <h1 class="text-center text-dark"><i class="fa fa-cogs"></i> Profile</h1>
                         <span id="errors-for-profile">
                         </span>
@@ -124,6 +101,16 @@
                                 
                             </ul>
                         </form>
+
+                                                <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
+                        <div class="container mx-auto mb-5 py-5">
+                            <h4 class="text-success">Thank you for your order !</h4>
+                            <h6>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</h6>
+                            <p><i class="p-3 text-primary fa fa-paypal"></i>Paypal :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App :<em> 8186052066</em></p>
+                            <p><i style="color:#7133a3;" class="p-3">Z</i>Zelle :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 fa fa-list-alt text-info"></i>Check :<em> 18253 Topham St Tarzana CA 91335</em></p>
+                        </div>
                        
                     </div>
                     <!--new order-->
@@ -131,6 +118,10 @@
                         <form id="form-new" class="main-form form-size mx-auto bg-white" method="POST" action="" style="height:auto;max-height:fit-content;">
                             <div class="p-4">
                                 <div class="w-100 h-100" style="position: relative;">
+                                    <div class="row p-3 bg-light text-dark">
+                                        <div class="col">Product</div><div class="col">Qty</div>
+                                        <div class="col">Price</div>
+                                    </div>
                                     <div class="mb-3" id="fill-d-minim">
                 
                                     </div>
@@ -154,26 +145,6 @@
                             </div>
                         </form>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>                       
-                    </div>
-                    <!--Comment form-->
-                    <div class="carousel-item text-center">
-                        <div class="container">
-                            <form method="POST" id="comment-form" class=" text-left form-size main-form bg-white mx-auto">
-                                <h5 class="text-info p-4">Send Comment.</h5>
-                                <div class="form-group p-4">
-                                    <label for="subject" class="text-info">Subject</label>
-                                    <input name="subject" id="subject" type="text" class="form-control" placeholder="Enter Subject">
-                                </div>
-                                <div class="form-group p-4">
-                                    <label for="comment" class="text-info">Comment</label>
-                                    <textarea name="text" style="max-height:200px;" id="comment" type="text" class="form-control" placeholder="Enter Subject"></textarea>
-                                </div>
-                                <div class="form-group p-4">
-                                    <button class="btn btn-info">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>
                     </div>
                 </div>
             </div>

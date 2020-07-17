@@ -83,7 +83,8 @@ function fillOrders(orders, items){
             <span class="badge badge-warning badge-pill">TOTAL :$${order.sum}</span></h5>
             <ul id="li${order._id.toString().slice(0,6)}" class="list-group collapse" data-parent="#user-orders-fill">`;
             for(let item of order.items){
-                const li = (isMin) => `<li class="list-group-item d-flex justify-content-between align-items-center">${isMin?item.item:item.item.replace('set','Esrog')}<span class="badge badge-primary badge-pill">${isMin?(item.totalPaid||item.q):item.q}</span></li>`;
+                const li = (isMin) => `<li class="list-group-item d-flex justify-content-between align-items-center">${isMin?item.item:item.item.replace('set','Esrog')}
+                <span class="badge badge-primary badge-pill">${isMin?(item.totalPaid||item.q):item.q}&times;${item.price}=${item.total}</span></li>`;
                 if(item.price>0)
                     resMin+= li(true);
                 resMax+=li(false);
@@ -195,9 +196,3 @@ onReady(()=>{ changeImgAndColOrRow(); checkInputs();
     $('#comment-form').attr('action',`/user/${urlId}/comment`);
     $('#form-new').attr('action',`/order/${urlId}/new`);
 });
-
-/*
-
-
-
-*/

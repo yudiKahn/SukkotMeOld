@@ -75,6 +75,7 @@ router.post('/order/:id/new', (req,res)=>{
     newOrder.isDone = false;
     newOrder.isPaid = false;
     newOrder.sum = sum;
+    newOrder.comment = req.body.comment;
     newOrder.userId = req.params.id;
     newOrder.save().then(()=>{
             res.redirect(`/order/${req.params.id}`);
@@ -90,7 +91,8 @@ router.post('/order/:id/update', (req,res)=>{
       if(doc.isDone){
           return res.status(400).send('Order is already pack.')
       }
-      orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum}).then(doc=>{
+      let c = req.body.comment || doc.comment;
+      orders.updateOne({_id:req.params.id},{items:newItems, sum:newSum, comment:c}).then(doc=>{
         res.send('updated');
         sendEmail(newItems, newSum, req.params.id);
       }).catch(err=>res.status(400).send(err));
