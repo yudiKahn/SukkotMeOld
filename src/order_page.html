@@ -28,8 +28,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-success w-100" style="justify-content:space-between;border-radius:0 0 20px 20px;border-top:4px solid #eff157;">
                 <a href="/"><img src="/imgs/icon.png" class="icon navbar-brand"></a>
                 <form method="GET" action="/signOut" class="navbar-item">
-                    <small class="c-y">Sign out</small>
-                    <button class="btn"><i class="fa  fa-user-circle-o fa-2x c-y"></i></button></form>
+                    <button class="btn c-y">Sign out <i class="fa  fa-user-circle-o fa-2x"></i></button></form>
             </nav>
         </div>
         <div class="p-3 text-center header-txt-bg mx-auto py-5" style="position:relative; top:70px;">
@@ -49,21 +48,6 @@
                         <div id="order-set-popup">
                             <h3 class="text-left"><i id="close-o-set-pop" class="p-3 fa fa-close text-danger"></i></h3>
                             <div id="order-set-btns"></div>
-                            <form id="update-order-form" class="main-form bg-light" method="POST" style="position:absolute;display:none;right:10px;top:50px;width:90vw;height:90vw;min-height: 400px;z-index: 5;">
-                                <div class="p-3 text-left" id="update-form-div">
-    
-                                </div>
-                                <div class="p-4">
-                                    <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
-                                    <small class="text-success">this is for Yanover. Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag</small>
-                                    <div class="row">
-                                        <div class="col-3">Esrog <small>(min: $50, max:$100)</small></div>
-                                        <div class="col-3"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
-                                        <div class="col-6"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
-                                    </div>
-                                </div>
-                                <div class="p-3 text-left"><button type="submit" class="btn btn-outline-success">Update</button></div>
-                            </form>
                         </div>
                         <div id="order-status" style="display:none;z-index:100;position:absolute;width:100px;height:100px;top:0;border-radius:10px;border:2px solid #007bff;" class="pl-1 bg-light">
                             
@@ -143,6 +127,25 @@
                                     <button type="submit" id="submit-btn" class="btn btn-outline-success">Submit</button>
                                 </div>
                             </div>
+                        </form>
+                        <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>                       
+                    </div>
+                    <!--update-->
+                    <div class="carousel-item">
+                        <form id="update-order-form" class="main-form form-size bg-light m-auto" method="POST" style="height:auto;max-height:fit-content;">
+                            <div class="p-3 text-left" id="update-form-div">
+
+                            </div>
+                            <div class="p-4">
+                                <h4 class="c-y">Is your budget for a Yanovar Esrog is under $100 ?! fill out here.</h4>
+                                <small class="text-success">this is for Yanover. Each set comes complete with Lulav, Esrog, Hadasim, Aruvos, Koshelach & Plastic bag</small>
+                                <div class="row">
+                                    <div class="col-3">Esrog <small>(min: $50, max:$100)</small></div>
+                                    <div class="col-3"><input type="number" name="Budget Esrog" min="0" max="10" class="form-control"/></div>
+                                    <div class="col-6"><input placeholder="$" type="number" name="Budget Esrog price" min="50" max="100" class="form-control"/></div>
+                                </div>
+                            </div>
+                            <div class="p-3 text-left"><button type="submit" class="btn btn-outline-success">Update</button></div>
                         </form>
                         <h4 data-target="#carousel-control" class="py-3 text-info text-center" data-slide-to="0">Back</h4>                       
                     </div>

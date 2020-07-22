@@ -126,15 +126,17 @@ function enableOrderBtns(items, isDone){
     })
     $('#order-info').click((btn)=>{
         let val = $('#order-info').attr('value');
-        console.log()
         if(isDone=='false'){
-            $('#update-order-form').css('display','block').submit(function(e){
+            $('#order-set-popup').css('display','none');
+            $('#update-order-form').submit(function(e){
                 e.preventDefault();let form = $(this);
                 $.ajax({ type:"POST",url:`/order/${val}/update`,data:form.serialize(),success:()=>{
                     init(); $('#update-order-form').css('display','none')
                 }, error:er=>alert(er.responseText) });
+               
             })
             $('#update-form-div').html(dMinimForm(items))
+            $("#carousel-control").carousel(2);
         }else{
            $('#order-set-btns').append(`<div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
            You can't update order, it's already packed.<button type="button" class="close" data-dismiss="alert" aria-label="Close">
