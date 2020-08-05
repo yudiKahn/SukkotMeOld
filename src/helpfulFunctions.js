@@ -3,8 +3,8 @@ const items = require('./items');
 const mailSender  = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'iesrogonline@gmail.com',
-      pass: 'chanais11'//sukkot130ME
+      user: 'sukkotme@gmail.com',//'iesrogonline@gmail.com'
+      pass: 'sukkot130ME'//'chanais11'
     }
 });
 
@@ -158,7 +158,7 @@ const invoiceEmail = (order, billed,total, id) => {
                 </tbody>
             </table>
         </div>
-        <h4 style="font-size: 200;text-align: center;">Thank you for you'r buisness</h4>
+        <h4 style="text-align: center;">Thank you for you'r buisness</h4>
     </div>`)
 }
 function boxEmail(orderObj, userObj){

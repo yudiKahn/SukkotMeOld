@@ -30,7 +30,7 @@ function fillUserProfile(user){
     </li>`;
     Object.keys(user).map(d=>{
         if(d == 'address'){
-                Object.keys(user[d]).map(a=>{
+                ['street','city','state','zip'].map(a=>{
                     txt+=`
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                      ${a}
