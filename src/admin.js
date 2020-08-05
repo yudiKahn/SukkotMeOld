@@ -152,21 +152,21 @@ function enableBtns(){
 }
  //show print page
 function Print(obj, whatPrint){
-    let tmpItems = '';
+    let paid = '', all='';
     let sortedItems = obj.doc.items.sort((a,b)=>(a.item.toLowerCase() > b.item.toLowerCase()) ? 1 : ((a.item.toLowerCase() < b.item.toLowerCase()) ? -1 : 0))
-    sortedItems.filter((v,i,a)=>v.price>0&&v.total>0).map(i=>{
-            tmpItems+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
-            <td scope="row">${i.byAdmin?'+ ':''}${i.item}</td>
+    sortedItems.map(i=>{
+        if(i.total>0){
+            paid+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
+            <td>${i.byAdmin?'+ ':''}${i.item}</td>
             <td>${i.q}</td>
             <td> $ ${i.total}</td>
-            </tr>`;
-    })
-    tmpItems+='<tr class="">Whats in the box</tr>';
-    sortedItems.map(i=>{
-        tmpItems+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
-        <td scope="row">${i.byAdmin?'+ ':''}${i.item.toString().replace('set','Esrog')}</td>
+            </tr>`
+        }
+        all+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
+        <td>${i.byAdmin?'+ ':''}${i.item.toString().replace('set','Esrog')}</td>
         <td>${i.q}</td>
         <td> $ ${i.total}</td>
+        <td style="text-align:center;"><input type="checkbox"/></td>
         </tr>`;
     })
     document.getElementById('popup-print').style.display='block';
@@ -175,9 +175,32 @@ function Print(obj, whatPrint){
     ${obj.user.address.city} ${obj.user.address.street} ${obj.user.address.zip} ${obj.user.address.state}</p>
     ${
         whatPrint=="Order"?
-        `<table class="table table-bordered"><thead><tr><td scope="col">#</td><td scope="col">Quantity</td>
-            <td scope="col">Price</td></tr></thead> <tbody>${tmpItems}<tr><th scope="row">SUM :</th><th></th><th>$${obj.doc.sum ? obj.doc.sum: 0}</th></tr>
-        </tbody></table>`: `<p><b>Email</b> ${obj.user.email}</p><p><b>Phone number</b> ${obj.user.phoneNumber}</p><p><b>Box No.</b> </p>`
+        `<h4 style="color:#ffc107;text-align:left;"><em>Order items.</em></h4>
+        <table class="w-100">
+          <thead>
+             <tr class="bg-info text-white">
+                 <td>Items</td><td>Quantity</td><td>Price</td>
+             </tr>
+          </thead>
+          <tbody>
+            ${paid}
+          </tbody>
+        </table>
+        <h4 style="color:#ffc107;text-align:left;" class="mt-5"><em>What's in the box.</em></h4>
+        <table class="w-100">
+            <thead>
+             <tr class="bg-info text-white">
+                <td>Items</td><td>Quantity</td><td>Price</td>
+                <td style="width:6%;font-size:12px;">Check</td>
+             </tr>
+            </thead>
+          <tbody>
+            ${all}
+          </tbody>
+        </table>
+        <p class="my-5 text-success">SUM :$${obj.doc.sum ? obj.doc.sum: 0}</p>`
+        :
+        `<p><b>Email</b> ${obj.user.email}</p><p><b>Phone number</b> ${obj.user.phoneNumber}</p><p><b>Box No.</b> </p>`
     }
     <button class="btn btn-outline-info" onclick="window.print()">Print</button>`;
     document.getElementById('close-popup').addEventListener('click', ()=>{
@@ -190,7 +213,7 @@ const adminItems=['Israeli Esrog A PITOM','Israeli Esrog B PITOM','Israeli Esrog
 'Esrog Yannever A PITOM','Esrog Yannever B PITOM','Esrog Yannever C PITOM',
 'Esrog Yannever D PITOM','Esrog Yannever A NO PITOM','Esrog Yannever B NO PITOM',
 'Esrog Yannever C NO PITOM','Esrog Yannever D NO PITOM','Egyptian Lulav','Deri Lulav',
-'Deri Much Lulav','Aruvos', 'Hadas A','Hadas B','Hadas C','Hoshnos',"Koisaklach","Plastic bag"];
+'Deri Much Lulav','Aruvos', 'Hadas A','Hadas B','Hadas C','Hoshnos',"Koisaklach","Plastic bag",'Shipping'];
 function showUpdateForm(username, id){
     const form = document.getElementById('admin-form');
     form.style.display='block';

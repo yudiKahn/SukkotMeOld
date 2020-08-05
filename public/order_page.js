@@ -187,9 +187,20 @@ function fillOrders(orders, items){
 
 function enableOrderBtns(items, isDone){
     $('#order-danger').click(()=>{
-       $.ajax({ type: "POST", url: `/order/${$('#order-danger').attr('value')}/delete`, success:()=>{
-            init(); $('#order-set-popup').css('display','none');
-       }});
+        if(isDone=='false'){
+            $('#order-set-popup').css('display','none');
+            $.ajax({ type: "POST", url: `/order/${$('#order-danger').attr('value')}/delete`, success:()=>{
+                init(); $('#order-set-popup').css('display','none');
+           }});
+        } else {
+            $('#order-set-btns').append(`
+            <div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
+              You can't Delete order, it's already packed.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+              </button>
+            </div>`)
+        }
     })
     $('#order-info').click((btn)=>{
         let val = $('#order-info').attr('value');
