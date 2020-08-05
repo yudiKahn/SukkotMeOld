@@ -1,13 +1,20 @@
 const nodemailer = require('nodemailer');
 const items = require('./items');
-const { use } = require('./routs');
 const mailSender  = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'sukkotme@gmail.com',
-      pass: 'sukkot130ME'
+      user: 'iesrogonline@gmail.com',
+      pass: 'chanais11'//sukkot130ME
     }
 });
+
+function getId(){
+    let nums='';
+    for(let i=0;i<10;i++){
+        nums += Math.floor(Math.random()*1000).toString();
+    }
+    return `${new Date().valueOf()}_${nums}`;
+}
 
 function getItemObj(item, q, price, total=null, byAdmin=false){
     return {item: item, q:q, price: price, total: total ? total :Number(price*q), byAdmin: byAdmin }
@@ -91,51 +98,141 @@ function getOrderSum(itemsAvailable, reqObj){
    return res ? res : 0;
 }
 
-const htmlResEmail = (first, last, items, sum) => {
-    let min="", max="";
-    for(let item of items){
-        if(item.total>0) min+=`<p>${item.item} &times; ${item.totalPaid||item.q}</p>`;
-        max+=`<p>${item.item.replace('set','esrog')} &times; ${item.q}</p>`;
-    }
+const invoiceEmail = (order, billed,total, id) => {
+    const col = `-ms-flex-preferred-size: 0;flex-basis: 0; -ms-flex-positive: 1; flex-grow: 1; max-width: 100%;
+        position: relative;width: 100%;padding-right: 15px;padding-left: 15px;`;
+    let items='';
+    order.map(i=>{
+        if(i.total>0){
+            items+=`
+            <tr>
+              <td>${i.item}</td>
+              <td>${i.q}</td>
+              <td>${i.price}</td>
+              <td>${i.total}</td>
+            </tr>`
+        }
+    });
+    billed = `${billed.firstName} ${billed.lastName}<br/>
+    ${billed.address.city} ${billed.address.state}
+    ${billed.address.street} ${billed.address.zip}`;
     return(`
-    <img src="" />
-    <p>blalbla</p>
-    <h3 style="padding:20px;background-color:#28a745;color:white;"></h3>`)
-    /*return(`${(first&&last)?`<h2 style="padding:20px;background-color:#28a745;color:white;">
-    <img src="/imgs/icon.png" style="max-width:15px;"/>&nbsp;
-    Hello ${first} ${last}. Here is your order details</h2>`:''}
-    <h4>Your order items</h4>
-    ${min}
-    <h4>Wht's in the box</h4>
-    ${max}
-    <b>SUM :$${sum}</b>
-    <p>Thank you for your order !</p>
-    <p>WHEN YOU RECIEVE YOUR ORDER.
-    Place Lulavim in a cool area and keep in a closed box
-    Hadasim and Aravos should be refrigerated
-    Inspect all merchandise for Kashrus
-    Report any damaged products within 24 hours of receiving shipment.</p>
-    <p>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</p><br/>
-    <small>Have a good Yom Tov!</small>`);*/
+    <div>
+        <div style="border-bottom: 3px solid #343a40;padding: 1rem; margin-left: 1rem;margin-right: 1rem;">
+            <table style="width:100%;margin-bottom:1em;color: #343a40; background-color: #f8f9fa; padding:1em;">
+                <tr>
+                <td>INOICVE</td>
+                <td><small> 18253 Topham St<br>Tarzana CA 91335  </small></td>
+                <td>${id}</td>
+                </tr>
+            </table>
+            <table style="width:100%;color: #343a40; background-color: #f8f9fa; padding:1em;">
+                <tr>
+                <td>
+                    <small>Billed To</small>
+                    <p>${billed}</p>
+                </td>
+                <td>
+                    <small>Date</small>
+                    <p>${new Date().getMonth()}/${new Date().getDay()}/${new Date().getFullYear()}</p>
+                </td>
+                <td>
+                    <small>Total</small>
+                    <p>$${total}</p>
+                </td>
+                </tr>
+            </table>
+        </div>
+        <div style="padding: 1rem; margin: 1rem;">
+            <table style="width:100%;color: #343a40; background-color: #f8f9fa; padding:.5em;">
+                <thead>
+                    <tr>
+                    <td>Item</td>
+                    <td>Qty</td>
+                    <td>Price</td>
+                    <td>Total</td>
+                    </tr>
+                </thead>
+                <tbody>
+                ${items}
+                </tbody>
+            </table>
+        </div>
+        <h4 style="font-size: 200;text-align: center;">Thank you for you'r buisness</h4>
+    </div>`)
+}
+function boxEmail(orderObj, userObj){
+    let paid='', all='', bc='#343a40', lc='#f8f9fa', wc='#ffc107',pc='#007bff';
+    orderObj.items.map((d,i)=>{
+        if(d.total>0){
+            paid+=` <tr>
+                    <td>${d.item}</td>
+                    <td>${d.q}</td>
+                    <td>${d.price}</td>
+                    <td>${d.total}</td>
+                </tr>`
+        }
+        all+=`<tr ${d.byAdmin?`style="background-color:${bc};color:${lc};"`:''}>
+            <td>${d.item.toString().replace('set','Esrog')}</td>
+            <td>${d.q}</td>
+            <td>${d.price}</td>
+            <td>${d.total}</td>
+        </tr>`
+    })
+    return(`
+        <div style="padding:1em;">
+            <h3 style="text-align:center;color:${bc};font-weight:200;margin-bottom:3em;font-size: x-large;">
+              <em>Order update for: ${userObj.firstName} ${userObj.lastName}</em>
+            </h3>
+            <h5 style="color:${wc};font-size: larger;">Order items:</h5>
+            <table style="width:100%;margin-bottom:3em;border-color:${pc};" border="1">
+                <thead stye="text-align:left;">
+                    <tr>
+                        <th style="background-color:${pc};color:${lc};">Item</th>
+                        <th style="background-color:${pc};color:${lc};">Qty</th>
+                        <th style="background-color:${pc};color:${lc};">Price</th>
+                        <th style="background-color:${pc};color:${lc};">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${paid}
+                </tbody>
+            </table>
+            <h5 style="color:${wc};font-size: larger;">What's in the box:</h5>
+            <table style="width:100%;margin-bottom:3em;border-color:${pc};" border="1">
+                <thead stye="text-align:left;">
+                    <tr>
+                        <th style="background-color:${pc};color:${lc};">Item</th>
+                        <th style="background-color:${pc};color:${lc};">Qty</th>
+                        <th style="background-color:${pc};color:${lc};">Price</th>
+                        <th style="background-color:${pc};color:${lc};">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${all}
+                </tbody>
+            </table>
+        </div>
+    `)
 }
 
-
-function sendEmail(items, sum, id){
-    items = items.sort((a,b)=>a.item.toLowerCase()>b.item.toLowerCase()?1:a.item.toLowerCase()<b.item.toLowerCase()?-1:0)
+function sendEmail(id ,isInvoice){
     const { users, orders } = require('./model');
     orders.findById(id).then(order=>{
         users.findById(order.userId).then(user=>{
             let mailOptions = {
-                from: 'sukkotme@gmail.com',
+                from: 'iesrogonline@gmail.com',
                 to: user.email,
-                subject: 'Thank you !',
-                html: htmlResEmail(user.firstName, user.lastName, items, sum)
+                subject: isInvoice ? 'Esrog invoice':'Esrog update',
+                html: isInvoice ? invoiceEmail(order.items, user, order.sum) : boxEmail(order, user)
             }
             mailSender.sendMail(mailOptions, function(error, info){
                 if (error) {
                   console.log(error);
+                  return false;
                 } else {
                   console.log('Email sent: ' + info.response);
+                  return true;
                 }
             });
         })
@@ -150,7 +247,7 @@ async function adminSendEmail(doc, reqObj){
     if(reqObj){
        htmlTxt=`<p>${reqObj}</p>`;
     }else{
-        htmlTxt=htmlResEmail(null,null,doc.items,doc.sum);
+        htmlTxt='';
     }
     let mailOptions = {
         from: 'sukkotme@gmail.com',
@@ -168,9 +265,11 @@ async function adminSendEmail(doc, reqObj){
 }
 
 module.exports = {
-    getOrderItems: getOrderItems,
-    getOrderSum: getOrderSum,
-    sendEmail: sendEmail,
-    getItemObj:getItemObj,
-    adminSendEmail:adminSendEmail
+    getOrderItems,
+    getOrderSum,
+    sendEmail,
+    getItemObj,
+    adminSendEmail,
+    getId,
+    invoiceEmail: boxEmail
 }

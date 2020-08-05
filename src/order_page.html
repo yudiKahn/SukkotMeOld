@@ -39,6 +39,51 @@
 
     <main id="main" class="py-3">
 
+        <div id="invoice">
+            <p style="justify-content: space-between;" class="row m-0 w-100">
+                <i class="fa fa-close fa-2x text-danger p-3" id="close-invoice"></i>
+                <button class="btn btn-primary m-3" id="print-invoice">Print</button>
+            </p>
+            <div class="p-3 mx-3" style="border-bottom: 3px solid #343a40;">
+                <h5 class="p-3 bg-light text-dark row">
+                    <span class="col">INVOICE</span>
+                    <span class="col"><small>
+                        18253 Topham St<br/>Tarzana CA 91335 
+                    </small></span>
+                </h5>
+                <div class="row w-100 m-0">
+                    <div class="col">
+                        <small>Billed To</small><br/>
+                        <p id="order-billed"></p>
+                    </div>
+                    <div class="col">
+                        <small>Date</small><br/>
+                        <script>
+                         const d = new Date();
+                         document.write(`${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`)
+                        </script>
+                    </div>
+                    <div class="col">
+                        <small>Total</small>
+                        <p id="order-total"></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-3 mx-3">
+                <div class="row bg-light m-0">
+                    <div class="col">Item</div>
+                    <div class="col">Qty</div>
+                    <div class="col">Price</div>
+                    <div class="col">Total</div>
+                </div>
+            </div>
+            <div class="p-3 mx-3" id="invoice-details">
+
+            </div>
+            <h5 class="py-2 text-center">Thank you for you'r buisness</h5>
+        </div>
+
         <div style="width: 100vw; min-height:50vh;">
             <div id="carousel-control" class="carousel slide" style="min-height:100%;" data-interval="false">
                 <div class="carousel-inner py-3" style="min-height:100%;">
@@ -61,17 +106,26 @@
                             </h5>
                         </div>
 
-                        <h1 class="text-center text-danger"><i class="fa fa-file-o"></i> Instructions</h1>
                         <div class="container mx-auto mb-5 py-5">
-                            <h4 class="text-danger">WHEN YOU RECIEVE YOUR ORDER.</h4>
-                            <p>
+                            <h4 class="text-danger text-center">WHEN YOU RECIEVE YOUR ORDER.</h4>
+                            <p class="text-center">
                                 Place Lulavim in a cool area and keep in a closed box
                                 Hadasim and Aravos should be refrigerated
                                 Inspect all merchandise for Kashrus
                                 Report any damaged products within 24 hours of receiving shipment.
                                 <br/>Have a good Yom Tov!
-                                <br/><small>Yanky Kahn - 818-605-2066</small>
+                                <br/>Yanky Kahn - 818-605-2066
                             </p>
+                        </div>
+
+                        <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
+                        <div class="container mx-auto mb-5 py-5">
+                            <h4 class="text-success">Thank you for your order !</h4>
+                            <h6>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</h6>
+                            <p><i class="p-3 text-primary fa fa-paypal"></i>Paypal :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App :<em> 8186052066</em></p>
+                            <p><i style="color:#7133a3;" class="p-3">Z</i>Zelle :<em> chabad18@hotmail.com</em></p>
+                            <p><i class="p-3 fa fa-list-alt text-info"></i>Check :<em> 18253 Topham St Tarzana CA 91335</em></p>
                         </div>
 
                         <h1 class="text-center text-dark"><i class="fa fa-cogs"></i> Profile</h1>
@@ -85,16 +139,6 @@
                                 
                             </ul>
                         </form>
-
-                                                <h1 class="text-center text-success"><i class="fa fa-credit-card"></i> Payment</h1>
-                        <div class="container mx-auto mb-5 py-5">
-                            <h4 class="text-success">Thank you for your order !</h4>
-                            <h6>Payment address:  Y Kahn  18253 Topham St Tarzana CA 91335</h6>
-                            <p><i class="p-3 text-primary fa fa-paypal"></i>Paypal :<em> chabad18@hotmail.com</em></p>
-                            <p><i class="p-3 text-success fa fa-dollar"></i>Cash App :<em> 8186052066</em></p>
-                            <p><i style="color:#7133a3;" class="p-3">Z</i>Zelle :<em> chabad18@hotmail.com</em></p>
-                            <p><i class="p-3 fa fa-list-alt text-info"></i>Check :<em> 18253 Topham St Tarzana CA 91335</em></p>
-                        </div>
                        
                     </div>
                     <!--new order-->

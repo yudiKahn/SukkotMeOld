@@ -2,7 +2,7 @@ const router = require('express').Router();
 const items = require('./items');
 const {users, orders} = require('./model');
 const comments = require('./model').comments;
-const {  getItemObj, adminSendEmail} = require('./helpfulFunctions');
+const {  getItemObj, adminSendEmail, sendEmail} = require('./helpfulFunctions');
 
 const pass = 123240;
 //gets all users for admin
@@ -93,16 +93,12 @@ router.get('/admin/script-js/130240/GET', (req,res)=>{
 
 //admin send email
 router.post('/admin/email/130240/:id', (req,res)=>{
-    orders.findById(req.params.id).then(doc=>{
-        adminSendEmail(doc, req.body.contant)
-        res.send('email send');
-    }).catch(err=>res.status(400).send(err));
+    sendEmail(req.params.id, false)
+    res.send('email send');
 })
 router.post('/admin/email-update/130240/:id', (req,res)=>{
-    orders.findById(req.params.id).then(doc=>{
-        adminSendEmail(doc);
-        res.send('email send');
-    }).catch(err=>res.status(400).send(err));
+    sendEmail(req.params.id, true)
+    res.send('email send');
 })
 
 //get all users names

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {getId} = require('./helpfulFunctions');
 
 const schema = mongoose.Schema({
     firstName: {type:String,required: true},
@@ -30,9 +31,29 @@ const orderSchema = mongoose.Schema({
     comment: {type: String}
 }, {timestamps: true})
 
+let users = new mongoose.model('users', schema);
+let comments = new mongoose.model('comments', commentSchema);
+let orders = new mongoose.model('orders', orderSchema);
+
+
+class User{
+    constructor(obj){
+
+    }
+}
+class Order{
+    constructor(obj){
+        if(obj.userId && obj.items&&obj.total){
+            this.items = obj.items;
+            this.userId = obj.userId;
+            this._id=getId();
+            this.total=obj.total;
+        }
+    }
+}
 
 module.exports = {
-    users: new mongoose.model('users', schema),
-    comments: new mongoose.model('comments', commentSchema),
-    orders: new mongoose.model('orders', orderSchema)
+    users,
+    comments,
+    orders
 }

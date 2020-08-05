@@ -70,7 +70,7 @@ function getOrders(arr, typeOfOrder){
     }
     return res;
 }
- //returns order in html
+ //returns order in html send-email-update
  function getOrderInHTML(d, i, orders){
     if(orders.length>0){
         let tableTxt='';
@@ -152,14 +152,22 @@ function enableBtns(){
 }
  //show print page
 function Print(obj, whatPrint){
-    let tmpItems = [];
+    let tmpItems = '';
     let sortedItems = obj.doc.items.sort((a,b)=>(a.item.toLowerCase() > b.item.toLowerCase()) ? 1 : ((a.item.toLowerCase() < b.item.toLowerCase()) ? -1 : 0))
-    sortedItems.map(i=>{
+    sortedItems.filter((v,i,a)=>v.price>0&&v.total>0).map(i=>{
             tmpItems+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
-            <td scope="row">${i.byAdmin?'+ ':''}${i.item.toString().replace('set','Esrog')}</td>
+            <td scope="row">${i.byAdmin?'+ ':''}${i.item}</td>
             <td>${i.q}</td>
             <td> $ ${i.total}</td>
             </tr>`;
+    })
+    tmpItems+='<tr class="">Whats in the box</tr>';
+    sortedItems.map(i=>{
+        tmpItems+=`<tr class="${i.byAdmin? 'bg-dark text-white':''}">
+        <td scope="row">${i.byAdmin?'+ ':''}${i.item.toString().replace('set','Esrog')}</td>
+        <td>${i.q}</td>
+        <td> $ ${i.total}</td>
+        </tr>`;
     })
     document.getElementById('popup-print').style.display='block';
     document.getElementById('popup-print').innerHTML=`<a id="close-popup" style="color:red;position:absolute;top:5px;right:5px;">&times;</a>

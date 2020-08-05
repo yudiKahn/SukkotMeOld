@@ -1,3 +1,6 @@
+const fs = require('fs');
+const { use } = require('./routs');
+
 module.exports = class Middleware{
     constructor(){
 
@@ -35,10 +38,18 @@ module.exports = class Middleware{
         })
     }
     static UserHomePage(req, res, next){
+        let users = fs.readFileSync(`${__dirname}/users.json`);
+        users=JSON.parse(users);
+        users.find(d=>d._id==req.params.id);
+        if(users)
+         return next();
+        return res.redirect('/')
+        /*
         const {users} = require('./model');
         users.findById(req.params.id).then(doc=>{
             if(doc){return next();}
             res.redirect('/')
         }).catch(()=>res.redirect('/'));
+        */
     }
 }

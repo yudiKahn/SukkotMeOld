@@ -12,7 +12,7 @@ app.use(robots(__dirname+'/public/robots.txt'));
 app.use(cookieSession({
     name: 'session',
     secret:'some secret',
-    maxAge: 24 * 60 * 60 * 1000 * 3, // 3 ays
+    maxAge: 24 * 60 * 60 * 1000 * 6, // 6 ays
     secure: false,
     httpOnly:true
 }))

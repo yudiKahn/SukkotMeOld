@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const items = require('./items');
-const { getOrderItems,  sendEmail, getOrderSum} = require('./helpfulFunctions');
+const { getOrderItems,  sendEmail, getOrderSum, invoiceEmail} = require('./helpfulFunctions');
 const { orders, users, comments } = require('./model');
 const bcrypt = require('bcrypt');
 const Middleware = require('./middleware');
+const fs = require('fs');
 
 //Home page
 router.get('/', (req,res)=>{
@@ -19,6 +20,12 @@ router.get('/signOut', (req,res)=>{
     res.redirect('/')
 })
 
+
+router.get('/xxx',(req,res)=>{
+
+    res.send(invoiceEmail([{item:'a',q:1,price:1,total:1}],{firstName:'a',lastName:'c',address:{zip:1,state:'a',city:'a',street:'a'}}))
+})
+
 //sign up
 router.post('/signup', Middleware.SignUp, (req,res)=>{
     let {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
@@ -30,6 +37,18 @@ router.post('/signup', Middleware.SignUp, (req,res)=>{
         res.send(doc._id);
     }).catch(err=>res.status(400).send(err));
 })
+/*router.post('/signup', (req,res)=>{
+    let {city, state, street, zip, firstName, lastName, email, phoneNumber, password} = req.body;
+    password = bcrypt.hashSync(password, 10);
+    let userObj = {firstName, lastName, email, phoneNumber,password, address:{street, city, state, zip} };
+    userObj._id = getId();
+    let file = fs.readFileSync(`${__dirname}/users.json`);
+    file = JSON.parse(file)
+    file.push(userObj);
+    fs.writeFileSync(`${__dirname}/users.json`, JSON.stringify(file));
+    req.session.id = userObj._id;
+    res.send(userObj._id)
+})*/
 
 //login
 router.post('/login',(req, res)=>{
@@ -39,6 +58,16 @@ router.post('/login',(req, res)=>{
         else { res.status(400).send('No user found. Please try again') };
     }).catch(()=>res.status(400).send('No user found. Please try again'));
 });
+/*router.post('/login',(req, res)=>{
+    let users = fs.readFileSync(`${__dirname}/users.json`);
+    users=JSON.parse(users);
+    users=users.find(d=>d.email==req.body.email&&bcrypt.compareSync(req.body.password,d.password))
+    if(users){ 
+      req.session.id = users._id; 
+      return res.send(users._id);
+    }
+    res.status(400).send('No user found. Please try again')
+});*/
 
 //update user profile
 router.post('/profile/update/:id', Middleware.UpdateProfile, (req, res)=>{
@@ -58,6 +87,15 @@ router.get('/order/:id', Middleware.UserHomePage, (req,res)=>{
      res.redirect('/');
 })  
 
+//get single order
+router.get('/getOrder/:id', (req,res)=>{
+    orders.findById(req.params.id, (err, data)=>{
+        if(data)
+         return res.send(data);
+        return res.status(400).send('non found');
+    })
+})
+
 //get user
 router.get('/user/:id', (req, res)=>{
     users.findById(req.params.id).then(doc=>{
@@ -65,6 +103,7 @@ router.get('/user/:id', (req, res)=>{
         res.json({firstName, lastName, email, address, phoneNumber})
     }).catch(err=>res.status(400).json(err));
 })
+
 
 //create order
 router.post('/order/:id/new', (req,res)=>{
