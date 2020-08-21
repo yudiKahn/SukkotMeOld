@@ -270,6 +270,5 @@ module.exports = {
     sendEmail,
     getItemObj,
     adminSendEmail,
-    getId,
-    invoiceEmail: boxEmail
+    getId
 }

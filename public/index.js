@@ -2,7 +2,16 @@ $(window).ready(()=>{
     onSignUp();
     onSignin();
     toggleInfo();
+    $('#googleMapA').click(googleMapUrl)
 })
+
+function googleMapUrl(){
+    const np = navigator.platform;
+    if(np.indexOf("iPhone") != -1 || np.indexOf("iPad") != -1 || np.indexOf("iPod") != -1)
+        window.open("maps://maps.google.com/maps?q=18253+Topham+St+Tarazana+CA+91335");
+    else 
+        window.open("https://maps.google.com/maps?q=18253+Topham+St+Tarazana+CA+91335");
+}
 
 function onSignUp(){
     $('#form-sigup').submit(function(e){
@@ -42,6 +51,7 @@ function toggleInfo(){
         $('#info').animate({width:'toggle'},800)
     })
     $(window).click((e)=>{
+        //stop bubbles
         if($(e.originalEvent.path[0]).attr('id')!=='info-icon' && $('#info').css('display')=='block'){
             $('#info').animate({height:'toggle'},800)
         }

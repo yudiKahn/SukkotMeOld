@@ -290,3 +290,15 @@ onReady(()=>{ changeImgAndColOrRow(); checkInputs();
     $('#comment-form').attr('action',`/user/${urlId}/comment`);
     $('#form-new').attr('action',`/order/${urlId}/new`);
 });
+
+class HTML{
+    static alert = (err) => `
+    <div class="mx-auto alert-dismissible fade show alert alert-warning" role="alert" style="width:90vw; max-width:500px;">
+        ${err}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>`;
+
+    
+}

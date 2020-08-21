@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const items = require('./items');
-const { getOrderItems,  sendEmail, getOrderSum, invoiceEmail} = require('./helpfulFunctions');
+const { getOrderItems,  sendEmail, getOrderSum} = require('./helpfulFunctions');
 const { orders, users, comments } = require('./model');
 const bcrypt = require('bcrypt');
 const Middleware = require('./middleware');
@@ -18,12 +18,6 @@ router.get('/', (req,res)=>{
 router.get('/signOut', (req,res)=>{
     req.session = null;
     res.redirect('/')
-})
-
-
-router.get('/xxx',(req,res)=>{
-
-    res.send(invoiceEmail([{item:'a',q:1,price:1,total:1}],{firstName:'a',lastName:'c',address:{zip:1,state:'a',city:'a',street:'a'}}))
 })
 
 //sign up
