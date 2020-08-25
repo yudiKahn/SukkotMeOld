@@ -4,7 +4,7 @@ const mailSender  = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'sukkotme@gmail.com',//'iesrogonline@gmail.com'
-      pass: 'sukkot130ME'//'chanais11'
+      pass: 'sukkot130ME'//'M7&mYENyzubMCv5N$MMA' 'chanais11' 
     }
 });
 
@@ -134,7 +134,7 @@ const invoiceEmail = (order, billed,total, id) => {
                 </td>
                 <td>
                     <small>Date</small>
-                    <p>${new Date().getMonth()}/${new Date().getDay()}/${new Date().getFullYear()}</p>
+                    <p>${new Date().getMonth()+1}/${new Date().getDate()}/${new Date().getFullYear()}</p>
                 </td>
                 <td>
                     <small>Total</small>
