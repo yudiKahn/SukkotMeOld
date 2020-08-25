@@ -4,7 +4,7 @@ const { getOrderItems,  sendEmail, getOrderSum} = require('./helpfulFunctions');
 const { orders, users, comments } = require('./model');
 const bcrypt = require('bcrypt');
 const Middleware = require('./middleware');
-const fs = require('fs');
+//const fs = require('fs');
 
 //Home page
 router.get('/', (req,res)=>{
