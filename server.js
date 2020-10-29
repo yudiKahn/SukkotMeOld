@@ -18,11 +18,11 @@ app.use(cookieSession({
 }))
 
 
-app.get('*', (req,res)=>{
+/*app.get('*', (req,res)=>{
     res.send(`<div style="text-align:center; padding-top: 30vh;">
     <h1 style="font-family: monospace;">For orders please call Yanky :18186052066</h1>
     </div>`)
-})
+})*/
 
 let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
 
