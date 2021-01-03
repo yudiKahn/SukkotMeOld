@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const secure = require('express-force-https');
 const robots= require('express-robots-txt');
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
+require('dotenv').config();
 
 const app = express();
 app.use(secure);
@@ -24,9 +25,7 @@ app.use(cookieSession({
     </div>`)
 })*/
 
-let uri = "mongodb+srv://yudikahn:thisisyudi770@fcc-myfirstcluster-fecus.mongodb.net/test?retryWrites=true&w=majority"
-
-mongoose.connect(uri, {useNewUrlParser:true,useUnifiedTopology:true,useFindAndModify:false})
+mongoose.connect(process.env.DB, {useNewUrlParser:true,useUnifiedTopology:true,useFindAndModify:false})
 .then(()=>{console.log('connected to db')}).catch(err=>console.log(err))
 
 const routs = require('./src/routs');
